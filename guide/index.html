@@ -3,174 +3,147 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>클로드 코드 시작하기 — Focus AI Edu 수업 가이드</title>
-<meta name="description" content="포커스 AI EDU 수업을 위한 클로드 코드 입문 가이드. 비개발자를 위해 설치부터 첫 사용까지, 수업에서 다루는 내용만 담았습니다.">
-<meta property="og:title" content="클로드 코드 시작하기 — Focus AI Edu">
-<meta property="og:description" content="비개발자를 위한 클로드 코드 수업 가이드. 설치부터 첫 사용까지 수업 범위만 쉽게.">
+<title>노슈니의 클로드 코드 복습 노트 — Focus AI Edu</title>
+<meta name="description" content="포커스 AI 에듀 수업을 마치고 집에서 혼자 이어가는 분들을 위한 클로드 코드 복습 노트. 설치부터 플러그인까지 노슈니가 챙겨드려요.">
+<meta property="og:title" content="노슈니의 클로드 코드 복습 노트 — Focus AI Edu">
+<meta property="og:description" content="수업 끝나고 집에서 혼자 다시 해볼 때 펼쳐 보는 클로드 코드 노트.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Gaegu:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
   :root{
-    --base:#0e0e10;
-    --surface:#16161b;
-    --surface-2:#1c1c23;
-    --purple:#7c3aed;
-    --purple-light:#a78bfa;
-    --cream:#f0ecff;
-    --muted:#9a96ac;
-    --line:rgba(167,139,250,.14);
-    --line-strong:rgba(167,139,250,.28);
+    --base:#0e0e10;--paper:#15151a;--paper-2:#1b1b22;
+    --purple:#7c3aed;--purple-light:#a78bfa;--cream:#f0ecff;
+    --muted:#9b97ad;--soft:#d4cfe4;
+    --line:rgba(167,139,250,.14);--line-2:rgba(167,139,250,.26);--mark:rgba(124,58,237,.42);
     --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
     --sans:'Pretendard','Outfit',system-ui,sans-serif;
     --display:'Outfit','Pretendard',sans-serif;
-    --maxw:1180px;
+    --hand:'Gaegu','Pretendard',cursive;
+    --maxw:920px;
   }
   *{box-sizing:border-box}
-  html{scroll-behavior:smooth;scroll-padding-top:88px}
+  html{scroll-behavior:smooth;scroll-padding-top:96px}
   @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
-  body{
-    margin:0;background:var(--base);color:var(--cream);
-    font-family:var(--sans);font-size:16px;line-height:1.72;
-    -webkit-font-smoothing:antialiased;letter-spacing:-.01em;
-  }
+  body{margin:0;background:var(--base);color:var(--cream);font-family:var(--sans);font-size:16.5px;line-height:1.78;-webkit-font-smoothing:antialiased;letter-spacing:-.01em}
   a{color:var(--purple-light);text-decoration:none}
   a:hover{text-decoration:underline}
   ::selection{background:var(--purple);color:#fff}
-  :focus-visible{outline:2px solid var(--purple-light);outline-offset:3px;border-radius:4px}
+  :focus-visible{outline:2px solid var(--purple-light);outline-offset:3px;border-radius:5px}
 
-  /* ---------- logo ---------- */
-  .logo{font-family:var(--display);font-weight:800;font-size:1.18rem;letter-spacing:-.02em;display:inline-flex;align-items:center;gap:.12em;line-height:1;white-space:nowrap}
-  .logo .f{color:var(--purple-light)}
-  .logo .rest{color:var(--cream)}
-  .logo .ai{color:#fff;background:var(--purple);padding:.1em .34em;border-radius:.28em;font-size:.82em;margin-left:.18em;box-shadow:0 0 18px rgba(124,58,237,.55)}
+  .mk{background:linear-gradient(transparent 58%, var(--mark) 58%, var(--mark) 92%, transparent 92%);padding:0 .04em;border-radius:2px}
+  .hand{font-family:var(--hand);font-weight:700;color:var(--purple-light);letter-spacing:0}
 
-  /* ---------- top bar ---------- */
-  header{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(14,14,16,.78);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-  .bar{max-width:var(--maxw);margin:0 auto;padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-  .bar .ey{font-size:.72rem;color:var(--muted);letter-spacing:.16em;text-transform:uppercase;font-family:var(--display);font-weight:600;display:none}
-  @media(min-width:760px){.bar .ey{display:block}}
-  .barcta{font-family:var(--display);font-weight:700;font-size:.85rem;padding:9px 16px;border:1px solid var(--line-strong);border-radius:999px;color:var(--cream);transition:.2s}
-  .barcta:hover{background:var(--purple);border-color:var(--purple);text-decoration:none;color:#fff}
+  .logo{font-family:var(--display);font-weight:800;font-size:1.12rem;letter-spacing:-.02em;display:inline-flex;align-items:center;gap:.1em;line-height:1;white-space:nowrap}
+  .logo .f{color:var(--purple-light)}.logo .rest{color:var(--cream)}
+  .logo .ai{color:#fff;background:var(--purple);padding:.1em .32em;border-radius:.28em;font-size:.82em;margin-left:.16em}
 
-  /* ---------- shell ---------- */
-  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+  header{position:fixed;inset:0 0 auto;z-index:60;background:rgba(14,14,16,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .bar{max-width:1080px;margin:0 auto;padding:15px 22px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+  .bar .mid{font-family:var(--hand);font-size:1.05rem;color:var(--muted);display:none}
+  @media(min-width:780px){.bar .mid{display:block}}
+  .alert-btn{font-family:var(--display);font-weight:700;font-size:.86rem;padding:9px 17px;border-radius:999px;background:var(--purple);color:#fff;display:inline-flex;align-items:center;gap:7px;transition:.2s;box-shadow:0 6px 22px -8px rgba(124,58,237,.9)}
+  .alert-btn:hover{background:#8b4ff0;text-decoration:none;transform:translateY(-1px)}
+  .alert-btn .bell{font-size:.95em}
 
-  /* ---------- hero ---------- */
-  .hero{position:relative;padding:150px 0 70px;overflow:hidden}
-  .aurora{position:absolute;inset:-30% -10% auto;height:680px;pointer-events:none;z-index:0;
-    background:radial-gradient(58% 50% at 28% 18%,rgba(124,58,237,.42),transparent 64%),
-               radial-gradient(46% 44% at 82% 8%,rgba(167,139,250,.22),transparent 60%);
-    filter:blur(8px)}
-  .hero .wrap{position:relative;z-index:1}
-  .eyebrow{font-family:var(--display);font-weight:600;letter-spacing:.18em;text-transform:uppercase;font-size:.74rem;color:var(--purple-light);margin:0 0 22px;display:inline-flex;align-items:center;gap:10px}
-  .eyebrow::before{content:"";width:30px;height:1px;background:var(--purple-light);opacity:.7}
-  h1{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-height:1.04;margin:0 0 22px;font-size:clamp(2.5rem,6.4vw,4.55rem)}
-  h1 .hl{color:var(--purple-light)}
-  .lede{font-size:clamp(1.05rem,2.3vw,1.3rem);color:#cfcadf;max-width:33ch;margin:0 0 36px;line-height:1.6}
-  .cta-row{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:46px}
-  .btn{font-family:var(--display);font-weight:700;font-size:1rem;padding:15px 26px;border-radius:13px;display:inline-flex;align-items:center;gap:9px;transition:.22s;border:1px solid transparent}
-  .btn.primary{background:var(--purple);color:#fff;box-shadow:0 10px 34px -10px rgba(124,58,237,.9)}
-  .btn.primary:hover{background:#8b4ff0;text-decoration:none;transform:translateY(-2px)}
-  .btn.ghost{border-color:var(--line-strong);color:var(--cream)}
-  .btn.ghost:hover{border-color:var(--purple-light);text-decoration:none;background:rgba(124,58,237,.1)}
-  .stats{display:flex;flex-wrap:wrap;gap:14px}
-  .stat{border:1px solid var(--line);border-radius:13px;padding:14px 18px;background:rgba(255,255,255,.015)}
-  .stat b{font-family:var(--display);font-weight:800;font-size:1.35rem;color:var(--cream);display:block;letter-spacing:-.02em}
-  .stat span{font-size:.82rem;color:var(--muted)}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
 
-  /* ---------- terminal motif ---------- */
-  .term{margin-top:48px;border:1px solid var(--line-strong);border-radius:16px;background:linear-gradient(180deg,#121217,#0d0d11);box-shadow:0 40px 90px -40px rgba(124,58,237,.55),inset 0 1px 0 rgba(255,255,255,.04);overflow:hidden;max-width:720px}
-  .term .top{display:flex;align-items:center;gap:8px;padding:13px 16px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.018)}
-  .term .top i{width:11px;height:11px;border-radius:50%;display:inline-block}
-  .dot1{background:#ff5f57}.dot2{background:#febc2e}.dot3{background:#28c840}
-  .term .top .name{margin-left:10px;font-family:var(--mono);font-size:.76rem;color:var(--muted)}
-  .term pre{margin:0;padding:22px 20px;font-family:var(--mono);font-size:.86rem;line-height:1.85;color:#dcd7ee;overflow-x:auto}
-  .term .pr{color:var(--purple-light)}
-  .term .ok{color:#5ee08a}
-  .term .cm{color:var(--muted)}
-  .cursor{display:inline-block;width:9px;height:1.05em;background:var(--purple-light);vertical-align:-2px;margin-left:3px;animation:blink 1.1s steps(2) infinite}
-  @keyframes blink{50%{opacity:0}}
+  .hero{position:relative;padding:138px 0 26px;overflow:hidden}
+  .glow{position:absolute;top:-160px;right:-120px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,.34),transparent 62%);filter:blur(10px);pointer-events:none}
+  .hero .wrap{position:relative}
+  .from{font-family:var(--hand);font-size:1.25rem;color:var(--purple-light);margin:0 0 18px}
+  h1{font-family:var(--display);font-weight:900;letter-spacing:-.035em;line-height:1.08;margin:0 0 24px;font-size:clamp(2.3rem,6.2vw,4rem)}
+  h1 em{font-style:normal;color:var(--purple-light)}
+  .hero-lede{font-size:clamp(1.08rem,2.2vw,1.32rem);color:var(--soft);max-width:39ch;line-height:1.66;margin:0 0 28px}
+  .who{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:8px}
+  .who span{font-size:.85rem;color:var(--soft);border:1px solid var(--line-2);border-radius:999px;padding:6px 14px;background:rgba(124,58,237,.06)}
 
-  /* ---------- body layout ---------- */
-  .body-shell{max-width:var(--maxw);margin:40px auto 0;padding:0 22px;display:grid;gap:46px;grid-template-columns:1fr}
-  @media(min-width:980px){.body-shell{grid-template-columns:232px 1fr;gap:64px;align-items:start}}
+  .chapnav{position:sticky;top:60px;z-index:40;background:rgba(14,14,16,.86);backdrop-filter:blur(10px);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:30px}
+  .chapnav .row{max-width:1080px;margin:0 auto;padding:11px 18px;display:flex;gap:7px;overflow-x:auto;scrollbar-width:none}
+  .chapnav .row::-webkit-scrollbar{display:none}
+  .chapnav a{flex:0 0 auto;font-family:var(--display);font-weight:600;font-size:.85rem;color:var(--muted);padding:7px 14px;border-radius:999px;border:1px solid transparent;white-space:nowrap;transition:.18s}
+  .chapnav a:hover{color:var(--cream);text-decoration:none;background:rgba(124,58,237,.1)}
+  .chapnav a.active{color:#fff;background:var(--purple);border-color:var(--purple)}
 
-  /* side nav */
-  nav.toc{position:sticky;top:92px;font-size:.9rem}
-  .toc .lbl{font-family:var(--display);font-weight:700;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0 0 14px;padding-left:14px}
-  .toc ol{list-style:none;margin:0;padding:0;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:6px}
-  .toc ol::-webkit-scrollbar{display:none}
-  @media(min-width:980px){.toc ol{flex-direction:column;overflow:visible}}
-  .toc a{display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:9px;color:var(--muted);border-left:2px solid transparent;white-space:nowrap;transition:.18s;font-weight:500}
-  .toc a:hover{color:var(--cream);text-decoration:none;background:rgba(124,58,237,.08)}
-  .toc a.active{color:var(--cream);background:rgba(124,58,237,.13);border-left-color:var(--purple)}
-  .toc a .n{font-family:var(--mono);font-size:.72rem;color:var(--purple-light);opacity:.8}
+  main{padding-top:18px}
+  section.blk{padding:46px 0 6px;scroll-margin-top:118px}
+  .step{font-family:var(--hand);font-size:1.1rem;color:var(--purple-light);margin:0 0 4px}
+  .blk h2{font-family:var(--display);font-weight:800;letter-spacing:-.03em;font-size:clamp(1.7rem,4vw,2.35rem);margin:0 0 16px;line-height:1.14}
+  .blk p{margin:0 0 16px;color:var(--soft);max-width:64ch}
+  .blk strong{color:var(--cream);font-weight:600}
+  .blk h3{font-family:var(--display);font-weight:700;font-size:1.22rem;letter-spacing:-.01em;color:var(--cream);margin:32px 0 12px}
+  .blk ul{margin:0 0 18px;padding:0;list-style:none;max-width:64ch}
+  .blk ul li{position:relative;padding-left:24px;margin-bottom:10px;color:var(--soft)}
+  .blk ul li::before{content:"";position:absolute;left:3px;top:.72em;width:7px;height:7px;border-radius:2px;background:var(--purple-light);transform:rotate(45deg)}
 
-  /* sections */
-  main{min-width:0}
-  section.sec{padding:34px 0 12px;border-top:1px solid var(--line);scroll-margin-top:90px}
-  section.sec:first-child{border-top:none;padding-top:8px}
-  .sec .kicker{display:flex;align-items:baseline;gap:14px;margin-bottom:6px}
-  .sec .num{font-family:var(--mono);font-size:.82rem;color:var(--purple-light);font-weight:500;border:1px solid var(--line-strong);border-radius:7px;padding:3px 9px;line-height:1}
-  .sec h2{font-family:var(--display);font-weight:800;letter-spacing:-.025em;font-size:clamp(1.55rem,3.6vw,2.15rem);margin:10px 0 8px;line-height:1.12}
-  .sec .sub{color:var(--muted);font-size:1.02rem;margin:0 0 22px;max-width:62ch}
-  .sec h3{font-family:var(--display);font-weight:700;font-size:1.18rem;letter-spacing:-.01em;margin:30px 0 10px;color:var(--cream)}
-  .sec p{margin:0 0 14px;color:#d4cfe4;max-width:66ch}
-  .sec strong{color:var(--cream);font-weight:600}
-  .sec ul{margin:0 0 16px;padding-left:0;list-style:none;max-width:66ch}
-  .sec ul li{position:relative;padding-left:22px;margin-bottom:9px;color:#d4cfe4}
-  .sec ul li::before{content:"";position:absolute;left:4px;top:.66em;width:6px;height:6px;border-radius:50%;background:var(--purple-light)}
-
-  /* code block */
-  pre.code{font-family:var(--mono);font-size:.84rem;line-height:1.8;background:#101015;border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow-x:auto;margin:0 0 18px;color:#dcd7ee}
+  code.in{font-family:var(--mono);font-size:.85em;background:rgba(124,58,237,.16);color:var(--cream);padding:.12em .42em;border-radius:6px}
+  pre.code{font-family:var(--mono);font-size:.83rem;line-height:1.85;background:#0c0c10;border:1px solid var(--line);border-radius:13px;padding:16px 18px;overflow-x:auto;margin:0 0 16px;color:#dcd7ee}
   pre.code .pr{color:var(--purple-light)}
   pre.code .cm{color:var(--muted)}
   pre.code .ok{color:#5ee08a}
-  code.inline{font-family:var(--mono);font-size:.86em;background:rgba(124,58,237,.16);color:var(--cream);padding:.12em .42em;border-radius:6px}
 
-  /* callout */
-  .note{border:1px solid var(--line);border-left:3px solid var(--purple);background:linear-gradient(90deg,rgba(124,58,237,.1),rgba(124,58,237,.02));border-radius:0 12px 12px 0;padding:16px 18px;margin:0 0 20px;font-size:.96rem;color:#e3dff2}
-  .note b{color:var(--purple-light)}
-  .note.warn{border-left-color:#febc2e;background:linear-gradient(90deg,rgba(254,188,46,.09),transparent)}
-  .note.warn b{color:#febc2e}
-  .note.star{border-left-color:var(--purple-light)}
-  .note .tag{font-family:var(--display);font-weight:700;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--purple-light);display:block;margin-bottom:5px}
+  .talk{position:relative;border:1px solid var(--line);background:linear-gradient(180deg,rgba(124,58,237,.08),rgba(124,58,237,.02));border-radius:16px;padding:20px 22px 20px 56px;margin:6px 0 22px;color:#e6e2f4;max-width:66ch}
+  .talk::before{content:"🙂";position:absolute;left:18px;top:18px;font-size:1.2rem}
+  .talk.tip::before{content:"💜"}
+  .talk.warn::before{content:"⚠️"}
+  .talk b{color:var(--purple-light)}
+  .talk.warn b{color:#febc2e}
 
-  /* table */
-  .tbl{width:100%;border-collapse:collapse;margin:0 0 20px;font-size:.92rem;display:block;overflow-x:auto}
-  .tbl table{width:100%;border-collapse:collapse;min-width:440px}
-  th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
-  th{font-family:var(--display);font-weight:700;color:var(--cream);font-size:.82rem;letter-spacing:.02em;background:rgba(255,255,255,.02)}
-  td{color:#cdc8de}
-  td strong{color:var(--cream)}
+  .checklist{counter-reset:ck;margin:6px 0 8px}
+  .ck{position:relative;border:1px solid var(--line);border-radius:16px;padding:22px 24px 22px 64px;margin-bottom:16px;background:var(--paper)}
+  .ck::before{counter-increment:ck;content:counter(ck);position:absolute;left:20px;top:22px;width:30px;height:30px;border-radius:9px;background:var(--purple);color:#fff;font-family:var(--display);font-weight:800;font-size:1rem;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px -6px rgba(124,58,237,.8)}
+  .ck h3{margin:0 0 8px;font-family:var(--display);font-weight:800;font-size:1.18rem;color:var(--cream)}
+  .ck p{margin:0 0 12px;color:var(--soft)}
+  .ck p:last-child{margin-bottom:0}
 
-  /* OS tabs */
-  .tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
-  .tab{font-family:var(--display);font-weight:600;font-size:.88rem;padding:8px 16px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;transition:.18s}
-  .tab[aria-selected="true"]{background:var(--purple);color:#fff;border-color:var(--purple)}
-  .tabpane{display:none}
-  .tabpane.show{display:block;animation:fade .25s ease}
-  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  .os-toggle{display:flex;gap:8px;margin:10px 0 16px;flex-wrap:wrap}
+  .os-toggle button{font-family:var(--display);font-weight:700;font-size:.9rem;padding:9px 18px;border-radius:11px;border:1px solid var(--line-2);background:transparent;color:var(--muted);cursor:pointer;transition:.18s;display:flex;align-items:center;gap:7px}
+  .os-toggle button[aria-selected="true"]{background:var(--purple);border-color:var(--purple);color:#fff}
+  .ospane{display:none}
+  .ospane.on{display:block;animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+  ol.steps{counter-reset:st;list-style:none;margin:0 0 14px;padding:0;max-width:64ch}
+  ol.steps>li{position:relative;padding:0 0 16px 40px;margin:0}
+  ol.steps>li::before{counter-increment:st;content:counter(st);position:absolute;left:0;top:0;width:26px;height:26px;border-radius:50%;border:1.5px solid var(--purple);color:var(--purple-light);font-family:var(--mono);font-size:.82rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+  ol.steps>li:not(:last-child)::after{content:"";position:absolute;left:13px;top:28px;bottom:0;width:1.5px;background:var(--line-2)}
+  ol.steps>li b{color:var(--cream)}
 
-  /* good/bad */
-  .gb{display:grid;gap:14px;margin-bottom:20px}
-  @media(min-width:620px){.gb{grid-template-columns:1fr 1fr}}
-  .gb .card{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:rgba(255,255,255,.012)}
-  .gb .card .h{font-family:var(--display);font-weight:700;font-size:.82rem;margin-bottom:8px;display:flex;align-items:center;gap:7px}
-  .gb .bad .h{color:#ff7a72}
-  .gb .good .h{color:#5ee08a}
-  .gb .card p{font-size:.9rem;margin:0;color:#cdc8de}
+  .tbl{width:100%;overflow-x:auto;margin:0 0 18px}
+  table{width:100%;border-collapse:collapse;min-width:440px;font-size:.93rem}
+  th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-family:var(--display);font-weight:700;color:var(--cream);font-size:.82rem;background:rgba(255,255,255,.02)}
+  td{color:var(--soft)}td strong{color:var(--cream)}
+  td code,.tbl code{font-family:var(--mono);font-size:.85em;background:rgba(124,58,237,.16);color:var(--cream);padding:.1em .4em;border-radius:6px;white-space:nowrap}
 
-  /* closing */
-  .closing{margin-top:64px;border-top:1px solid var(--line);background:radial-gradient(60% 120% at 50% 0%,rgba(124,58,237,.16),transparent 70%)}
-  .closing .in{max-width:var(--maxw);margin:0 auto;padding:70px 22px 30px;text-align:center}
-  .closing h2{font-family:var(--display);font-weight:800;font-size:clamp(1.8rem,4.4vw,2.6rem);letter-spacing:-.03em;margin:0 0 14px;line-height:1.1}
-  .closing p{color:#cfcadf;max-width:44ch;margin:0 auto 28px}
-  footer{border-top:1px solid var(--line);padding:26px 22px;text-align:center}
-  footer .ft{max-width:var(--maxw);margin:0 auto;display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between}
-  footer small{color:var(--muted);font-size:.8rem}
+  .gb{display:grid;gap:14px;margin:6px 0 18px}
+  @media(min-width:600px){.gb{grid-template-columns:1fr 1fr}}
+  .gb .c{border:1px solid var(--line);border-radius:13px;padding:14px 16px;background:rgba(255,255,255,.012)}
+  .gb .c .t{font-family:var(--display);font-weight:700;font-size:.82rem;margin-bottom:7px}
+  .gb .x .t{color:#ff8079}.gb .o .t{color:#5ee08a}
+  .gb .c .ex{font-family:var(--mono);font-size:.84rem;color:var(--soft);margin:0;line-height:1.6}
+
+  .ten{display:grid;gap:13px;margin:8px 0 16px}
+  @media(min-width:640px){.ten{grid-template-columns:1fr 1fr}}
+  .item{border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:var(--paper);transition:.18s}
+  .item:hover{border-color:var(--line-2);transform:translateY(-2px)}
+  .item.star{border-color:var(--line-2);background:linear-gradient(180deg,rgba(124,58,237,.12),rgba(124,58,237,.02))}
+  .item .head{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+  .item .ic{font-size:1.15rem}
+  .item .nm{font-family:var(--display);font-weight:800;font-size:1.0rem;color:var(--cream)}
+  .item .en{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+  .item .badge{font-family:var(--display);font-size:.64rem;font-weight:700;letter-spacing:.04em;padding:3px 8px;border-radius:999px;margin-left:auto;background:var(--purple);color:#fff}
+  .item p{margin:0;font-size:.9rem;color:var(--soft);line-height:1.6}
+
+  .closing{margin-top:60px;border-top:1px solid var(--line);background:radial-gradient(70% 130% at 50% 0%,rgba(124,58,237,.18),transparent 70%)}
+  .closing .in{max-width:var(--maxw);margin:0 auto;padding:64px 24px 18px;text-align:center}
+  .closing .from{justify-content:center}
+  .closing h2{font-family:var(--display);font-weight:900;font-size:clamp(1.9rem,4.6vw,2.8rem);letter-spacing:-.035em;line-height:1.1;margin:0 0 16px}
+  .closing p{color:var(--soft);max-width:44ch;margin:0 auto 28px}
+  .alert-btn.big{font-size:1.02rem;padding:15px 28px;border-radius:14px}
+  footer{border-top:1px solid var(--line);padding:24px}
+  footer .ft{max-width:1080px;margin:0 auto;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center}
+  footer small{color:var(--muted);font-size:.78rem;max-width:62ch}
 </style>
 </head>
 <body>
@@ -178,330 +151,365 @@
 <header>
   <div class="bar">
     <span class="logo"><span class="f">F</span><span class="rest">ocus</span><span class="ai">ai</span></span>
-    <span class="ey">클로드 코드 수업 가이드</span>
-    <a class="barcta" href="#apply">수업 신청 →</a>
+    <span class="mid">노슈니의 클로드 코드 복습 노트</span>
   </div>
 </header>
 
 <!-- HERO -->
 <div class="hero">
-  <div class="aurora" aria-hidden="true"></div>
+  <div class="glow" aria-hidden="true"></div>
   <div class="wrap">
-    <p class="eyebrow">Focus AI Edu · 비개발자를 위한 가이드</p>
-    <h1>클로드 코드,<br><span class="hl">겁먹지 말고</span> 시작해요</h1>
-    <p class="lede">코딩 몰라도 됩니다. 수업에서 함께 만들 도구, 클로드 코드의 첫걸음만 쉽게 모았어요.</p>
-    <div class="cta-row">
-      <a class="btn primary" href="#s00">가이드 시작하기 →</a>
-      <a class="btn ghost" href="#s04">수업 전 준비부터 보기</a>
-    </div>
-    <div class="stats">
-      <div class="stat"><b>3강</b><span>한 가지를 끝까지 완성</span></div>
-      <div class="stat"><b>터미널 없이</b><span>데스크톱 앱으로도 OK</span></div>
-      <div class="stat"><b>10명 정원</b><span>소수 정예 실습</span></div>
-    </div>
-
-    <div class="term" aria-label="설치 명령어 예시">
-      <div class="top"><i class="dot1"></i><i class="dot2"></i><i class="dot3"></i><span class="name">terminal — claude</span></div>
-<pre><span class="pr">$</span> curl -fsSL https://claude.ai/install.sh | bash
-<span class="ok">✓ Claude Code 설치 완료</span>
-<span class="pr">$</span> claude
-<span class="cm"># 무엇을 만들어 볼까요?</span><span class="cursor"></span></pre>
+    <p class="from">수업 끝나고, 집에서 혼자 할 때 펼쳐 보는 노트 ✍️</p>
+    <h1>이제 혼자서도,<br><em>충분히 할 수 있어요</em></h1>
+    <p class="hero-lede">수업에서 같이 해본 클로드 코드, 집에 가면 "어 이게 뭐였더라?" 싶잖아요. 그래서 만들었어요. 설치부터 편하게 쓰는 법까지, 막힐 때 펼쳐 보세요.</p>
+    <div class="who">
+      <span>수업은 들었는데 혼자 하려니 막막한 분</span>
+      <span>집 컴퓨터에 다시 깔아야 하는 분</span>
+      <span>배운 걸 진짜 내 것으로 만들고 싶은 분</span>
     </div>
   </div>
 </div>
 
-<!-- BODY -->
-<div class="body-shell">
-  <nav class="toc" aria-label="목차">
-    <p class="lbl">목차</p>
-    <ol>
-      <li><a href="#s00"><span class="n">00</span> 시작하기 전에</a></li>
-      <li><a href="#s01"><span class="n">01</span> 클로드 코드란?</a></li>
-      <li><a href="#s02"><span class="n">02</span> 뭘 만들 수 있나요</a></li>
-      <li><a href="#s03"><span class="n">03</span> 요금제</a></li>
-      <li><a href="#s04"><span class="n">04</span> 설치 &amp; 로그인</a></li>
-      <li><a href="#s05"><span class="n">05</span> 첫 사용법</a></li>
-      <li><a href="#s06"><span class="n">06</span> 터미널 기초</a></li>
-      <li><a href="#s07"><span class="n">07</span> CLAUDE.md</a></li>
-    </ol>
-  </nav>
+<nav class="chapnav" aria-label="목차">
+  <div class="row">
+    <a href="#intro">들어가며</a>
+    <a href="#what">뭐였더라</a>
+    <a href="#make">뭘 만드냐면</a>
+    <a href="#ready">내 컴퓨터에 갖추기</a>
+    <a href="#first">처음 켰을 때</a>
+    <a href="#terminal">터미널 기초</a>
+    <a href="#memory">규칙 기억(CLAUDE.md)</a>
+    <a href="#habits">습관 · 명령어</a>
+    <a href="#power">플러그인 · 스킬</a>
+    <a href="#railway">레일웨이</a>
+  </div>
+</nav>
 
-  <main>
-    <!-- 00 -->
-    <section class="sec" id="s00">
-      <div class="kicker"><span class="num">00</span></div>
-      <h2>시작하기 전에</h2>
-      <p class="sub">이 가이드는 포커스 AI EDU 수업과 함께 보는 자료예요. 수업에서 다루는 내용만 담았으니, 부담 없이 필요한 부분만 펼쳐 보세요.</p>
+<main class="wrap">
 
-      <h3>이 가이드는 이렇게 써요</h3>
-      <ul>
-        <li><strong>수업 전</strong> — <a href="#s03">03 요금제</a>와 <a href="#s04">04 설치 &amp; 로그인</a>까지는 첫 수업 전에 꼭 끝내 주세요. 이게 준비돼 있어야 수업 시간을 설치가 아니라 '만들기'에 쓸 수 있어요.</li>
-        <li><strong>수업 중·후</strong> — 05~07은 손이 기억할 때까지 옆에 두고 펼쳐 보는 용도예요. 막히면 여기서 다시 찾아보면 됩니다.</li>
-      </ul>
+  <!-- INTRO -->
+  <section class="blk" id="intro">
+    <p class="step">먼저, 한마디만</p>
+    <h2>집에 가면 꼭 막히더라고요</h2>
+    <p>안녕하세요, 노슈니예요. 이 노트는 <strong>수업을 마치고 집에 가서 혼자 다시 해볼 때</strong> 옆에 두고 보는 복습 노트예요. 수업에선 같이 하니까 술술 됐는데, 막상 혼자 앉으면 "어 이거 뭐였지?" 싶죠. 그 순간을 위해 만들었어요.</p>
+    <p>이미 수업에서 한 번 해본 것들이라 낯설지 않을 거예요. 처음부터 다 읽을 필요 없이, <span class="mk">막히는 부분만 펼쳐서</span> 그대로 따라 하면 돼요.</p>
+    <div class="talk tip"><b>이 노트 쓰는 법.</b> 위에서부터 차례대로 가도 좋고, 필요한 데만 콕 집어 봐도 좋아요. 집 컴퓨터에 처음 깔 거라면 <a href="#ready">내 컴퓨터에 갖추기</a>부터, 다 깔려 있으면 <a href="#power">플러그인 · 스킬</a>로 바로 가셔도 돼요.</div>
+  </section>
 
-      <div class="note star">
-        <span class="tag">왕초보 안심 포인트</span>
-        클로드 코드는 <strong>코딩을 배우는 도구가 아니에요.</strong> "이거 해줘"라고 말로 시키면 컴퓨터 안에서 대신 일해주는 AI예요. 까만 터미널 화면이 무섭다면 <strong>데스크톱 앱</strong>으로 시작할 수 있으니 걱정 마세요.
-      </div>
-    </section>
+  <!-- WHAT -->
+  <section class="blk" id="what">
+    <p class="step">하나, 다시 떠올리면</p>
+    <h2>클로드 코드, 뭐였더라</h2>
+    <p>우리가 평소에 쓰는 <strong>claude.ai</strong>는 대화창이에요. 질문하면 답을 보여주고, 파일은 하나씩 올려야 하죠. 클로드 코드는 거기서 한 발 더 들어가요. <span class="mk">내 컴퓨터 폴더 안으로 직접 들어와서</span> 파일을 읽고, 정리하고, 결과물까지 만들어 둡니다.</p>
+    <p>수업에서 말씀드린 비유 기억나시죠? claude.ai가 <strong>카톡으로 물어보는 사이</strong>라면, 클로드 코드는 <strong>우리 집에 와서 같이 책상 정리해주는 사람</strong>이에요.</p>
+    <div class="tbl"><table>
+      <tr><th></th><th>claude.ai (대화창)</th><th>클로드 코드</th></tr>
+      <tr><td><strong>파일</strong></td><td>하나씩 올려야 함</td><td>폴더째로 알아서 읽음</td></tr>
+      <tr><td><strong>결과물</strong></td><td>복사해서 옮기기</td><td>파일로 딱 저장해 둠</td></tr>
+      <tr><td><strong>반복 일</strong></td><td>매번 다시 시켜야</td><td>한 번 말하면 알아서</td></tr>
+    </table></div>
+  </section>
 
-    <!-- 01 -->
-    <section class="sec" id="s01">
-      <div class="kicker"><span class="num">01</span></div>
-      <h2>클로드 코드란?</h2>
-      <p class="sub">한 줄로 말하면, 내 컴퓨터 폴더에 직접 들어와서 파일을 읽고, 정리하고, 결과물까지 만들어 주는 AI예요.</p>
+  <!-- MAKE -->
+  <section class="blk" id="make">
+    <p class="step">둘, 집에서도 이런 걸</p>
+    <h2>혼자서도 이런 걸 만들 수 있어요</h2>
+    <p>수업에서 하나 완성해봤으니, 이제 일상 속 귀찮은 일을 하나씩 시켜보세요. 컴퓨터로 하는 일은 거의 다 됩니다.</p>
+    <ul>
+      <li><strong>콘텐츠·SNS</strong> — 카드뉴스 자동으로 만들기, 인스타 글·블로그 초안 쓰기</li>
+      <li><strong>문서 정리</strong> — 흩어진 회의록 수십 개에서 결정사항만 쏙 뽑아 한 파일로</li>
+      <li><strong>자료 분석</strong> — 긴 PDF·엑셀 한 번에 요약 (엑셀 함수 몰라도 돼요)</li>
+      <li><strong>나만의 작은 도구</strong> — 자료 모아두는 웹페이지, 슬랙봇, 반복 작업 자동화</li>
+    </ul>
+    <div class="talk"><b>"또 뭘 만들지 막막해요."</b> 그럴 땐 거창하게 생각하지 마세요. <strong>이번 주에 제일 귀찮았던 일</strong> 하나를 떠올려서 "이거 좀 줄여줘"라고 시켜보는 것부터예요. 수업에서 했던 그 방식 그대로요.</div>
+  </section>
 
-      <p>우리가 평소 쓰는 <strong>claude.ai 웹</strong>은 대화창 안에서 답을 보여줘요. 파일도 하나씩 올려야 하고, 결과물은 복사해서 옮겨야 하죠. <strong>클로드 코드</strong>는 다릅니다. 내 폴더 안으로 직접 들어와서, 수십 개 파일을 한 번에 읽고, 결과물을 파일로 만들어 둡니다.</p>
+  <!-- READY -->
+  <section class="blk" id="ready">
+    <p class="step">셋, 내 컴퓨터에 갖추기</p>
+    <h2>집에서 혼자 하려면, 두 가지부터</h2>
+    <p>수업에선 다 세팅돼 있었지만, 집 컴퓨터에선 이 두 가지를 직접 갖춰둬야 해요. 한 번만 해두면 그다음부턴 그냥 켜기만 하면 됩니다.</p>
 
-      <div class="tbl">
-        <table>
-          <tr><th></th><th>claude.ai 웹</th><th>클로드 코드</th></tr>
-          <tr><td><strong>파일</strong></td><td>하나씩 직접 올림</td><td>폴더째로 알아서 읽음</td></tr>
-          <tr><td><strong>결과물</strong></td><td>복사해서 옮기기</td><td>파일로 자동 저장</td></tr>
-          <tr><td><strong>반복 작업</strong></td><td>매번 수동</td><td>한 번 말하면 알아서</td></tr>
-          <tr><td><strong>기억</strong></td><td>그 대화 안에서만</td><td>내 규칙을 파일로 기억(<a href="#s07">07</a>)</td></tr>
-        </table>
-      </div>
-
-      <div class="note">
-        <b>비유 하나.</b> claude.ai가 <strong>물어보면 답해주는 대화 상대</strong>라면, 클로드 코드는 <strong>내 컴퓨터에 출근해서 같이 일하는 동료</strong>예요.
-      </div>
-    </section>
-
-    <!-- 02 -->
-    <section class="sec" id="s02">
-      <div class="kicker"><span class="num">02</span></div>
-      <h2>뭘 만들 수 있나요?</h2>
-      <p class="sub">이름은 'Code'지만 코딩 전용 도구가 아니에요. 컴퓨터로 하는 거의 모든 일을 말로 시킬 수 있어요. 우리 수업의 핵심은 <strong>'내가 진짜로 쓸 한 가지'</strong>를 찾아 완성하는 거예요.</p>
-
-      <h3>수강생들이 실제로 만드는 것들</h3>
-      <ul>
-        <li><strong>콘텐츠·SNS</strong> — 카드뉴스 자동 만들기, 블로그·뉴스레터 초안, 인스타 캡션 정리</li>
-        <li><strong>문서·업무</strong> — 회의록 30개를 읽고 결정사항만 뽑아 한 파일로, 보고서 검토</li>
-        <li><strong>자료 정리·분석</strong> — PDF·엑셀 한 번에 요약, 설문 결과 분석 (파이썬 몰라도 OK)</li>
-        <li><strong>나만의 작은 도구</strong> — 자료 정리 웹페이지, 반복 작업 자동화기</li>
-      </ul>
-
-      <div class="note">
-        <b>막막해도 정상이에요.</b> 처음엔 "이걸로 뭘 하지?"가 당연합니다. 첫 수업에서 <strong>내 일상·업무에서 반복되거나 귀찮은 일</strong>을 같이 끄집어내고, 강의 기간 안에 끝낼 수 있는 크기로 함께 다듬을 거예요. 빈 종이부터 시작하지 않으니 안심하세요.
-      </div>
-    </section>
-
-    <!-- 03 -->
-    <section class="sec" id="s03">
-      <div class="kicker"><span class="num">03</span></div>
-      <h2>요금제 — 유료 플랜이 필요해요</h2>
-      <p class="sub">클로드 코드는 무료 플랜으로는 쓸 수 없어요. 수업 전에 유료 플랜 하나를 준비해 주세요.</p>
-
-      <div class="note warn">
-        <span class="tag">꼭 확인</span>
-        <strong>무료 클로드 계정으로는 클로드 코드가 실행되지 않습니다.</strong> 아래 둘 중 하나의 유료 구독이 있어야 해요. 첫 수업 전까지 결제까지 마쳐 주세요.
-      </div>
-
-      <div class="tbl">
-        <table>
+    <div class="checklist">
+      <div class="ck">
+        <h3>유료 플랜 하나 준비하기</h3>
+        <p>클로드 코드는 <strong>무료 계정으로는 켜지지 않아요.</strong> 아래 둘 중 하나의 유료 구독이 있어야 해요.</p>
+        <div class="tbl"><table>
           <tr><th>플랜</th><th>월 요금</th><th>이런 분께</th></tr>
-          <tr><td><strong>Pro</strong></td><td>약 $20</td><td>"클로드 코드가 뭔지 가볍게 써보고 싶다" — 체험용</td></tr>
-          <tr><td><strong>Max</strong></td><td>약 $100~</td><td>"수업 따라 제대로 만들어보고 싶다" — 사용량 한도가 넉넉</td></tr>
-        </table>
+          <tr><td><strong>Pro</strong></td><td>약 $20</td><td>가볍게, 가끔 쓰는 정도</td></tr>
+          <tr><td><strong>Max</strong></td><td>약 $100~</td><td>매일 여유 있게 (한도 넉넉)</td></tr>
+        </table></div>
+        <p>혼자 가볍게 이어간다면 <strong>Pro</strong>로도 충분해요. 다만 집중해서 만들다 보면 한도가 금방 차서 멈추기도 해요. 넉넉하게 쓰고 싶으면 <strong>Max</strong>를 추천해요. 가격은 <a href="https://claude.com/pricing" target="_blank" rel="noopener">claude.com/pricing</a>에서 확인하세요.</p>
       </div>
 
-      <p>가볍게 시작한다면 <strong>Pro</strong>로 충분해요. 다만 Pro는 사용량 한도가 빨리 차서, 집중해서 만들다 보면 중간에 멈출 수 있어요. 수업과 숙제를 여유 있게 따라가고 싶다면 <strong>Max</strong>를 추천합니다. 최신 가격은 <a href="https://claude.com/pricing" target="_blank" rel="noopener">claude.com/pricing</a>에서 확인하세요.</p>
+      <div class="ck">
+        <h3>내 컴퓨터에 클로드 코드 설치하기</h3>
+        <p>수업에서 터미널로 깔아봤죠? <strong>집 컴퓨터에도 똑같이</strong> 깔아두면 어디서든 쓸 수 있어요. 진짜 <span class="mk">복사 → 붙여넣기 → Enter</span>가 전부예요.</p>
 
-      <div class="note">
-        <b>세션 사용량이 궁금하면</b> 클로드 코드 안에서 <code class="inline">/cost</code>를 입력하면 지금까지 쓴 양을 볼 수 있어요.
+        <div class="os-toggle" role="tablist" aria-label="운영체제">
+          <button role="tab" aria-selected="true" data-os="mac">🍎 맥북 (Mac)</button>
+          <button role="tab" aria-selected="false" data-os="win">🪟 윈도우 (Windows)</button>
+        </div>
+
+        <div class="ospane on" data-pane="mac">
+          <ol class="steps">
+            <li><b>터미널 앱 열기.</b> <code class="in">Cmd</code>+<code class="in">스페이스바</code>로 검색창을 띄우고 <strong>터미널</strong>이라 친 뒤 Enter.</li>
+            <li><b>설치 명령어 붙여넣기.</b> 아래 한 줄을 복사해서 붙여넣고(<code class="in">Cmd</code>+<code class="in">V</code>) Enter.
+<pre class="code"><span class="pr">$</span> curl -fsSL https://claude.ai/install.sh | bash</pre>
+            <span style="font-size:.9rem;color:var(--muted)">1분 안쪽이면 끝나요.</span></li>
+            <li><b>터미널 껐다 다시 켜기.</b> 창을 완전히 닫고 다시 열어주세요.</li>
+            <li><b>확인.</b> 버전 번호가 뜨면 성공!
+<pre class="code"><span class="pr">$</span> claude --version</pre></li>
+            <li><b>실행하고 로그인.</b> <code class="in">claude</code> → 브라우저가 열리면 유료 계정으로 로그인 → 끝.
+<pre class="code"><span class="pr">$</span> claude</pre></li>
+          </ol>
+          <div class="talk tip"><b>홈브루(Homebrew)를 쓰는 분이라면</b> <code class="in">brew install --cask claude-code</code> 한 줄로도 돼요.</div>
+        </div>
+
+        <div class="ospane" data-pane="win">
+          <ol class="steps">
+            <li><b>PowerShell 열기.</b> 시작 버튼을 <strong>오른쪽 클릭</strong> → <strong>터미널</strong> 또는 <strong>Windows PowerShell</strong> 선택. (안 보이면 <code class="in">Win</code>+<code class="in">R</code> → <code class="in">powershell</code> → Enter)</li>
+            <li><b>설치 명령어 붙여넣기.</b> <strong>오른쪽 클릭으로 붙여넣고</strong> Enter.
+<pre class="code"><span class="pr">></span> irm https://claude.ai/install.ps1 | iex</pre></li>
+            <li><b>PowerShell 껐다 다시 켜기.</b></li>
+            <li><b>확인.</b>
+<pre class="code"><span class="pr">></span> claude --version</pre></li>
+            <li><b>실행하고 로그인.</b> <code class="in">claude</code> → 브라우저에서 유료 계정 로그인 → 끝!
+<pre class="code"><span class="pr">></span> claude</pre></li>
+          </ol>
+          <div class="talk warn"><b>윈도우에서 한 가지.</b> 직접 파일·코드 작업을 하려면 <strong>Git</strong>이 필요할 수 있어요(<a href="https://git-scm.com/downloads/win" target="_blank" rel="noopener">git-scm.com</a>). WinGet을 쓴다면 <code class="in">winget install Anthropic.ClaudeCode</code>로도 돼요.</div>
+        </div>
+
+        <div class="talk warn"><b>설치하다 막혔다면.</b> <code class="in">claude: command not found</code>가 뜨면 대부분 <strong>터미널을 껐다 켜면</strong> 해결돼요. 그래도 안 되면 <code class="in">claude doctor</code>로 점검, 그래도 안 풀리면 캡처해서 슬랙 채널에 올려주세요.</div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- 04 -->
-    <section class="sec" id="s04">
-      <div class="kicker"><span class="num">04</span></div>
-      <h2>설치 &amp; 로그인</h2>
-      <p class="sub">⭐ 첫 수업 전에 꼭 끝내야 하는 숙제예요. 두 가지 길이 있는데, 터미널이 부담되면 첫 번째를 고르세요.</p>
+  <!-- FIRST -->
+  <section class="blk" id="first">
+    <p class="step">넷, 다시 말 거는 법</p>
+    <h2>처음 켰을 때, 이렇게 말 걸어요</h2>
+    <p>작업할 폴더에서 <code class="in">claude</code>를 켜고, 그냥 말로 시키면 돼요. 잘 시키는 요령 세 가지만 다시 짚을게요.</p>
 
-      <h3>길 A. 데스크톱 앱 — 터미널이 무섭다면 (입문자 추천)</h3>
-      <p>까만 터미널 화면 없이, 익숙한 앱 창에서 클로드 코드를 쓸 수 있어요. <a href="https://claude.ai/download" target="_blank" rel="noopener">claude.ai/download</a>에서 데스크톱 앱을 설치하고 로그인한 뒤, 앱 안의 <strong>Code 탭</strong>에서 시작하면 됩니다. 진입장벽의 절반인 '터미널 공포'가 사라져요.</p>
+    <h3>① 두루뭉술 말고, 콕 집어서</h3>
+    <div class="gb">
+      <div class="c x"><div class="t">✕ 이러면 헤매요</div><p class="ex">"문서 정리해줘"</p></div>
+      <div class="c o"><div class="t">✓ 이렇게 콕</div><p class="ex">"이 폴더 회의록들 날짜순으로 정리하고, 이번 달 결정사항만 뽑아서 요약.md로 저장해줘"</p></div>
+    </div>
 
-      <div class="note star"><span class="tag">추천</span> 처음이라면 <strong>길 A(데스크톱 앱)</strong>로 시작하는 걸 권해요. 익숙해진 뒤에 길 B로 넘어가도 전혀 늦지 않습니다.</div>
-
-      <h3>길 B. 터미널 설치 — 명령어 한 줄</h3>
-      <p>아래 명령어를 <strong>그대로 복사해서 붙여넣고(Cmd+V / Ctrl+V)</strong> Enter만 누르면 돼요. 뜻을 이해할 필요 없어요. 설치엔 <strong>Node.js 같은 사전 준비가 필요 없습니다.</strong></p>
-
-      <div class="tabs" role="tablist" aria-label="운영체제 선택">
-        <button class="tab" role="tab" aria-selected="true" data-tab="mac">macOS</button>
-        <button class="tab" role="tab" aria-selected="false" data-tab="win">Windows</button>
-      </div>
-
-      <div class="tabpane show" data-pane="mac">
-        <p style="font-size:.92rem;color:var(--muted);margin-bottom:8px">터미널 열기: <code class="inline">Cmd+Space</code> → "terminal" 검색 → Enter</p>
-<pre class="code"><span class="cm"># 방법 1 — 기본 설치</span>
-<span class="pr">$</span> curl -fsSL https://claude.ai/install.sh | bash
-
-<span class="cm"># 방법 2 — Homebrew를 쓴다면</span>
-<span class="pr">$</span> brew install --cask claude-code</pre>
-      </div>
-
-      <div class="tabpane" data-pane="win">
-        <p style="font-size:.92rem;color:var(--muted);margin-bottom:8px">PowerShell 열기: <code class="inline">Win+R</code> → "powershell" 입력 → Enter</p>
-<pre class="code"><span class="cm"># 방법 1 — PowerShell에서 바로 설치</span>
-<span class="pr">></span> irm https://claude.ai/install.ps1 | iex
-
-<span class="cm"># 방법 2 — WinGet을 쓴다면</span>
-<span class="pr">></span> winget install Anthropic.ClaudeCode</pre>
-      </div>
-
-      <h3>설치 확인 &amp; 로그인</h3>
-<pre class="code"><span class="pr">$</span> claude --version   <span class="cm"># 버전 번호가 뜨면 설치 성공</span>
-<span class="pr">$</span> claude             <span class="cm"># 실행 → 브라우저가 자동으로 열려요</span></pre>
-      <p><code class="inline">claude</code>를 처음 실행하면 브라우저에 로그인 화면이 떠요. <strong>03에서 준비한 유료 계정</strong>으로 로그인하면 자동으로 인증이 끝나고 터미널로 돌아옵니다. 끝!</p>
-
-      <div class="note">
-        <b>잘 안 될 때.</b> 설치했는데 <code class="inline">claude: command not found</code>가 뜨면, 터미널을 완전히 닫았다가 다시 열어 보세요. 그래도 안 되면 <code class="inline">claude doctor</code>로 상태를 점검할 수 있어요. 수업 전에 막히면 슬랙 채널에 편하게 올려 주세요.
-      </div>
-    </section>
-
-    <!-- 05 -->
-    <section class="sec" id="s05">
-      <div class="kicker"><span class="num">05</span></div>
-      <h2>첫 사용법</h2>
-      <p class="sub">설치가 끝났다면, 작업할 폴더에서 <code class="inline">claude</code>를 켜고 말로 시키면 됩니다. 잘 시키는 작은 요령 세 가지만 기억하세요.</p>
-
-      <h3>요령 1. 구체적으로 말하기</h3>
-      <p>모호하게 말하면 모호한 결과가, 구체적으로 말하면 좋은 결과가 나와요.</p>
-      <div class="gb">
-        <div class="card bad"><div class="h">✕ 모호한 예</div><p>"문서 정리해줘"</p></div>
-        <div class="card good"><div class="h">✓ 구체적인 예</div><p>"이 폴더 회의록들을 날짜순으로 정리하고, 이번 달 결정사항만 뽑아서 요약.md로 저장해줘"</p></div>
-      </div>
-
-      <h3>요령 2. 한 번에 하나씩</h3>
-      <p>여러 개를 한꺼번에 시키면 중간에 길을 잃어요. 하나 끝나면 다음을 시키세요.</p>
-<pre class="code"><span class="cm"># 추천</span>
-<span class="pr">></span> 먼저 카드뉴스 1번 글만 써줘
-<span class="cm">  (완성 확인 후)</span>
+    <h3>② 한꺼번에 말고, 하나씩</h3>
+<pre class="code"><span class="pr">></span> 먼저 카드뉴스 1번 글만 써줘
+<span class="cm">  (확인하고)</span>
 <span class="pr">></span> 좋아, 이제 2번 글 써줘</pre>
 
-      <h3>요령 3. <code class="inline">@</code>로 파일 콕 집어주기</h3>
-      <p>"이 파일 읽고…"라고 설명할 필요 없이, <code class="inline">@</code> 뒤에 파일 이름을 붙이면 그 파일을 바로 넘겨줘요. 한글 파일명도 괜찮아요.</p>
+    <h3>③ 파일은 <code class="in">@</code>로 콕 집어주기</h3>
 <pre class="code"><span class="pr">></span> @회의록.txt 에서 할 일만 담당자별로 뽑아줘
-<span class="pr">></span> @설문결과.csv 분석해서 인사이트 3개 알려줘
-<span class="pr">></span> @docs/ 이 폴더 문서 전부 읽고 목차 만들어줘</pre>
+<span class="pr">></span> @설문결과.csv 분석해서 인사이트 3개 알려줘</pre>
 
-      <div class="note">
-        <b>마음에 안 들면 바로 말하세요.</b> "좋은데 말투를 더 친근하게", "이 부분은 빼줘"처럼 피드백을 주고받으며 다듬는 게 정상적인 사용법이에요. 한 번에 완벽하지 않아도 됩니다.
-      </div>
-    </section>
+    <div class="talk"><b>마음에 안 들면 그냥 말하세요.</b> "말투를 더 친근하게", "이 부분은 빼줘"처럼 주거니 받거니 다듬는 게 정상이에요.</div>
+  </section>
 
-    <!-- 06 -->
-    <section class="sec" id="s06">
-      <div class="kicker"><span class="num">06</span></div>
-      <h2>터미널 기초 — 딱 다섯 개만</h2>
-      <p class="sub">길 B(터미널)로 쓴다면 이것만 알면 길 잃을 일 없어요. 폴더를 '방'이라고 생각하면 쉬워요.</p>
+  <!-- TERMINAL -->
+  <section class="blk" id="terminal">
+    <p class="step">다섯, 길 안 잃는 법</p>
+    <h2>터미널, 딱 이만큼만 기억해요</h2>
+    <p>터미널이 어려운 게 아니라 <span class="mk">'내가 지금 어느 폴더에 있는지'</span>가 헷갈려서 막히는 거예요. 폴더를 '방'이라고 생각하면 쉬워요.</p>
 
-      <h3>핵심 3단계: 방 만들고 → 들어가서 → 클로드 부르기</h3>
-      <p>프로젝트마다 폴더(방)를 따로 만들고, 그 안에서 클로드를 켜면 작업물이 안 섞여요.</p>
-<pre class="code"><span class="pr">$</span> mkdir 끼리끼리   <span class="cm"># '끼리끼리'라는 방(폴더)을 새로 만들고</span>
-<span class="pr">$</span> cd 끼리끼리     <span class="cm"># 그 방 안으로 걸어 들어가서</span>
-<span class="pr">$</span> claude         <span class="cm"># 그 방에서 클로드를 부른다</span></pre>
-      <p>다른 작업을 하고 싶으면 <code class="inline">cd ..</code>로 방에서 나온 뒤, 새 방을 만들어 똑같이 하면 돼요.</p>
+    <h3>핵심 3줄: 방 만들고 → 들어가서 → 클로드 부르기</h3>
+<pre class="code"><span class="pr">$</span> mkdir 카드뉴스   <span class="cm"># '카드뉴스'라는 방(폴더) 만들기</span>
+<span class="pr">$</span> cd 카드뉴스     <span class="cm"># 그 방으로 걸어 들어가기</span>
+<span class="pr">$</span> claude         <span class="cm"># 그 방에서 클로드 부르기</span></pre>
+    <p>다른 작업으로 옮길 땐 <code class="in">cd ..</code>로 방에서 나온 뒤, 새 방을 만들어 똑같이 하면 돼요.</p>
 
-      <h3>길 잃었을 때: 나머지 2개</h3>
-      <div class="tbl">
-        <table>
-          <tr><th>명령어</th><th>뜻</th><th>물어보는 것</th></tr>
-          <tr><td><code class="inline">pwd</code></td><td>print working directory</td><td>"나 지금 <strong>어느 방</strong>에 있어?"</td></tr>
-          <tr><td><code class="inline">ls</code></td><td>list</td><td>"이 방 안에 <strong>뭐가</strong> 있어?"</td></tr>
-        </table>
-      </div>
-      <p>이 둘은 클로드가 아니라 터미널한테 직접 묻는 거라서 <strong>토큰도 안 들어요.</strong> 헷갈릴 때마다 마음껏 쳐도 됩니다.</p>
+    <h3>길 잃었을 때 쓰는 두 마디</h3>
+    <div class="tbl"><table>
+      <tr><th>명령어</th><th>이런 뜻이에요</th></tr>
+      <tr><td><code>pwd</code></td><td>"나 지금 <strong>어느 방</strong>에 있어?" — 현재 위치 보여줘</td></tr>
+      <tr><td><code>ls</code></td><td>"이 방 안에 <strong>뭐가</strong> 있어?" — 파일 목록 보여줘</td></tr>
+    </table></div>
 
-      <div class="note warn">
-        <span class="tag">자주 하는 실수 ①</span>
-        <strong>폴더 이름에 띄어쓰기 금지.</strong> 터미널은 띄어쓰기를 "단어가 끝났다"는 신호로 읽어요. <code class="inline">mkdir research bot</code>이라고 하면 폴더가 <em>두 개</em> 만들어져요. 대신 하이픈이나 언더바를 쓰세요 → <code class="inline">mkdir research-bot</code>
-      </div>
+    <div class="talk warn"><b>자주 하는 실수 ①.</b> 폴더 이름에 <strong>띄어쓰기는 금물</strong>. <code class="in">mkdir 카드 뉴스</code>처럼 띄우면 폴더가 두 개로 쪼개져요. 붙여 쓰거나 <code class="in">-</code>, <code class="in">_</code>를 넣으세요. → <code class="in">mkdir 카드뉴스</code></div>
+    <div class="talk warn"><b>실수 ②.</b> "폴더가 바탕화면에 안 보여요!" 터미널은 켜면 항상 <strong>홈 폴더(<code class="in">~</code>)</strong>에서 시작해요. 바탕화면에 만들려면 먼저 이동. → <code class="in">cd ~/Desktop</code></div>
+  </section>
 
-      <div class="note warn">
-        <span class="tag">자주 하는 실수 ②</span>
-        <strong>폴더가 바탕화면에 안 보여요!</strong> 터미널을 켜면 항상 '홈 폴더(<code class="inline">~</code>)'에서 시작해요. 바탕화면은 홈 폴더 안의 다른 방이에요. 바탕화면에 만들고 싶다면 먼저 이동하세요 → <code class="inline">cd ~/Desktop</code>
-      </div>
-    </section>
-
-    <!-- 07 -->
-    <section class="sec" id="s07">
-      <div class="kicker"><span class="num">07</span></div>
-      <h2>CLAUDE.md — 내 규칙을 기억시키기</h2>
-      <p class="sub">선택 사항이에요. 클로드 코드는 세션이 끝나면 대화를 잊어버리는데, 이 파일 하나로 매번 설명하는 수고를 없앨 수 있어요.</p>
-
-      <p><strong>CLAUDE.md</strong>는 클로드에게 주는 '지시서'예요. 폴더 안에 이 파일을 두면, 클로드 코드를 켤 때마다 자동으로 읽어서 내 규칙을 기억한 채로 일을 시작해요.</p>
-
-      <p>가장 쉬운 방법은 클로드한테 직접 만들어 달라고 하는 거예요.</p>
+  <!-- MEMORY -->
+  <section class="blk" id="memory">
+    <p class="step">여섯, 한 번 더 편하게</p>
+    <h2>내 규칙을 기억시키기 (CLAUDE.md)</h2>
+    <p>클로드 코드는 창을 닫으면 대화를 잊어버려요. 그런데 폴더 안에 <strong>CLAUDE.md</strong>라는 파일을 하나 두면, 켤 때마다 <span class="mk">자동으로 읽어서 내 규칙을 기억</span>해요. 매번 같은 설명을 안 해도 되는 거죠.</p>
+    <p>제일 쉬운 방법은 그냥 클로드한테 만들어 달라고 하는 거예요.</p>
 <pre class="code"><span class="pr">></span> 이 폴더는 내 인스타 콘텐츠 작업방이야.
-<span class="pr">></span> 말투는 친근하게, 과장 표현은 쓰지 말고, 항상 한국어로 써줘.
+<span class="pr">></span> 말투는 친근하게, 과장 표현은 빼고, 항상 한국어로 써줘.
 <span class="pr">></span> 이 내용으로 CLAUDE.md 파일을 만들어줘.</pre>
+    <p>한 번 적어두면, 다음부터는 "친근하게 써줘"를 매번 말 안 해도 알아서 지켜요. 콘텐츠 작업이라면 이런 걸 넣어두면 좋아요.</p>
+    <ul>
+      <li><strong>이 폴더가 하는 일</strong> — "인스타 카드뉴스랑 캡션 작업방"</li>
+      <li><strong>말투·스타일</strong> — "친근하지만 과장 금지, 항상 한국어"</li>
+      <li><strong>하지 말 것</strong> — "경쟁사 실명 쓰지 않기" 같은 금지선</li>
+      <li><strong>저장 규칙</strong> — "초안은 drafts/ 폴더에, 파일명은 날짜_주제"</li>
+    </ul>
+    <div class="talk tip"><b>이거 하나면 훨씬 편해져요.</b> 바로 다음 장에서 이걸 더 편하게 쓰는 습관을 알려드릴게요.</div>
+  </section>
 
-      <p>한 번 써두면 다음 세션부터는 "친근하게 써줘"를 매번 말하지 않아도 알아서 지켜요. 콘텐츠 작업이라면 이런 걸 적어두면 좋아요.</p>
-      <ul>
-        <li><strong>이 폴더가 하는 일</strong> — "인스타 카드뉴스와 캡션 작업방"</li>
-        <li><strong>말투·스타일</strong> — "친근하지만 과장 금지, 항상 한국어"</li>
-        <li><strong>하지 말 것</strong> — "경쟁사 실명 언급 금지" 같은 금지 사항</li>
-        <li><strong>저장 규칙</strong> — "초안은 drafts/ 폴더에, 파일명은 날짜_주제.md"</li>
-      </ul>
+  <!-- HABITS -->
+  <section class="blk" id="habits">
+    <p class="step">일곱, 알아두면 편해요</p>
+    <h2>꼭 알아두면 두고두고 편한 것들</h2>
+    <p>외울 필요 없어요. "아, 이런 게 있었지" 정도만 기억해두면 나중에 큰 도움이 돼요.</p>
 
-      <div class="note">
-        <b>이게 마지막이에요.</b> 여기까지 손에 익으면 수업을 따라오는 데 필요한 클로드 코드 기초는 끝입니다. 나머지는 수업에서 직접 만들어 보면서 자연스럽게 익히게 될 거예요.
-      </div>
-    </section>
-  </main>
-</div>
+    <h3>새 프로젝트는 항상 <code class="in">/init</code>부터</h3>
+    <p>작업 폴더에서 클로드를 켜자마자 <code class="in">/init</code>을 해보세요. 클로드가 폴더를 쓱 둘러보고 <span class="mk">CLAUDE.md(내 규칙 메모장)</span>를 알아서 만들어줘요.</p>
+    <div class="talk tip"><b>중간에 떠오른 규칙은 <code class="in">#</code>으로 바로 저장.</b> 작업하다 "앞으로 이건 이렇게 해줘" 싶을 때, 메시지 맨 앞에 <code class="in">#</code>를 붙여 적으면 그 내용이 메모리(CLAUDE.md)에 바로 기록돼요.<br>예: <code class="in"># 캡션 끝엔 항상 "프로필 링크에서 신청" 붙이기</code></div>
+
+    <h3>그 밖에 몸에 익히면 좋은 습관</h3>
+    <ul>
+      <li><strong>대화가 길어지면 <code class="in">/compact</code></strong> — 느려졌다 싶을 때 한 번 정리(압축)하면 다시 쾌적해져요.</li>
+      <li><strong>새 일은 <code class="in">/clear</code>로 초기화</strong> — 앞 작업이랑 상관없는 새 일을 시작할 땐 깨끗이 비우고.</li>
+      <li><strong>실수했으면 <code class="in">Esc</code> 두 번</strong> — 잘못 바뀌었을 때 이전 상태로 되돌리는 안전장치.</li>
+      <li><strong>큰 작업 전엔 <code class="in">Shift+Tab</code>(Plan 모드)</strong> — 여러 파일을 한꺼번에 바꾸기 전에 '계획만 먼저 보기'.</li>
+      <li><strong>비밀번호·카드번호·키는 절대 입력 금지</strong> — 민감한 정보는 대화창에 적지 않기.</li>
+      <li><strong>모르면 그냥 물어보기</strong> — "왜 이렇게 해? 다른 방법 없어?" 클로드는 같이 고민하는 파트너예요.</li>
+    </ul>
+
+    <h3>자주 쓰는 명령어 (대화 중 <code class="in">/</code>로 시작)</h3>
+    <div class="tbl"><table>
+      <tr><th>명령어</th><th>이럴 때 써요</th></tr>
+      <tr><td><code>/init</code></td><td>프로젝트 시작 — 폴더 파악해서 CLAUDE.md 자동 생성</td></tr>
+      <tr><td><code>/memory</code></td><td>CLAUDE.md 열어서 직접 고치기</td></tr>
+      <tr><td><code>/compact</code></td><td>대화가 길어졌을 때 정리(압축)</td></tr>
+      <tr><td><code>/clear</code></td><td>새 작업 시작 — 대화 초기화</td></tr>
+      <tr><td><code>/cost</code></td><td>이번 세션에 쓴 사용량 보기</td></tr>
+      <tr><td><code>/plugin</code></td><td>플러그인·스킬 설치 창 열기</td></tr>
+      <tr><td><code>/help</code></td><td>명령어 전체 목록 보기</td></tr>
+    </table></div>
+
+    <h3>자주 쓰는 단축키 · 기호</h3>
+    <div class="tbl"><table>
+      <tr><th>키 · 기호</th><th>하는 일</th></tr>
+      <tr><td><code>@파일명</code></td><td>그 파일을 콕 집어 클로드에게 넘기기</td></tr>
+      <tr><td><code>#문장</code></td><td>그 문장을 메모리(CLAUDE.md)에 규칙으로 바로 저장</td></tr>
+      <tr><td><code>Shift+Tab</code></td><td>권한 모드 전환 (기본 ↔ 자동 ↔ Plan)</td></tr>
+      <tr><td><code>Esc</code></td><td>진행 중인 답변 잠깐 멈추기</td></tr>
+      <tr><td><code>Esc Esc</code></td><td>되돌리기 메뉴 — 이전 상태로 복원</td></tr>
+      <tr><td><code>Ctrl+C</code></td><td>지금 작업 취소</td></tr>
+    </table></div>
+    <div class="talk"><b>터미널에서 클로드 켜기 전 명령도 몇 개.</b> <code class="in">claude</code>(켜기), <code class="in">claude -c</code>(직전 대화 이어서), <code class="in">claude --version</code>(버전), <code class="in">claude doctor</code>(점검).</div>
+  </section>
+
+  <!-- POWER: plugins & skills -->
+  <section class="blk" id="power">
+    <p class="step">여덟, 남이 만든 걸 빌려 쓰기</p>
+    <h2>플러그인 · 스킬 깔아서 더 편하게</h2>
+    <p>여기가 진짜 신세계예요. 클로드 코드는 기본도 강력하지만, <strong>남이 잘 만들어둔 '능력 묶음'</strong>을 깔면 훨씬 편해져요. 저도 <span class="mk">'끼리끼리' 같은 걸 터미널에 깔아두니까</span> 일이 확 줄더라고요. 그 까는 법을 알려드릴게요.</p>
+
+    <h3>스킬 · 플러그인이 뭐예요?</h3>
+    <p>클로드에게 <strong>"이런 일은 이렇게 하는 거야"라고 미리 가르쳐둔 능력 묶음</strong>이에요. 스마트폰에 앱 깔듯, 필요한 걸 골라 깔면 명령어 하나로 불러 쓸 수 있어요. (스킬 여러 개를 묶어 한 번에 설치하는 게 '플러그인'이에요.)</p>
+
+    <h3>까는 기본 순서</h3>
+    <ol class="steps">
+      <li><b>마켓(저장소) 한 번 등록.</b> 클로드 코드 안에서 한 줄 입력 — <code class="in">/plugin marketplace add 저장소주소</code></li>
+      <li><b>원하는 걸 설치.</b> <code class="in">/plugin install</code>로 목록에서 고르거나, 이름을 바로 적어요.</li>
+      <li><b>클로드 코드 재시작.</b> 그래야 새로 깐 게 켜져요.</li>
+    </ol>
+    <div class="talk tip"><b>제일 쉬운 길.</b> 사실 더 쉬운 방법도 있어요. 깃허브 주소를 통째로 붙여넣고 <strong>"이거 보고 설치하는 것 좀 도와줘"</strong>라고 클로드에게 부탁하면, 알아서 설치를 안내해줘요. 명령어가 헷갈리면 이렇게 하세요.</div>
+
+    <h3>① 한국 입문자용 플러그인 모음</h3>
+    <p>비개발자·바이브코더를 위해 한국어로 만든 플러그인 모음이에요. 제가 쓰는 <strong>끼리끼리</strong>도 여기 있어요. API 키 같은 거 없이 깔면 바로 써요.</p>
+<pre class="code"><span class="cm"># 1) 마켓 등록 (최초 1회)</span>
+<span class="pr">></span> /plugin marketplace add https://github.com/fivetaku/gptaku_plugins.git
+<span class="cm"># 2) 설치 (목록에서 고르거나 이름 지정)</span>
+<span class="pr">></span> /plugin install
+<span class="pr">></span> /plugin install show-me-the-prd
+<span class="cm"># 3) 클로드 코드 재시작</span></pre>
+    <div class="ten">
+      <div class="item star"><div class="head"><span class="ic">🐔</span><span class="nm">끼리끼리</span><span class="badge">노슈니 PICK</span></div><p>"리서치 팀 만들어줘" 한마디면 AI 팀을 자동으로 꾸려 같이 일해줘요. <span class="en">kkirikkiri</span></p></div>
+      <div class="item"><div class="head"><span class="ic">📝</span><span class="nm">쇼미더피알디</span></div><p>아이디어 한 줄 → 인터뷰 몇 번으로 기획서를 뚝딱 만들어줘요. <span class="en">show-me-the-prd</span></p></div>
+      <div class="item"><div class="head"><span class="ic">🔬</span><span class="nm">딥리서치</span></div><p>여러 자료를 한꺼번에 조사·교차검증해 정리 보고서로. <span class="en">deep-research</span></p></div>
+      <div class="item"><div class="head"><span class="ic">🏢</span><span class="nm">노팔</span></div><p>구글 캘린더·드라이브·시트·Gmail 등 9개를 말로 한 번에. <span class="en">nopal</span></p></div>
+      <div class="item"><div class="head"><span class="ic">🎓</span><span class="nm">바르다 깃선생</span></div><p>비개발자용 Git/GitHub 입문. "커밋이 뭐야?"부터 쉽게. <span class="en">git-teacher</span></p></div>
+      <div class="item"><div class="head"><span class="ic">🎨</span><span class="nm">인세인 디자인</span></div><p>마음에 든 웹사이트 주소만 넣으면 그 디자인 감각을 분석해줘요. <span class="en">insane-design</span></p></div>
+      <div class="item"><div class="head"><span class="ic">📚</span><span class="nm">독스 가이드</span></div><p>공식 문서를 참고해 정확히 답해줘요. 엉뚱한 답 줄이기. <span class="en">docs-guide</span></p></div>
+      <div class="item"><div class="head"><span class="ic">💬</span><span class="nm">수다</span></div><p>전문가 4명이 토론하듯, 막연한 아이디어를 쓸 수 있는 스킬로. <span class="en">skillers-suda</span></p></div>
+    </div>
+    <div class="talk warn"><b>윈도우는 한 가지 더.</b> 이 모음은 클로드 코드 전용이고, <strong>윈도우에서는 WSL2 환경이 필요</strong>해요(맥은 바로 됩니다). 조금 고급 단계라, 윈도우 쓰는 분은 수업 때나 슬랙에서 같이 잡아드릴게요.</div>
+
+    <h3>② k-skill — 한국 생활 스킬 모음</h3>
+    <p>한국인 일상에 필요한 걸 모아둔 스킬 모음이에요. SRT 예매부터 <strong>청약 공고·주식 정보 조회</strong>까지 수십 가지가 들어 있어요. 깃허브는 <a href="https://github.com/NomaDamas/k-skill" target="_blank" rel="noopener">github.com/NomaDamas/k-skill</a>.</p>
+    <div class="ten">
+      <div class="item star"><div class="head"><span class="ic">🏠</span><span class="nm">LH·SH 청약 공고 조회</span></div><p>LH·SH의 청약·주택 공고문을 찾아 정리해줘요. (정보 조회)</p></div>
+      <div class="item star"><div class="head"><span class="ic">📈</span><span class="nm">한국 주식 정보 조회</span></div><p>종목·시세 같은 주식 정보를 모아 보여줘요. (정보 조회)</p></div>
+      <div class="item"><div class="head"><span class="ic">🚄</span><span class="nm">SRT 예매</span></div><p>열차 조회·예약·확인·취소. (로그인 인증 필요)</p></div>
+      <div class="item"><div class="head"><span class="ic">🎯</span><span class="nm">로또 당첨 확인</span></div><p>최신·특정 회차 번호 대조. 인증 없이 바로.</p></div>
+      <div class="item"><div class="head"><span class="ic">⚾</span><span class="nm">KBO 경기 결과</span></div><p>날짜별 일정·결과·팀별 조회.</p></div>
+      <div class="item"><div class="head"><span class="ic">📄</span><span class="nm">한글(HWP) 변환</span></div><p>.hwp 파일을 읽어 텍스트·마크다운으로 변환.</p></div>
+    </div>
+    <p>이건 설치 방식이 조금 달라요. 위 깃허브의 <strong>'설치 방법' 문서</strong>를 따라 <span class="mk">전체 설치 → <code class="in">k-skill-setup</code> 실행 → 개별 기능 사용</span> 순서예요. 헷갈리면 깃허브 주소를 클로드에 붙여넣고 "이거 설치 도와줘"라고 하면 돼요.</p>
+
+    <div class="talk warn"><b>딱 하나만 주의.</b> 플러그인·스킬은 누구나 만들 수 있어서, <strong>믿을 만한 공식·검증된 것만</strong> 까세요. 정확한 주소·명령어는 바뀌기도 하니 각 깃허브 안내를 따르고, 처음엔 2~3개만 깔아도 충분해요.</div>
+  </section>
+
+  <!-- RAILWAY -->
+  <section class="blk" id="railway">
+    <p class="step">아홉, 만든 걸 24시간 돌리기</p>
+    <h2>레일웨이(Railway) — 클라우드에 켜두는 내 컴퓨터</h2>
+    <p>수업에서 <strong>슬랙봇</strong> 만들어봤죠? 그런데 봇이 24시간 대답하려면 봇이 계속 켜져 있어야 해요. 내 노트북을 하루 종일 켜둘 순 없잖아요.</p>
+    <p>그래서 <a href="https://railway.com/" target="_blank" rel="noopener">레일웨이</a>를 써요. 레일웨이는 <span class="mk">클라우드에 '항상 켜져 있는 컴퓨터' 한 대를 빌려주는</span> 서비스예요. 거기에 봇을 올려두면, <strong>내 노트북을 꺼도 어디서든 봇이 살아서 일해요.</strong></p>
+
+    <h3>집에서 다시 올릴 땐 이렇게</h3>
+    <ol class="steps">
+      <li><b>봇 코드를 GitHub에 올리기.</b> 클로드 코드가 옆에서 도와줘요.</li>
+      <li><b>레일웨이에서 그 GitHub 저장소를 연결.</b> 마우스 클릭 몇 번이면 돼요.</li>
+      <li><b>레일웨이가 알아서 켜줌.</b> 코드를 가져와 빌드하고 24시간 실행. 보통 몇 분이면 끝.</li>
+      <li><b>이제 슬랙에서 봇을 부르면</b> 언제든 대답해요.</li>
+    </ol>
+
+    <h3>비용은요</h3>
+    <p>처음엔 <strong>무료 체험 크레딧($5, 카드 없이 시작)</strong>이 있어요. 이후엔 쓴 만큼 내는 방식이고, 작은 봇 하나는 보통 <strong>월 $5 안팎</strong>이에요. 정확한 가격은 <a href="https://railway.com/" target="_blank" rel="noopener">railway.com</a>에서 확인하세요.</p>
+    <div class="talk tip"><b>혼자 다시 해볼 때.</b> 수업에서 한 번 해봤으니 어렵지 않아요. 막히면 그때 화면 캡처해서 슬랙에 올려주세요. 같이 봐드릴게요.</div>
+  </section>
+</main>
 
 <!-- CLOSING -->
-<div class="closing" id="apply">
+<div class="closing">
   <div class="in">
-    <p class="eyebrow" style="justify-content:center">Focus AI Edu</p>
-    <h2>준비됐다면,<br>이제 함께 만들어 봐요</h2>
-    <p>혼자 막히지 않게, 10명 정원 소수 정예로 끝까지 함께 갑니다. 수업 신청은 프로필 링크에서.</p>
-    <a class="btn primary" href="https://oshooni.github.io/focus-ai-edu" target="_blank" rel="noopener">프로필 링크에서 신청 →</a>
+    <p class="from">혼자서도 잘하고 있어요 :)</p>
+    <h2>막히면 언제든,<br>다시 펼쳐 보세요</h2>
+    <p>이 노트가 도움이 됐다면, 다음 기수·새 수업 소식도 제일 먼저 알려드릴게요. 주변에 "나도 배우고 싶다"는 분이 있다면 알림 신청을 권해주세요.</p>
+    <a class="alert-btn big" href="https://oshooni.github.io/focus-ai-edu/Earlybird/" target="_blank" rel="noopener"><span class="bell">🔔</span> 오픈 알림 신청하기</a>
   </div>
   <footer>
     <div class="ft">
-      <span class="logo" style="font-size:1rem"><span class="f">F</span><span class="rest">ocus</span><span class="ai">ai</span></span>
-      <small>© Focus AI Edu · 클로드 코드 수업 가이드 · 가격·설치 방법은 공식 안내에 따라 달라질 수 있어요</small>
+      <span class="logo" style="font-size:.98rem"><span class="f">F</span><span class="rest">ocus</span><span class="ai">ai</span></span>
+      <small>© Focus AI Edu · 노슈니의 클로드 코드 복습 노트 · 가격·설치 방법·플러그인 목록은 공식 안내에 따라 바뀔 수 있어요.</small>
     </div>
   </footer>
 </div>
 
 <script>
-  // OS tabs
-  document.querySelectorAll('.tab').forEach(function(t){
-    t.addEventListener('click',function(){
-      document.querySelectorAll('.tab').forEach(function(x){x.setAttribute('aria-selected','false')});
-      t.setAttribute('aria-selected','true');
-      var key=t.dataset.tab;
-      document.querySelectorAll('.tabpane').forEach(function(p){
-        p.classList.toggle('show', p.dataset.pane===key);
-      });
+  document.querySelectorAll('.os-toggle button').forEach(function(b){
+    b.addEventListener('click',function(){
+      var scope=b.closest('.ck');
+      scope.querySelectorAll('.os-toggle button').forEach(function(x){x.setAttribute('aria-selected','false')});
+      b.setAttribute('aria-selected','true');
+      var key=b.dataset.os;
+      scope.querySelectorAll('.ospane').forEach(function(p){p.classList.toggle('on',p.dataset.pane===key)});
     });
   });
-
-  // scroll-spy nav
-  var links=document.querySelectorAll('.toc a');
-  var map={};
-  links.forEach(function(l){ map[l.getAttribute('href').slice(1)]=l; });
-  var obs=new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
+  var links=document.querySelectorAll('.chapnav a'), map={};
+  links.forEach(function(l){map[l.getAttribute('href').slice(1)]=l});
+  var obs=new IntersectionObserver(function(es){
+    es.forEach(function(e){
       if(e.isIntersecting){
         links.forEach(function(l){l.classList.remove('active')});
         var a=map[e.target.id];
         if(a){a.classList.add('active');
-          // keep active chip visible on mobile horizontal nav (no vertical page jump)
-          var ol=a.closest('ol');
-          if(ol && ol.scrollWidth>ol.clientWidth){
-            ol.scrollTo({left:a.offsetLeft-24,behavior:'smooth'});
-          }
+          var row=a.parentElement;
+          if(row.scrollWidth>row.clientWidth){row.scrollTo({left:a.offsetLeft-20,behavior:'smooth'})}
         }
       }
     });
-  },{rootMargin:'-40% 0px -55% 0px'});
-  document.querySelectorAll('section.sec').forEach(function(s){obs.observe(s)});
+  },{rootMargin:'-45% 0px -50% 0px'});
+  document.querySelectorAll('section.blk').forEach(function(s){obs.observe(s)});
 </script>
 </body>
 </html>
