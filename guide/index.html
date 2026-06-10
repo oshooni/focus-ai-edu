@@ -83,6 +83,23 @@
   pre.code .cm{color:var(--muted)}
   pre.code .ok{color:#5ee08a}
 
+  /* copyable command rows */
+  .cmd-block{display:flex;flex-direction:column;gap:9px;margin:0 0 18px}
+  .cmd-note{font-family:var(--sans);font-size:.88rem;color:var(--muted);margin:2px 0 -3px}
+  .cmd{position:relative;display:flex;gap:10px;align-items:flex-start;background:#0c0c10;border:1px solid var(--line);border-radius:11px;padding:11px 11px 11px 32px;margin:0 0 14px}
+  .cmd-block .cmd{margin:0}
+  .cmd::before{content:"$";position:absolute;left:13px;top:11px;color:var(--purple-light);font-family:var(--mono);font-size:.84rem}
+  .cmd.ps::before{content:">"}
+  .cmd code{flex:1;min-width:0;font-family:var(--mono);font-size:.84rem;color:#dcd7ee;background:none;border:none;padding:0;white-space:pre-wrap;word-break:break-all;line-height:1.55}
+  .cmd .copy{flex:0 0 auto;font-family:var(--display);font-weight:700;font-size:.7rem;padding:5px 11px;border-radius:8px;border:1px solid var(--line-2);background:rgba(124,58,237,.16);color:var(--cream);cursor:pointer;transition:.15s;white-space:nowrap}
+  .cmd .copy:hover{background:var(--purple);color:#fff;border-color:var(--purple)}
+  .cmd .copy.done{background:#1f7a46;border-color:#1f7a46;color:#fff}
+
+  /* folder tree illustration */
+  .tree{font-family:var(--mono);font-size:.84rem;line-height:1.95;background:#0c0c10;border:1px solid var(--line);border-radius:13px;padding:16px 18px;margin:0 0 16px;color:#cdc8de;white-space:pre;overflow-x:auto}
+  .tree .root{color:var(--cream);font-weight:700}
+  .tree .hl{color:var(--purple-light)}
+
   .talk{position:relative;border:1px solid var(--line);background:linear-gradient(180deg,rgba(124,58,237,.08),rgba(124,58,237,.02));border-radius:16px;padding:20px 22px 20px 56px;margin:6px 0 22px;color:#e6e2f4;max-width:66ch}
   .talk::before{content:"🙂";position:absolute;left:18px;top:18px;font-size:1.2rem}
   .talk.tip::before{content:"💜"}
@@ -134,6 +151,10 @@
   .item .en{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
   .item .badge{font-family:var(--display);font-size:.64rem;font-weight:700;letter-spacing:.04em;padding:3px 8px;border-radius:999px;margin-left:auto;background:var(--purple);color:#fff}
   .item p{margin:0;font-size:.9rem;color:var(--soft);line-height:1.6}
+  .item .cmd{margin:12px 0 0;padding:9px 9px 9px 27px;border-radius:9px}
+  .item .cmd::before{left:11px;top:9px;font-size:.78rem}
+  .item .cmd code{font-size:.77rem;line-height:1.5}
+  .item .cmd .copy{font-size:.65rem;padding:4px 9px}
 
   .closing{margin-top:60px;border-top:1px solid var(--line);background:radial-gradient(70% 130% at 50% 0%,rgba(124,58,237,.18),transparent 70%)}
   .closing .in{max-width:var(--maxw);margin:0 auto;padding:64px 24px 18px;text-align:center}
@@ -208,9 +229,19 @@
       <tr><td><strong>결과물</strong></td><td>복사해서 옮기기</td><td>파일로 딱 저장해 둠</td></tr>
       <tr><td><strong>반복 일</strong></td><td>매번 다시 시켜야</td><td>한 번 말하면 알아서</td></tr>
     </table></div>
-  </section>
 
-  <!-- MAKE -->
+    <h3>챗 · 코워크 · 코드 · 터미널, 뭐가 달라요?</h3>
+    <p>이름이 비슷해서 왕초보일 때 제일 헷갈리는 부분이에요. 한눈에 정리하면 이래요.</p>
+    <div class="tbl"><table>
+      <tr><th>구분</th><th>한마디로</th><th>이럴 때 쓰면 좋아요</th></tr>
+      <tr><td><strong>Claude 챗</strong><br><span style="font-size:.82rem;color:var(--muted)">claude.ai</span></td><td>똑똑한 대화 상대</td><td>가볍게 묻고, 글·아이디어 다듬기.<br>예: "이 캡션 더 친근하게 고쳐줘"</td></tr>
+      <tr><td><strong>Cowork</strong><br><span style="font-size:.82rem;color:var(--muted)">코워크</span></td><td>일을 통째로 맡기는 비서</td><td>여러 단계가 필요한 일을 알아서.<br>예: "이 자료들 조사해서 보고서로 정리해줘"</td></tr>
+      <tr><td><strong>Claude Code</strong><br><span style="font-size:.82rem;color:var(--muted)">코드</span></td><td>내 컴퓨터에 와서 일하는 동료</td><td>내 폴더 파일을 직접 다루고 도구·자동화 만들기.<br>예: 회의록 정리, 슬랙봇 만들기</td></tr>
+      <tr><td><strong>터미널</strong></td><td>앱이 아니라 '까만 명령어 창'</td><td>클로드 코드를 켜는 무대(장소).<br>예: <code>claude</code> 쳐서 코드 켜기</td></tr>
+    </table></div>
+    <div class="talk warn"><b>여기만 안 헷갈리면 돼요.</b> <strong>'클로드 코드 = 터미널'이 아니에요.</strong> 터미널은 그냥 명령어를 입력하는 '창'이고, 클로드 코드는 그 창에서 켜서 쓰는 '도구'예요. 우리는 그 창에 <code class="in">claude</code>라고 쳐서 코드를 부르는 거죠.</div>
+    <p><b>한 줄 요약</b> — 가볍게 물을 땐 <strong>챗</strong>, 여러 단계 일을 통째로 맡길 땐 <strong>코워크</strong>, 내 컴퓨터 파일을 직접 만지고 뭔가 만들 땐 <strong>코드</strong>. 그리고 <strong>터미널</strong>은 그 코드를 켜는 곳이에요.</p>
+  </section>
   <section class="blk" id="make">
     <p class="step">둘, 집에서도 이런 걸</p>
     <h2>혼자서도 이런 걸 만들 수 있어요</h2>
@@ -255,13 +286,13 @@
           <ol class="steps">
             <li><b>터미널 앱 열기.</b> <code class="in">Cmd</code>+<code class="in">스페이스바</code>로 검색창을 띄우고 <strong>터미널</strong>이라 친 뒤 Enter.</li>
             <li><b>설치 명령어 붙여넣기.</b> 아래 한 줄을 복사해서 붙여넣고(<code class="in">Cmd</code>+<code class="in">V</code>) Enter.
-<pre class="code"><span class="pr">$</span> curl -fsSL https://claude.ai/install.sh | bash</pre>
+<div class="cmd"><code>curl -fsSL https://claude.ai/install.sh | bash</code><button class="copy" type="button">복사</button></div>
             <span style="font-size:.9rem;color:var(--muted)">1분 안쪽이면 끝나요.</span></li>
             <li><b>터미널 껐다 다시 켜기.</b> 창을 완전히 닫고 다시 열어주세요.</li>
             <li><b>확인.</b> 버전 번호가 뜨면 성공!
-<pre class="code"><span class="pr">$</span> claude --version</pre></li>
+<div class="cmd"><code>claude --version</code><button class="copy" type="button">복사</button></div></li>
             <li><b>실행하고 로그인.</b> <code class="in">claude</code> → 브라우저가 열리면 유료 계정으로 로그인 → 끝.
-<pre class="code"><span class="pr">$</span> claude</pre></li>
+<div class="cmd"><code>claude</code><button class="copy" type="button">복사</button></div></li>
           </ol>
           <div class="talk tip"><b>홈브루(Homebrew)를 쓰는 분이라면</b> <code class="in">brew install --cask claude-code</code> 한 줄로도 돼요.</div>
         </div>
@@ -270,12 +301,12 @@
           <ol class="steps">
             <li><b>PowerShell 열기.</b> 시작 버튼을 <strong>오른쪽 클릭</strong> → <strong>터미널</strong> 또는 <strong>Windows PowerShell</strong> 선택. (안 보이면 <code class="in">Win</code>+<code class="in">R</code> → <code class="in">powershell</code> → Enter)</li>
             <li><b>설치 명령어 붙여넣기.</b> <strong>오른쪽 클릭으로 붙여넣고</strong> Enter.
-<pre class="code"><span class="pr">></span> irm https://claude.ai/install.ps1 | iex</pre></li>
+<div class="cmd ps"><code>irm https://claude.ai/install.ps1 | iex</code><button class="copy" type="button">복사</button></div></li>
             <li><b>PowerShell 껐다 다시 켜기.</b></li>
             <li><b>확인.</b>
-<pre class="code"><span class="pr">></span> claude --version</pre></li>
+<div class="cmd ps"><code>claude --version</code><button class="copy" type="button">복사</button></div></li>
             <li><b>실행하고 로그인.</b> <code class="in">claude</code> → 브라우저에서 유료 계정 로그인 → 끝!
-<pre class="code"><span class="pr">></span> claude</pre></li>
+<div class="cmd ps"><code>claude</code><button class="copy" type="button">복사</button></div></li>
           </ol>
           <div class="talk warn"><b>윈도우에서 한 가지.</b> 직접 파일·코드 작업을 하려면 <strong>Git</strong>이 필요할 수 있어요(<a href="https://git-scm.com/downloads/win" target="_blank" rel="noopener">git-scm.com</a>). WinGet을 쓴다면 <code class="in">winget install Anthropic.ClaudeCode</code>로도 돼요.</div>
         </div>
@@ -315,10 +346,33 @@
     <h2>터미널, 딱 이만큼만 기억해요</h2>
     <p>터미널이 어려운 게 아니라 <span class="mk">'내가 지금 어느 폴더에 있는지'</span>가 헷갈려서 막히는 거예요. 폴더를 '방'이라고 생각하면 쉬워요.</p>
 
+    <h3>잠깐 — 터미널이 만든 폴더는 어디 있어요?</h3>
+    <p>왕초보가 제일 어리둥절해하는 부분이에요. 결론부터 말하면, <span class="mk">터미널로 만든 폴더 = 진짜 내 컴퓨터 폴더</span>예요. Finder(맥)나 파일 탐색기(윈도우)에서 평소처럼 보이는, 마우스로 우클릭해서 '새 폴더' 만드는 그것과 <strong>완전히 똑같은 폴더</strong>예요. 터미널은 그저 '마우스 대신 말(명령어)로' 폴더를 만드는 방법일 뿐이에요. 터미널만의 특별한 폴더가 따로 생기는 게 아니에요.</p>
+    <p>그럼 그 폴더가 어디에 생길까요? <strong>지금 내가 서 있는 폴더(현재 위치) 안</strong>에 생겨요. 터미널을 켜면 늘 <strong>홈 폴더</strong>에서 시작하니까, 켜자마자 <code class="in">mkdir 카드뉴스</code>를 하면 홈 폴더 안에 '카드뉴스' 방이 생기는 거죠.</p>
+    <p>홈 폴더는 <strong>내 이름으로 된 '내 집' 같은 폴더</strong>예요. 평소 쓰는 바탕화면·문서·다운로드가 전부 이 안에 들어 있어요.</p>
+    <div class="tree"><span class="root">🏠 홈 폴더 (내 집)</span>   <span style="color:var(--muted)">맥: 사용자/내이름  ·  윈도우: C:\Users\내이름</span>
+├─ 🖥️ 바탕화면 (Desktop)
+├─ 📄 문서 (Documents)
+├─ ⬇️ 다운로드 (Downloads)
+└─ <span class="hl">📁 카드뉴스   ← 방금 mkdir로 만든 폴더가 여기 생겨요!</span></div>
+    <p>눈으로 직접 확인하고 싶으면, <strong>지금 있는 폴더를 화면(Finder·탐색기)으로 바로 열 수</strong> 있어요. 점(<code class="in">.</code>) 하나가 '지금 이 폴더'라는 뜻이에요.</p>
+    <div class="cmd-block">
+      <p class="cmd-note">맥에서 — 지금 폴더를 Finder로 열기</p>
+      <div class="cmd"><code>open .</code><button class="copy" type="button">복사</button></div>
+      <p class="cmd-note">윈도우에서 — 지금 폴더를 탐색기로 열기</p>
+      <div class="cmd ps"><code>start .</code><button class="copy" type="button">복사</button></div>
+    </div>
+    <div class="talk tip"><b>이거 하나만 기억하면 안 헷갈려요.</b> 터미널에서 뭔가 만든 뒤 "어디 갔지?" 싶으면, 그 자리에서 <code class="in">open .</code>(맥) 또는 <code class="in">start .</code>(윈도우)를 쳐보세요. 방금 만든 폴더가 화면에 짠 하고 열려요.</div>
+
     <h3>핵심 3줄: 방 만들고 → 들어가서 → 클로드 부르기</h3>
-<pre class="code"><span class="pr">$</span> mkdir 카드뉴스   <span class="cm"># '카드뉴스'라는 방(폴더) 만들기</span>
-<span class="pr">$</span> cd 카드뉴스     <span class="cm"># 그 방으로 걸어 들어가기</span>
-<span class="pr">$</span> claude         <span class="cm"># 그 방에서 클로드 부르기</span></pre>
+    <div class="cmd-block">
+      <p class="cmd-note">① '카드뉴스'라는 방(폴더) 만들기</p>
+      <div class="cmd"><code>mkdir 카드뉴스</code><button class="copy" type="button">복사</button></div>
+      <p class="cmd-note">② 그 방으로 걸어 들어가기</p>
+      <div class="cmd"><code>cd 카드뉴스</code><button class="copy" type="button">복사</button></div>
+      <p class="cmd-note">③ 그 방에서 클로드 부르기</p>
+      <div class="cmd"><code>claude</code><button class="copy" type="button">복사</button></div>
+    </div>
     <p>다른 작업으로 옮길 땐 <code class="in">cd ..</code>로 방에서 나온 뒤, 새 방을 만들어 똑같이 하면 돼요.</p>
 
     <h3>길 잃었을 때 쓰는 두 마디</h3>
@@ -415,35 +469,34 @@
 
     <h3>① 한국 입문자용 플러그인 모음</h3>
     <p>비개발자·바이브코더를 위해 한국어로 만든 플러그인 모음이에요. 제가 쓰는 <strong>끼리끼리</strong>도 여기 있어요. API 키 같은 거 없이 깔면 바로 써요.</p>
-<pre class="code"><span class="cm"># 1) 마켓 등록 (최초 1회)</span>
-<span class="pr">></span> /plugin marketplace add https://github.com/fivetaku/gptaku_plugins.git
-<span class="cm"># 2) 설치 (목록에서 고르거나 이름 지정)</span>
-<span class="pr">></span> /plugin install
-<span class="pr">></span> /plugin install show-me-the-prd
-<span class="cm"># 3) 클로드 코드 재시작</span></pre>
+    <div class="cmd-block">
+      <p class="cmd-note">먼저, 마켓을 한 번만 등록해요 (최초 1회). 이것만 해두면 아래 카드 명령어로 바로 깔려요.</p>
+      <div class="cmd ps"><code>/plugin marketplace add https://github.com/fivetaku/gptaku_plugins.git</code><button class="copy" type="button">복사</button></div>
+    </div>
+    <p>이제 아래에서 원하는 걸 골라, <strong>카드 속 명령어를 복사해 붙여넣고</strong> 클로드 코드를 재시작하면 끝이에요.</p>
     <div class="ten">
-      <div class="item star"><div class="head"><span class="ic">🐔</span><span class="nm">끼리끼리</span><span class="badge">노슈니 PICK</span></div><p>"리서치 팀 만들어줘" 한마디면 AI 팀을 자동으로 꾸려 같이 일해줘요. <span class="en">kkirikkiri</span></p></div>
-      <div class="item"><div class="head"><span class="ic">📝</span><span class="nm">쇼미더피알디</span></div><p>아이디어 한 줄 → 인터뷰 몇 번으로 기획서를 뚝딱 만들어줘요. <span class="en">show-me-the-prd</span></p></div>
-      <div class="item"><div class="head"><span class="ic">🔬</span><span class="nm">딥리서치</span></div><p>여러 자료를 한꺼번에 조사·교차검증해 정리 보고서로. <span class="en">deep-research</span></p></div>
-      <div class="item"><div class="head"><span class="ic">🏢</span><span class="nm">노팔</span></div><p>구글 캘린더·드라이브·시트·Gmail 등 9개를 말로 한 번에. <span class="en">nopal</span></p></div>
-      <div class="item"><div class="head"><span class="ic">🎓</span><span class="nm">바르다 깃선생</span></div><p>비개발자용 Git/GitHub 입문. "커밋이 뭐야?"부터 쉽게. <span class="en">git-teacher</span></p></div>
-      <div class="item"><div class="head"><span class="ic">🎨</span><span class="nm">인세인 디자인</span></div><p>마음에 든 웹사이트 주소만 넣으면 그 디자인 감각을 분석해줘요. <span class="en">insane-design</span></p></div>
-      <div class="item"><div class="head"><span class="ic">📚</span><span class="nm">독스 가이드</span></div><p>공식 문서를 참고해 정확히 답해줘요. 엉뚱한 답 줄이기. <span class="en">docs-guide</span></p></div>
-      <div class="item"><div class="head"><span class="ic">💬</span><span class="nm">수다</span></div><p>전문가 4명이 토론하듯, 막연한 아이디어를 쓸 수 있는 스킬로. <span class="en">skillers-suda</span></p></div>
+      <div class="item star"><div class="head"><span class="ic">🐔</span><span class="nm">끼리끼리</span><span class="badge">노슈니 PICK</span></div><p>"리서치 팀 만들어줘" 한마디면 AI 팀을 자동으로 꾸려 같이 일해줘요.</p><div class="cmd ps"><code>/plugin install kkirikkiri</code><button class="copy" type="button">복사</button></div></div>
+      <div class="item"><div class="head"><span class="ic">📝</span><span class="nm">쇼미더피알디</span></div><p>아이디어 한 줄 → 인터뷰 몇 번으로 기획서를 뚝딱 만들어줘요.</p><div class="cmd ps"><code>/plugin install show-me-the-prd</code><button class="copy" type="button">복사</button></div></div>
+      <div class="item"><div class="head"><span class="ic">🔬</span><span class="nm">딥리서치</span></div><p>여러 자료를 한꺼번에 조사·교차검증해 정리 보고서로.</p><div class="cmd ps"><code>/plugin install deep-research</code><button class="copy" type="button">복사</button></div></div>
+      <div class="item"><div class="head"><span class="ic">🏢</span><span class="nm">노팔</span></div><p>구글 캘린더·드라이브·시트·Gmail 등 9개를 말로 한 번에.</p><div class="cmd ps"><code>/plugin install nopal</code><button class="copy" type="button">복사</button></div></div>
+      <div class="item"><div class="head"><span class="ic">🎓</span><span class="nm">바르다 깃선생</span></div><p>비개발자용 Git/GitHub 입문. "커밋이 뭐야?"부터 쉽게.</p><div class="cmd ps"><code>/plugin install git-teacher</code><button class="copy" type="button">복사</button></div></div>
+      <div class="item"><div class="head"><span class="ic">🎨</span><span class="nm">인세인 디자인</span></div><p>마음에 든 웹사이트 주소만 넣으면 그 디자인 감각을 분석해줘요.</p><div class="cmd ps"><code>/plugin install insane-design</code><button class="copy" type="button">복사</button></div></div>
+      <div class="item"><div class="head"><span class="ic">📚</span><span class="nm">독스 가이드</span></div><p>공식 문서를 참고해 정확히 답해줘요. 엉뚱한 답 줄이기.</p><div class="cmd ps"><code>/plugin install docs-guide</code><button class="copy" type="button">복사</button></div></div>
+      <div class="item"><div class="head"><span class="ic">💬</span><span class="nm">수다</span></div><p>전문가 4명이 토론하듯, 막연한 아이디어를 쓸 수 있는 스킬로.</p><div class="cmd ps"><code>/plugin install skillers-suda</code><button class="copy" type="button">복사</button></div></div>
     </div>
     <div class="talk warn"><b>윈도우는 한 가지 더.</b> 이 모음은 클로드 코드 전용이고, <strong>윈도우에서는 WSL2 환경이 필요</strong>해요(맥은 바로 됩니다). 조금 고급 단계라, 윈도우 쓰는 분은 수업 때나 슬랙에서 같이 잡아드릴게요.</div>
 
     <h3>② k-skill — 한국 생활 스킬 모음</h3>
     <p>한국인 일상에 필요한 걸 모아둔 스킬 모음이에요. SRT 예매부터 <strong>청약 공고·주식 정보 조회</strong>까지 수십 가지가 들어 있어요. 깃허브는 <a href="https://github.com/NomaDamas/k-skill" target="_blank" rel="noopener">github.com/NomaDamas/k-skill</a>.</p>
     <div class="ten">
-      <div class="item star"><div class="head"><span class="ic">🏠</span><span class="nm">LH·SH 청약 공고 조회</span></div><p>LH·SH의 청약·주택 공고문을 찾아 정리해줘요. (정보 조회)</p></div>
-      <div class="item star"><div class="head"><span class="ic">📈</span><span class="nm">한국 주식 정보 조회</span></div><p>종목·시세 같은 주식 정보를 모아 보여줘요. (정보 조회)</p></div>
-      <div class="item"><div class="head"><span class="ic">🚄</span><span class="nm">SRT 예매</span></div><p>열차 조회·예약·확인·취소. (로그인 인증 필요)</p></div>
-      <div class="item"><div class="head"><span class="ic">🎯</span><span class="nm">로또 당첨 확인</span></div><p>최신·특정 회차 번호 대조. 인증 없이 바로.</p></div>
-      <div class="item"><div class="head"><span class="ic">⚾</span><span class="nm">KBO 경기 결과</span></div><p>날짜별 일정·결과·팀별 조회.</p></div>
-      <div class="item"><div class="head"><span class="ic">📄</span><span class="nm">한글(HWP) 변환</span></div><p>.hwp 파일을 읽어 텍스트·마크다운으로 변환.</p></div>
+      <div class="item star"><div class="head"><span class="ic">🏠</span><span class="nm">LH·SH 청약 공고 조회</span></div><p>LH·SH의 청약·주택 공고문을 찾아 정리해줘요. (정보 조회)</p><div class="cmd"><code>npx --yes skills add NomaDamas/k-skill --skill lh-notice-search --skill sh-notice-search</code><button class="copy" type="button">복사</button></div></div>
+      <div class="item star"><div class="head"><span class="ic">📈</span><span class="nm">한국 주식 정보 조회</span></div><p>종목·시세 같은 주식 정보를 모아 보여줘요. (정보 조회)</p><div class="cmd"><code>npx --yes skills add NomaDamas/k-skill --skill korean-stock-search</code><button class="copy" type="button">복사</button></div></div>
+      <div class="item"><div class="head"><span class="ic">🚄</span><span class="nm">SRT 예매</span></div><p>열차 조회·예약·확인·취소. (로그인 인증 필요)</p><div class="cmd"><code>npx --yes skills add NomaDamas/k-skill --skill srt-booking</code><button class="copy" type="button">복사</button></div></div>
+      <div class="item"><div class="head"><span class="ic">🎯</span><span class="nm">로또 당첨 확인</span></div><p>최신·특정 회차 번호 대조. 인증 없이 바로.</p><div class="cmd"><code>npx --yes skills add NomaDamas/k-skill --skill lotto-results</code><button class="copy" type="button">복사</button></div></div>
+      <div class="item"><div class="head"><span class="ic">⚾</span><span class="nm">KBO 경기 결과</span></div><p>날짜별 일정·결과·팀별 조회.</p><div class="cmd"><code>npx --yes skills add NomaDamas/k-skill --skill kbo-results</code><button class="copy" type="button">복사</button></div></div>
+      <div class="item"><div class="head"><span class="ic">📄</span><span class="nm">한글(HWP) 변환</span></div><p>.hwp 파일을 읽어 텍스트·마크다운으로 변환.</p><div class="cmd"><code>npx --yes skills add NomaDamas/k-skill --skill hwp</code><button class="copy" type="button">복사</button></div></div>
     </div>
-    <p>이건 설치 방식이 조금 달라요. 위 깃허브의 <strong>'설치 방법' 문서</strong>를 따라 <span class="mk">전체 설치 → <code class="in">k-skill-setup</code> 실행 → 개별 기능 사용</span> 순서예요. 헷갈리면 깃허브 주소를 클로드에 붙여넣고 "이거 설치 도와줘"라고 하면 돼요.</p>
+    <p>위 카드의 명령어는 <strong>그 스킬 하나만 골라 까는 방법</strong>이에요(클로드 코드가 아니라 터미널에 붙여넣어요). SRT처럼 <strong>로그인이 필요한 스킬</strong>은 깐 뒤에 <code class="in">k-skill-setup</code>으로 공통 설정을 한 번 해줘야 해요. 한꺼번에 전부 깔고 싶으면, 깃허브 주소를 클로드에 붙여넣고 "이 레포 보고 k-skill 전체 설치 도와줘"라고 하면 알아서 해줘요.</p>
 
     <div class="talk warn"><b>딱 하나만 주의.</b> 플러그인·스킬은 누구나 만들 수 있어서, <strong>믿을 만한 공식·검증된 것만</strong> 까세요. 정확한 주소·명령어는 바뀌기도 하니 각 깃허브 안내를 따르고, 처음엔 2~3개만 깔아도 충분해요.</div>
   </section>
@@ -486,6 +539,17 @@
 </div>
 
 <script>
+  document.querySelectorAll('.cmd .copy').forEach(function(b){
+    b.addEventListener('click',function(){
+      var code=b.parentElement.querySelector('code').textContent;
+      function done(){var t=b.dataset.t||b.textContent;b.dataset.t=t;b.textContent='복사됨!';b.classList.add('done');setTimeout(function(){b.textContent=t;b.classList.remove('done')},1400)}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(code).then(done).catch(fallback);
+      }else{fallback()}
+      function fallback(){var ta=document.createElement('textarea');ta.value=code;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy')}catch(e){}document.body.removeChild(ta);done()}
+    });
+  });
+
   document.querySelectorAll('.os-toggle button').forEach(function(b){
     b.addEventListener('click',function(){
       var scope=b.closest('.ck');
