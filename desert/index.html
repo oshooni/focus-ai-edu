@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>황홀스레 디저트 찾기 테스트</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FFF6DE;
+    --cream-2:#FFEDC0;
+    --card:#FFFDF7;
+    --gold:#F5B82E;
+    --gold-deep:#E89A14;
+    --ink:#3D2E16;
+    --ink-soft:#8A7142;
+    --mint:#9FD8D4;
+    --pink:#F6C7BC;
+    --line:#F0E0B8;
+    --shadow:rgba(180,140,40,.18);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:'Gowun Dodum',sans-serif;
+    color:var(--ink);
+    background:radial-gradient(120% 90% at 50% 0%,var(--cream) 0%,var(--cream-2) 100%);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px 16px;
+  }
+  .wrap{width:100%;max-width:480px}
+  .card{
+    background:var(--card);
+    border:2px solid var(--line);
+    border-radius:32px;
+    box-shadow:0 18px 40px var(--shadow);
+    padding:32px 26px 30px;
+    position:relative;
+    overflow:hidden;
+  }
+  h1,h2,h3,.jua{font-family:'Jua',sans-serif;font-weight:400;letter-spacing:.2px}
+
+  /* bear mascot */
+  .bear{width:96px;height:96px;margin:0 auto 6px;display:block}
+
+  /* intro */
+  .eyebrow{
+    font-family:'Jua',sans-serif;color:var(--gold-deep);
+    text-align:center;font-size:15px;letter-spacing:2px;margin-bottom:4px;
+  }
+  .title{
+    font-size:30px;line-height:1.3;text-align:center;color:var(--ink);margin-bottom:10px;
+  }
+  .title b{color:var(--gold-deep)}
+  .lead{
+    text-align:center;color:var(--ink-soft);font-size:15px;line-height:1.7;margin-bottom:26px;
+  }
+  .btn{
+    width:100%;border:none;cursor:pointer;
+    font-family:'Jua',sans-serif;font-size:19px;
+    color:#fff;background:var(--gold);
+    padding:16px;border-radius:18px;
+    box-shadow:0 6px 0 var(--gold-deep);
+    transition:transform .08s ease, box-shadow .08s ease, background .15s ease;
+  }
+  .btn:hover{background:var(--gold-deep)}
+  .btn:active{transform:translateY(4px);box-shadow:0 2px 0 var(--gold-deep)}
+  .btn:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+
+  /* progress */
+  .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+  .count{font-family:'Jua',sans-serif;color:var(--gold-deep);font-size:15px}
+  .dots{display:flex;gap:6px}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--line);transition:background .25s,transform .25s}
+  .dot.on{background:var(--gold);transform:scale(1.15)}
+  .dot.done{background:var(--gold-deep)}
+
+  .q{font-size:23px;line-height:1.45;margin-bottom:22px;min-height:66px}
+  .opts{display:flex;flex-direction:column;gap:11px}
+  .opt{
+    text-align:left;cursor:pointer;
+    font-family:'Gowun Dodum',sans-serif;font-size:16px;color:var(--ink);
+    background:#fff;border:2px solid var(--line);border-radius:16px;
+    padding:15px 17px;line-height:1.4;
+    transition:border-color .12s,background .12s,transform .08s;
+  }
+  .opt:hover{border-color:var(--gold);background:#FFFBEE}
+  .opt:active{transform:scale(.985)}
+  .opt:focus-visible{outline:3px solid var(--gold-deep);outline-offset:2px}
+
+  /* result */
+  .r-emoji{font-size:60px;text-align:center;line-height:1;margin:4px 0 8px}
+  .r-type{text-align:center;color:var(--gold-deep);font-family:'Jua',sans-serif;font-size:15px;letter-spacing:1px;margin-bottom:4px}
+  .r-name{text-align:center;font-size:27px;line-height:1.3;margin-bottom:14px}
+  .r-desc{color:var(--ink-soft);font-size:15.5px;line-height:1.8;margin-bottom:20px}
+  .pair{
+    background:#FFF6DE;border:2px dashed var(--gold);border-radius:16px;
+    padding:14px 16px;margin-bottom:22px;font-size:15px;line-height:1.6;color:var(--ink);
+  }
+  .pair b{font-family:'Jua',sans-serif;color:var(--gold-deep)}
+  .cta{
+    display:block;text-align:center;text-decoration:none;
+    font-family:'Jua',sans-serif;font-size:18px;color:#fff;background:var(--gold);
+    padding:15px;border-radius:18px;box-shadow:0 6px 0 var(--gold-deep);margin-bottom:11px;
+    transition:transform .08s,box-shadow .08s,background .15s;
+  }
+  .cta:hover{background:var(--gold-deep)}
+  .cta:active{transform:translateY(4px);box-shadow:0 2px 0 var(--gold-deep)}
+  .restart{
+    width:100%;border:none;cursor:pointer;background:transparent;color:var(--ink-soft);
+    font-family:'Gowun Dodum',sans-serif;font-size:14px;text-decoration:underline;padding:6px;
+  }
+
+  .step{animation:fade .35s ease both}
+  @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){
+    .step{animation:none}
+    .btn:active,.cta:active,.opt:active{transform:none}
+  }
+  .foot{text-align:center;color:var(--ink-soft);font-size:12px;margin-top:14px;opacity:.8}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" id="card"></div>
+    <p class="foot">Handmade Dessert · 황홀스레 🐻</p>
+  </div>
+
+<script>
+/* ---- 곰돌이 마스코트 (간단 버전) ---- */
+const BEAR = `
+<svg class="bear" viewBox="0 0 120 120" aria-hidden="true">
+  <circle cx="30" cy="34" r="15" fill="#FBF0D6" stroke="#E7C98A" stroke-width="3"/>
+  <circle cx="90" cy="34" r="15" fill="#FBF0D6" stroke="#E7C98A" stroke-width="3"/>
+  <circle cx="60" cy="62" r="40" fill="#FDF6E6" stroke="#E7C98A" stroke-width="3"/>
+  <circle cx="47" cy="58" r="3.4" fill="#3D2E16"/>
+  <circle cx="73" cy="58" r="3.4" fill="#3D2E16"/>
+  <ellipse cx="60" cy="70" rx="14" ry="11" fill="#FBEFD2"/>
+  <circle cx="60" cy="67" r="3" fill="#3D2E16"/>
+  <path d="M60 70 v5 M60 75 q-5 4 -9 1 M60 75 q5 4 9 1" stroke="#3D2E16" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <circle cx="40" cy="70" r="5" fill="#F6C7BC" opacity=".75"/>
+  <circle cx="80" cy="70" r="5" fill="#F6C7BC" opacity=".75"/>
+  <path d="M83 60 q4 6 0 11" stroke="#9FD8D4" stroke-width="3" fill="none" stroke-linecap="round"/>
+</svg>`;
+
+/* ---- 디저트 결과 데이터 (실제 황홀스레 메뉴 기반) ---- */
+const RESULTS = {
+  dujjon:{
+    emoji:"🟢", type:"트렌드 세터", name:"두바이 쫀득쿠키 ‘두쫀쿠’",
+    desc:"늘 새로운 걸 먼저 찾아내는 당신은, 요즘 제일 핫한 두쫀쿠와 찰떡이에요. 쭉 늘어나는 쫀득함에 피스타치오의 고소함까지, 한 입 베어 물면 SNS에 안 올릴 수가 없죠. 유행을 즐길 줄 아는 사람에게 딱 어울리는 황홀스레 대표 메뉴랍니다.",
+    pair:"잘 어울리는 음료는 <b>시원한 아이스 라떼</b> ☕ 쫀득한 단맛을 깔끔하게 잡아줘요."
+  },
+  macaron:{
+    emoji:"🌈", type:"비주얼 러버", name:"수제 똥카롱 마카롱",
+    desc:"예쁜 걸 보면 그냥 못 지나치는 당신! 알록달록 통통한 똥카롱은 보기만 해도 기분이 말랑해져요. 겉은 바삭, 속은 꾸덕한 크림이 가득. 친구랑 나눠 먹거나 선물하기에도 좋아서, 받는 사람마다 ‘너무 예뻐서 못 먹겠다’는 말이 절로 나와요.",
+    pair:"잘 어울리는 음료는 <b>달콤한 바닐라 라떼</b> 🥛 마카롱의 색만큼 사랑스러운 조합!"
+  },
+  levain:{
+    emoji:"🍫", type:"찐 디저트 마니아", name:"두바이 초코 르뱅 쿠키",
+    desc:"적당히는 통하지 않는 당신. 이왕 먹을 거면 진하고 든든하게죠. 묵직하게 꽉 찬 초코 르뱅 쿠키는 한 개만 먹어도 마음까지 든든해지는 진짜배기예요. 당 떨어졌을 때 이만한 보상이 없답니다.",
+    pair:"잘 어울리는 음료는 <b>진한 아메리카노</b> ☕ 묵직한 단맛엔 쌉싸름함이 정답."
+  },
+  madeleine:{
+    emoji:"🌷", type:"감성 힐링러", name:"수제 마들렌 · 휘낭시에",
+    desc:"조용히 나만의 시간을 즐길 줄 아는 당신에겐 은은한 마들렌이 잘 어울려요. 폭신하고 촉촉한 버터 향, 가볍지만 깊은 풍미가 바쁜 하루에 작은 쉼표를 찍어줘요. 화려하진 않아도 곁에 두고 싶은, 그런 디저트랍니다.",
+    pair:"잘 어울리는 음료는 <b>따뜻한 얼그레이 티</b> 🫖 향과 향이 부드럽게 이어져요."
+  },
+  basque:{
+    emoji:"🧀", type:"꾸덕 크림 러버", name:"수제 바스크 치즈케이크",
+    desc:"부드럽고 진득한 위로가 필요한 당신. 크림치즈가 가득한 바스크 치즈케이크는 한 입에 하루의 피로가 사르르 녹아요. 겉은 살짝 그을리고 속은 촉촉 꾸덕한 그 매력에 한 번 빠지면 헤어나오기 힘들답니다.",
+    pair:"잘 어울리는 음료는 <b>고소한 흑임자 라떼</b> 🥛 진한 크림과 고소함이 환상 궁합!"
+  }
+};
+
+/* ---- 질문지 (선택지마다 결과 점수) ---- */
+const QUESTIONS = [
+  { q:"오늘 당신의 기분은 어떤가요?",
+    o:[
+      ["새로운 거 막 도전하고 싶어!","dujjon"],
+      ["예쁜 거 보면서 기분전환 하고파","macaron"],
+      ["진하고 달달한 게 당겨","levain"],
+      ["조용히 혼자 힐링하고 싶어","madeleine"],
+      ["부드럽고 진득한 위로가 필요해","basque"],
+    ]},
+  { q:"가장 좋아하는 디저트 식감은?",
+    o:[
+      ["쭉 늘어나는 쫀득함","dujjon"],
+      ["겉바속촉, 바삭한 한 입","macaron"],
+      ["묵직하고 꽉 찬 느낌","levain"],
+      ["폭신하고 촉촉한 결","madeleine"],
+      ["꾸덕꾸덕 크리미함","basque"],
+    ]},
+  { q:"디저트는 보통 언제 먹나요?",
+    o:[
+      ["SNS에 올릴 핫플 디저트로","dujjon"],
+      ["친구랑 수다 떨면서","macaron"],
+      ["당 떨어질 때 든든하게","levain"],
+      ["혼자 커피랑 여유롭게","madeleine"],
+      ["하루 끝, 나를 위한 보상으로","basque"],
+    ]},
+  { q:"제일 마음이 가는 맛은?",
+    o:[
+      ["피스타치오 같은 이색 조합","dujjon"],
+      ["알록달록 달콤한 크림","macaron"],
+      ["깊고 진한 초콜릿","levain"],
+      ["은은한 버터·레몬 향","madeleine"],
+      ["진득한 크림치즈","basque"],
+    ]},
+  { q:"디저트를 선물한다면, 받는 사람 반응은?",
+    o:[
+      ["‘이거 완전 요즘 유행이잖아!’","dujjon"],
+      ["‘너무 예뻐서 못 먹겠어’","macaron"],
+      ["‘와 이거 진짜 든든하다’","levain"],
+      ["‘분위기 있다, 고급스러워’","madeleine"],
+      ["‘한 입인데 행복해진다’","basque"],
+    ]},
+  { q:"카페에서 함께 마실 음료를 고른다면?",
+    o:[
+      ["시원한 아이스 라떼","dujjon"],
+      ["달콤한 바닐라 라떼","macaron"],
+      ["진한 아메리카노","levain"],
+      ["따뜻한 얼그레이 티","madeleine"],
+      ["고소한 흑임자 라떼","basque"],
+    ]},
+];
+
+const STORE = "https://smartstore.naver.com/hwangholsre";
+const card = document.getElementById('card');
+let step = 0;
+const score = {dujjon:0,macaron:0,levain:0,madeleine:0,basque:0};
+
+function dots(){
+  let d = '<div class="dots">';
+  for(let i=0;i<QUESTIONS.length;i++){
+    const c = i<step?'dot done':(i===step?'dot on':'dot');
+    d += `<span class="${c}"></span>`;
+  }
+  return d+'</div>';
+}
+
+function renderIntro(){
+  card.innerHTML = `
+    <div class="step">
+      ${BEAR}
+      <p class="eyebrow">HANDMADE DESSERT</p>
+      <h1 class="title">나에게 딱 맞는<br><b>황홀스레 디저트</b>는?</h1>
+      <p class="lead">6개의 질문에 답하면<br>당신과 찰떡인 수제 디저트를 찾아드려요 🐻</p>
+      <button class="btn" id="start">테스트 시작하기</button>
+    </div>`;
+  document.getElementById('start').onclick = ()=>{step=0;renderQ();};
+}
+
+function renderQ(){
+  const item = QUESTIONS[step];
+  card.innerHTML = `
+    <div class="step">
+      <div class="top">
+        <span class="count">Q${step+1} / ${QUESTIONS.length}</span>
+        ${dots()}
+      </div>
+      <h2 class="q">${item.q}</h2>
+      <div class="opts" role="group">
+        ${item.o.map((o,i)=>`<button class="opt" data-key="${o[1]}">${o[0]}</button>`).join('')}
+      </div>
+    </div>`;
+  card.querySelectorAll('.opt').forEach(b=>{
+    b.onclick = ()=>{
+      score[b.dataset.key]++;
+      step++;
+      if(step<QUESTIONS.length) renderQ();
+      else renderResult();
+    };
+  });
+}
+
+function topResult(){
+  let best='dujjon',max=-1;
+  // 동점이면 먼저 나온 결과 우선
+  for(const k of ['dujjon','macaron','levain','madeleine','basque']){
+    if(score[k]>max){max=score[k];best=k;}
+  }
+  return RESULTS[best];
+}
+
+function renderResult(){
+  const r = topResult();
+  card.innerHTML = `
+    <div class="step">
+      <div class="r-emoji">${r.emoji}</div>
+      <p class="r-type">당신과 찰떡인 디저트는</p>
+      <h2 class="r-name">${r.name}</h2>
+      <p class="r-desc">${r.desc}</p>
+      <div class="pair">${r.pair}</div>
+      <a class="cta" href="${STORE}" target="_blank" rel="noopener">황홀스레에서 주문하러 가기 →</a>
+      <button class="restart" id="again">다시 테스트하기</button>
+    </div>`;
+  document.getElementById('again').onclick = ()=>{
+    for(const k in score) score[k]=0;
+    step=0; renderIntro();
+  };
+}
+
+renderIntro();
+</script>
+</body>
+</html>
