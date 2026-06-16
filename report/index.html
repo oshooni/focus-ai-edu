@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CHEEU 보고서 생성기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #fff; color: #2B1418;
+         font-family: 'Pretendard', system-ui, -apple-system, sans-serif; }
+  button { cursor: pointer; font-family: inherit; }
+  @media print {
+    .no-print { display: none !important; }
+    body { background: #fff; }
+    .report-page { page-break-after: always; box-shadow: none !important; margin-bottom: 0 !important; border-radius: 0 !important; }
+    .report-page:last-child { page-break-after: auto; }
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<script type="text/babel" data-presets="react">
+const { useState, useMemo } = React;
+
+/* ===== 브랜드 토큰 ===== */
+const C = {
+  burgundy: "#80011F", burgundyDeep: "#5C0016", burgundyMid: "#8A3A44",
+  roseTaupe: "#B79A92", taupe: "#DCCFC0", sand: "#F3EBDD",
+  cream: "#FFFBEF", ink: "#2B1418", rose: "#A8324A",
+};
+const serif = "'Nanum Myeongjo', serif";
+const sans = "'Pretendard', system-ui, -apple-system, sans-serif";
+
+/* ===== 공통 헬퍼 ===== */
+const MEDIA_WORDS = ["사진", "이모티콘", "동영상", "음성메시지", "삭제된 메시지입니다."];
+const isMedia = (t) => {
+  const x = (t || "").trim();
+  return MEDIA_WORDS.includes(x) || /^사진\s*\d+장$/.test(x) || /^파일:/.test(x);
+};
+const isSystem = (t) =>
+  /(님이 들어왔습니다|님이 나갔습니다|님을 초대했습니다|채팅방 관리자|운영정책|저장한 날짜|내보낸 날짜)/.test(t || "");
+
+function groupMessages(messages) {
+  const byPerson = {};
+  for (const msg of messages) (byPerson[msg.person] = byPerson[msg.person] || []).push(msg);
+  const participants = Object.keys(byPerson).map((name) => {
+    const msgs = byPerson[name];
+    const days = new Set(msgs.map((x) => x.date).filter(Boolean));
+    const dates = [...days].sort();
+    return {
+      name, count: msgs.length, activeDays: days.size,
+      media: msgs.filter((x) => x.isMedia).length,
+      firstDate: dates[0] || null, lastDate: dates[dates.length - 1] || null,
+    };
+  }).sort((a, b) => b.count - a.count);
+  return { participants, byPerson };
+}
+
+/* ---- CSV (Date,User,Message) ---- */
+function parseCSVRows(text) {
+  text = text.replace(/^\uFEFF/, "");
+  const rows = []; let field = "", row = [], inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (inQuotes) {
+      if (ch === '"') { if (text[i + 1] === '"') { field += '"'; i++; } else inQuotes = false; }
+      else field += ch;
+    } else if (ch === '"') inQuotes = true;
+    else if (ch === ",") { row.push(field); field = ""; }
+    else if (ch === "\n") { row.push(field); rows.push(row); row = []; field = ""; }
+    else if (ch !== "\r") field += ch;
+  }
+  if (field.length || row.length) { row.push(field); rows.push(row); }
+  return rows;
+}
+function parseCSVInput(text) {
+  const rows = parseCSVRows(text);
+  const messages = [];
+  for (let i = 1; i < rows.length; i++) {
+    const [date, person, msg] = rows[i];
+    if (!person || !person.trim()) continue;
+    if (isSystem(msg)) continue;
+    messages.push({ date: (date || "").split(" ")[0] || null, person: person.trim(), text: (msg || "").trim(), isMedia: isMedia(msg) });
+  }
+  return groupMessages(messages);
+}
+
+/* ---- 카톡 텍스트 ---- */
+function parseKakao(text) {
+  const lines = text.split(/\r?\n/);
+  const messages = []; let currentDate = null, last = null;
+  const dateSep1 = /^-{2,}\s*(\d{4})년\s*(\d{1,2})월\s*(\d{1,2})일.*?-{2,}$/;
+  const dateSep2 = /^(\d{4})년\s*(\d{1,2})월\s*(\d{1,2})일\s*[월화수목금토일]요일$/;
+  const pcLine = /^\[([^\]]+)\]\s*\[(오전|오후)\s*(\d{1,2}):(\d{2})\]\s*(.*)$/;
+  const mobileLine = /^(\d{4})[.년]\s*(\d{1,2})[.월]\s*(\d{1,2})[.일]?\.?\s*(오전|오후)\s*(\d{1,2}):(\d{2}),\s*(.+?)\s*:\s*([\s\S]*)$/;
+  const pad = (n) => String(n).padStart(2, "0");
+  for (const raw of lines) {
+    const line = raw.replace(/\u200b/g, "").replace(/\s+$/, "");
+    if (!line.trim()) continue;
+    let m;
+    if ((m = line.match(dateSep1)) || (m = line.match(dateSep2))) { currentDate = `${m[1]}-${pad(m[2])}-${pad(m[3])}`; last = null; continue; }
+    if ((m = line.match(mobileLine))) {
+      const date = `${m[1]}-${pad(m[2])}-${pad(m[3])}`; currentDate = date;
+      if (isSystem(line)) { last = null; continue; }
+      const msg = { date, person: m[7].trim(), text: m[8].trim(), isMedia: isMedia(m[8]) };
+      messages.push(msg); last = msg; continue;
+    }
+    if ((m = line.match(pcLine))) {
+      if (isSystem(line)) { last = null; continue; }
+      const msg = { date: currentDate, person: m[1].trim(), text: m[5].trim(), isMedia: isMedia(m[5]) };
+      messages.push(msg); last = msg; continue;
+    }
+    if (last && !isSystem(line)) { last.text += "\n" + line.trim(); if (isMedia(line)) last.isMedia = true; }
+  }
+  return groupMessages(messages);
+}
+
+function analyze(text) {
+  const head = text.replace(/^\uFEFF/, "").trimStart().slice(0, 40);
+  if (/^Date\s*,\s*User\s*,\s*Message/i.test(head)) return parseCSVInput(text);
+  return parseKakao(text);
+}
+
+/* ===== 응답 파싱(AI 사용 시) ===== */
+function balanceJson(s) {
+  const stack = []; let inStr = false, esc = false;
+  for (const ch of s) {
+    if (esc) { esc = false; continue; }
+    if (ch === "\\") { esc = true; continue; }
+    if (ch === '"') { inStr = !inStr; continue; }
+    if (inStr) continue;
+    if (ch === "{" || ch === "[") stack.push(ch);
+    else if (ch === "}" || ch === "]") stack.pop();
+  }
+  let out = s; if (inStr) out += '"'; out = out.replace(/,\s*$/, "");
+  for (let i = stack.length - 1; i >= 0; i--) out += stack[i] === "{" ? "}" : "]";
+  return out;
+}
+function lenientParse(text) {
+  let s = (text || "").replace(/```json|```/g, "").trim();
+  const start = s.indexOf("{"); if (start > 0) s = s.slice(start);
+  const end = s.lastIndexOf("}"); const tries = [s];
+  if (end > 0) tries.push(s.slice(0, end + 1));
+  tries.push(balanceJson(s));
+  for (const cand of tries) { try { const o = JSON.parse(cand); if (o && typeof o === "object") return o; } catch (e) {} }
+  return null;
+}
+
+/* ===== 보고서 생성 ===== */
+// 대화 내용 기반 자동 생성 (키 불필요).
+function pickHighlight(texts) {
+  const bad = /(\d+\s*[.,]?\s*\d*\s*kg|몸무게|체중|\d{2,3}\s*[.,]\s*\d)/;
+  const cands = texts.filter((t) => t.length >= 8 && t.length <= 120 && !bad.test(t));
+  cands.sort((a, b) => b.length - a.length);
+  return cands[0] || (texts.slice().sort((a, b) => b.length - a.length)[0] || "");
+}
+function inferSignals(msgs) {
+  const texts = (msgs || []).filter((m) => !m.isMedia && m.text).map((m) => m.text.replace(/\n+/g, " ").trim());
+  const joined = texts.join(" ");
+  const weights = extractWeights(msgs);
+  const first = weights[0], last = weights[weights.length - 1];
+  const loss = first && last && first.value > last.value ? first.value - last.value : null;
+  const has = (re) => re.test(joined);
+  const count = (re) => (joined.match(re) || []).length;
+  const scores = {
+    night: count(/야식|밤.{0,6}먹|저녁.{0,8}폭|입터|폭식|식탐|간식|빵|초콜릿|단거|밀가루/g),
+    stress: count(/스트레스|화나|우울|멘탈|강박|자존감|자신감|불안|무서워/g),
+    hunger: count(/배고|허기|공복|꼬르륵|힘들었|참아|버텼/g),
+    outside: count(/회식|약속|외식|모임|여행|놀러|청첩장|술/g),
+    coffee: count(/커피|카페인|아메리카노/g),
+    water: count(/물|수분|미리터|리터/g),
+    sleep: count(/잠|수면|늦잠|설쳤|피곤|피로|두통|메스꺼움|어지|멍한/g),
+    bowel: count(/변비|화장실|배변|붓|부종|부었|더부룩/g),
+    exercise: count(/운동|걷|산책|만보|필라테스|피티|바레|계단|헬스|주\d일/g),
+    routine: count(/인증|기록|체중계|몸무게.{0,8}기록|매일|꾸준/g),
+    family: count(/출산|아이|육아|자매|워킹맘|남편|가족/g),
+    work: count(/출퇴근|재택|회사원|사무직|교대|근무|야근/g),
+    alone: count(/혼자\s*살|자취|혼자사니/g),
+    wedding: count(/웨딩|촬영|결혼|청첩장|신혼/g),
+    rebound: count(/요요|다시.{0,8}찜|반복|올라갔다 내려갔다|유지|복구/g),
+    protein: count(/단백질|닭가슴살|계란|달걀|두부|고기|샐러드/g),
+    meal: count(/일반식|집밥|밥|점심|저녁|식단/g),
+    fasting: count(/간헐|공복|단식|비움/g),
+  };
+  const tags = {
+    night: scores.night > 0,
+    stress: scores.stress > 0,
+    hunger: scores.hunger > 0,
+    outside: scores.outside > 0,
+    coffee: scores.coffee > 0,
+    water: scores.water > 0,
+    sleep: scores.sleep > 0,
+    bowel: scores.bowel > 0,
+    exercise: scores.exercise > 0,
+    routine: scores.routine > 0,
+    family: scores.family > 0,
+    work: scores.work > 0,
+    alone: scores.alone > 0,
+    wedding: scores.wedding > 0,
+    highWeight: weights.some((w) => w.value >= 80) || has(/(?:8\d|9\d|1[0-3]\d)\s*(?:kg|키로)/),
+    rebound: scores.rebound > 0,
+    protein: scores.protein > 0,
+    meal: scores.meal > 0,
+    fasting: scores.fasting > 0,
+  };
+  const hardship =
+    tags.night ? "야식·입터짐을 끊어낸 점" :
+    tags.stress ? "스트레스가 올라오는 순간" :
+    tags.hunger ? "공복감이 올라오는 시간" :
+    tags.outside ? "외식과 약속이 있던 날" :
+    "흔들리는 순간";
+  const strength =
+    tags.water ? "물 챙기는 흐름" :
+    tags.exercise ? "움직임을 이어간 점" :
+    tags.routine ? "기록을 남긴 꾸준함" :
+    /참|버텼|성공|완료|완주/.test(joined) ? "끝까지 버틴 힘" :
+    "포기하지 않고 기록한 꾸준함";
+  const dietStyle =
+    tags.meal ? "일반식으로 양 조절" :
+    tags.fasting ? "공복 리듬 유지" :
+    tags.protein ? "단백질 먼저 챙기기" :
+    "무리하지 않는 유지식";
+  return { weights, loss, hardship, strength, dietStyle, tags, scores };
+}
+function uniqActions(items) {
+  const seen = new Set();
+  return items.map((x) => String(x || "").replace(/^✔️\s*/, "").trim()).filter((x) => {
+    if (!x || seen.has(x)) return false;
+    seen.add(x);
+    return true;
+  });
+}
+function buildForwardActions(signals, info) {
+  const t = signals.tags || {};
+  const s = signals.scores || {};
+  const candidates = [];
+  const add = (key, text, boost = 0) => { if (t[key]) candidates.push({ score: (s[key] || 1) + boost, text }); };
+  if (signals.loss !== null && signals.loss >= 3) candidates.push({ score: 9, text: "감량폭이 컸던 타입이라 바로 세게 먹지 말고, 첫 3일은 일반식 양을 70%만 잡아요." });
+  else if (signals.loss !== null) candidates.push({ score: 7, text: `${signals.loss.toFixed(1)}kg 내려간 흐름이 있으니, 매일 아침 같은 조건으로 몸무게만 체크해요.` });
+  add("highWeight", "큰 감량 목표는 속도보다 반복이에요. 하루 한 번 기록, 한 끼 단백질, 물 2L 이 3개만 매일 고정.", 7);
+  add("wedding", "촬영·결혼 목표가 있는 타입은 주 1회 사진으로 핏 체크해요. 숫자보다 라인이 빨리 보여요.", 6);
+  add("family", "육아·가족 일정 있는 날은 완벽한 식단보다 끼니 순서를 지켜요. 단백질 먼저 먹으면 덜 흔들려요.", 5);
+  add("alone", "혼자 먹는 날은 대충 때우지 말고, 냉장고에 바로 먹을 단백질 2개만 준비해둬요.", 5);
+  add("work", "출퇴근·업무일에는 점심을 고정 메뉴로 만들어야 편해요. 고민 줄이면 유지가 쉬워져요.", 4);
+  add("rebound", "요요를 반복했던 타입이라 극단적으로 줄이면 다시 터져요. 평일은 규칙, 주말은 양 조절로 가요.", 4);
+  add("night", "야식·입터짐 신호가 오면 바로 먹지 말고 물 한 컵, 양치, 10분 대기. 이 3개만 먼저 해봐요.", 3);
+  add("stress", "스트레스가 올라오는 날은 식단을 완벽하게 하려 하지 말고, 첫 끼 단백질부터 잡아요. 무너지지만 않으면 돼.", 3);
+  add("outside", "약속 있는 날은 메뉴보다 순서가 중요해요. 물 먼저, 단백질 먼저, 탄수화물은 마지막.", 3);
+  add("coffee", "커피가 당기는 타입이면 오전 1잔까지만. 오후에는 따뜻한 차로 바꿔야 붓기랑 잠이 덜 흔들려요.", 2);
+  add("bowel", "변비·붓기 신호가 있으면 물, 따뜻한 차, 가벼운 걷기를 한 세트로 묶어요. 화장실 루틴이 감량 리듬이에요.", 2);
+  add("sleep", "잠이 흔들리면 다음 날 식욕이 세져요. 밤 11시 전 눕기, 자기 전 폰 줄이기부터 해요.", 2);
+  add("exercise", "운동 루틴이 있는 사람은 단식 직후 고강도보다 걷기부터. 몸이 가벼워진 뒤 강도를 올려요.", 2);
+  add("water", "물 챙기는 건 이미 강점이에요. 오전 1L, 오후 1L로 나눠 마시면 더 안정적으로 가요.", 1);
+  add("protein", "단백질을 챙기던 흐름은 계속 가져가요. 첫 끼에 계란·두부·고기 중 하나는 꼭 넣기.", 1);
+  add("meal", "일반식으로 돌아갈 땐 밥을 끊지 말고 양을 줄여요. 반 공기부터 시작하면 유지가 쉬워요.", 1);
+  add("fasting", "공복 리듬이 맞는 타입이라 12~14시간 공복부터 이어가요. 무리해서 길게 잡지 마요.", 1);
+  if (info && info.media > 0) candidates.push({ score: 4, text: "인증을 남긴 힘이 있어요. 유지 기간에도 식사 사진을 하루 1장만 남겨요." });
+  if (info && info.activeDays >= 7) candidates.push({ score: 4, text: "참여일이 꾸준했으니 혼자서도 체크리스트 방식이 맞아요. 매일 딱 3개만 체크해요." });
+  candidates.push({ score: 0, text: `${signals.dietStyle}: 첫 끼는 천천히, 배부르기 전 멈추기.` });
+  candidates.push({ score: 0, text: `${signals.strength}은 강점이에요. 이건 빼지 말고 유지 루틴으로 가져가요.` });
+  candidates.push({ score: 0, text: `${signals.hardship}이 다시 와도 실패 아니에요. 그날은 다음 끼니만 가볍게 잡으면 돼요.` });
+  candidates.sort((a, b) => b.score - a.score);
+  return uniqActions(candidates.map((x) => x.text)).slice(0, 5);
+}
+function mergeForwardActions(primary, fallback) {
+  const generic = /잘 자고|물 자주|스스로에게 다정|부드러운 생활 습관|개인 패턴에 맞는 실행 행동/;
+  const fromPrimary = (primary || []).filter((f) => !generic.test(String(f || "")));
+  return uniqActions([...fromPrimary, ...(fallback || [])]).slice(0, 5);
+}
+function generateLocal(name, msgs) {
+  const texts = (msgs || [])
+    .filter((m) => !m.isMedia && m.text && m.text.replace(/\s/g, "").length > 4)
+    .map((m) => m.text.replace(/\n+/g, " ").trim());
+  const s = inferSignals(msgs);
+  const lossText = s.loss !== null ? `${s.loss.toFixed(1)}kg 감량` : "10일 완주";
+  return {
+    note: `${name}님, ${lossText} 진짜 잘했어요🩷 ${s.hardship}에서도 다시 잡은 게 포인트야. 이제 살은 급하게 말고, 흐름으로 빼면 돼요.`,
+    highlight: pickHighlight(texts),
+    mood_arc: [
+      { stage: "시작", emoji: "😮‍💨", word: "첫 마음" },
+      { stage: "함께", emoji: "🌱", word: "하루하루" },
+      { stage: "완주", emoji: "🌟", word: "해냈어요" },
+    ],
+    forward: buildForwardActions(s),
+    cheer: `${name}님은 이미 해낸 사람이에요. 치유크루에서 이 흐름 같이 이어가요🩷`,
+  };
+}
+
+const SYSTEM_PROMPT = `당신은 인스타그램 계정 @cheeuisrumi를 운영하는 치유언니입니다.
+
+[계정 캐릭터]
+- 다이어트에 8억 쓴 40대 유지어터 전문가
+- 64kg → 51kg, 13kg 감량 후 3년 유지 중
+- 전문가보다는 "먼저 겪어본 언니"의 포지션
+- 단톡방에서 함께 10일 디톡스를 완수한 멤버들에게 메시지를 보내는 상황
+
+[말투 규칙]
+- 정보 전달 시 존댓말, 친근한 공감/강조 시 반말 혼용
+- 문장은 짧고 단호하게. 긴 설명보다 핵심 한 줄
+- 보고서 전체 문구는 다정하지만 늘어지지 않게. "고생 많았어요"보다 "진짜 잘했어요", "이제 이렇게 가면 돼요" 같은 치유언니 말투를 쓰세요.
+- 어려운 의학 용어 금지. 일상 언어로 설명
+- ✔️ 기호로 핵심 정리, 이모지는 🌿 🩷 ✨ ⭐ ✔️ 계열로 포인트에만 1개씩
+- "전문가와 상의하세요" 같은 면책성 문구 금지
+
+[메시지 구조]
+1. 이름 호명 + 개인 성과 언급(감량 수치, 완주, 힘들었던 순간)
+2. 대화에서 관찰된 패턴/특징 짚기
+3. 앞으로 유지/다이어트에 이 사람에게 딱 맞는 구체적 행동 3~5가지
+4. 응원 + 치유크루 소속감으로 마무리
+
+반드시 지킬 것:
+- 오직 제공된 대화와 추출 정보에만 근거하세요. 없는 사실을 지어내지 마세요.
+- 체중 수치가 제공되면 감량 결과로 자연스럽게 언급하세요.
+- 폭식, 야식, 스트레스, 공복, 외식, 물 섭취, 운동, 인증 등 실제 대화 패턴을 forward에 반영하세요.
+- forward는 최소 3개, 최대 5개 작성하고, 각각 바로 실행 가능한 행동이어야 합니다.
+- forward는 참가자마다 달라야 합니다. 커피, 야식, 폭식, 스트레스, 변비, 수면, 외식, 출퇴근, 육아, 운동, 일반식, 공복 리듬 같은 개인 신호를 섞어 쓰세요.
+- highlight는 체중 숫자만 있는 말보다 이 사람의 패턴이나 감정이 드러나는 한 줄을 고르세요.
+아래 JSON만 출력(마크다운·설명 없이):
+{"note":"150자 내외 개인화 메시지. 이름, 성과, 관찰 패턴, 응원을 치유언니 말투로 포함","highlight":"이 사람의 특징이 드러난 한 줄","mood_arc":[{"stage":"시작","emoji":"😮‍💨","word":"막막함"},{"stage":"중반","emoji":"🌱","word":"적응"},{"stage":"완주","emoji":"✨","word":"완주"}],"forward":["✔️ 개인 패턴에 맞는 실행 행동 1","✔️ 개인 패턴에 맞는 실행 행동 2","✔️ 개인 패턴에 맞는 실행 행동 3"],"cheer":"치유크루 소속감이 드러나는 응원 한 줄"}
+모두 한국어, 간결하게.`;
+
+async function generateAI(name, msgs, apiKey) {
+  const transcript = msgs.map((m) => `[${m.date || "?"}] ${m.isMedia ? "(사진/미디어 공유)" : m.text}`).join("\n").slice(0, 12000);
+  const signals = inferSignals(msgs);
+  const weightText = signals.weights.length
+    ? signals.weights.map((w) => `${w.date || "날짜 없음"} ${w.value.toFixed(1)}kg`).join(", ")
+    : "대화에서 명확한 체중 기록 없음";
+  const lossText = signals.loss !== null ? `${signals.loss.toFixed(1)}kg` : "명확한 감량 수치 없음";
+  const tagText = Object.entries(signals.tags || {}).filter(([, v]) => v).map(([k]) => k).join(", ") || "특정 신호 적음";
+  const userPrompt = `참가자 닉네임: ${name}
+참여한 날: ${new Set(msgs.map((m) => m.date).filter(Boolean)).size}일
+10일 감량 결과: ${lossText}
+체중 기록: ${weightText}
+힘들었던 순간/폭식 패턴 후보: ${signals.hardship}
+잘한 점/강점 후보: ${signals.strength}
+앞으로 이어갈 식단 스타일 후보: ${signals.dietStyle}
+감지된 개인화 신호: ${tagText}
+아래 메시지로 위 형식의 개인화 보고서 JSON을 만들어 주세요.
+
+=== 대화 ===
+${transcript}`;
+  const res = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": apiKey,
+      "anthropic-version": "2023-06-01",
+      "anthropic-dangerous-direct-browser-access": "true",
+    },
+    body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 1400, system: SYSTEM_PROMPT, messages: [{ role: "user", content: userPrompt }] }),
+  });
+  if (!res.ok) throw new Error("API " + res.status);
+  const data = await res.json();
+  if (!Array.isArray(data.content)) throw new Error("형식 오류");
+  const text = data.content.filter((b) => b.type === "text").map((b) => b.text).join("\n");
+  const parsed = lenientParse(text);
+  if (!parsed) throw new Error("파싱 실패");
+  return parsed;
+}
+
+async function makeReport(name, msgs, apiKey) {
+  if (apiKey && apiKey.trim()) {
+    try { const r = await generateAI(name, msgs, apiKey.trim()); return { ...generateLocal(name, msgs), ...r }; }
+    catch (e) { return generateLocal(name, msgs); }
+  }
+  return generateLocal(name, msgs);
+}
+
+/* ===== 대시보드 컴포넌트 ===== */
+function Stat({ emoji, big, label }) {
+  return (
+    <div style={{ background: "#fff", borderRadius: 12, padding: "14px 8px", textAlign: "center", border: `1px solid ${C.taupe}` }}>
+      <div style={{ fontSize: 24, lineHeight: 1 }}>{emoji}</div>
+      <div style={{ fontFamily: serif, fontSize: 22, fontWeight: 800, color: C.burgundy, marginTop: 4 }}>{big}</div>
+      <div style={{ fontFamily: sans, fontSize: 11, color: "#9a8478", marginTop: 2 }}>{label}</div>
+    </div>
+  );
+}
+function Card({ children, accent }) {
+  return <div style={{ background: accent ? "#FBF4E8" : "#fff", border: `1px solid ${C.taupe}`, borderRadius: 12, padding: 16 }}>{children}</div>;
+}
+function CardTitle({ children }) {
+  return <div style={{ fontFamily: sans, fontSize: 13, fontWeight: 700, color: C.burgundyDeep, marginBottom: 10 }}>{children}</div>;
+}
+function FootprintStrip({ days, activeCount }) {
+  const list = days.length ? days : Array.from({ length: activeCount }).map((_, i) => ({ n: i + 1, active: true, photo: false }));
+  return (
+    <div>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 7 }}>
+        {list.map((d, i) => (
+          <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3, width: 24 }}>
+            <div style={{ width: 20, height: 20, borderRadius: "50%", background: d.active ? C.burgundy : "transparent", border: `2px solid ${d.active ? C.burgundy : C.roseTaupe}`, position: "relative" }}>
+              {d.photo && <span style={{ position: "absolute", top: -3, right: -3, width: 8, height: 8, borderRadius: "50%", background: "#fff", border: `2px solid ${C.rose}` }} />}
+            </div>
+            <span style={{ fontFamily: sans, fontSize: 9, color: d.active ? C.burgundy : C.roseTaupe }}>{d.n}</span>
+          </div>
+        ))}
+      </div>
+      <div style={{ fontFamily: sans, fontSize: 10, opacity: 0.6, marginTop: 8, display: "flex", gap: 12 }}>
+        <span>● 참여한 날</span><span>◌ 쉬어간 날</span><span>◔ 사진</span>
+      </div>
+    </div>
+  );
+}
+
+function extractWeights(messages) {
+  const entries = [];
+  const skipWords = /(목표|희망|감량|증량|빠졌|빠진|줄었|늘었|증가|감소|차이|전날|어제보다|빼고|뺐|kg\s*감)/;
+  const unitRe = /(\d{2,3}(?:[.,]\d{1,2})?)\s*(?:kg|킬로|키로)(?![A-Za-z])/gi;
+  const contextRe = /(몸무게|체중|공복\s*몸무게|아침\s*몸무게|몸)\s*(?:은|는|이|가|:|：|-|=)?\s*(\d{2,3}(?:[.,]\d{1,2})?)/gi;
+  (messages || []).forEach((m, index) => {
+    if (!m.text || m.isMedia) return;
+    const text = m.text.replace(/\n+/g, " ");
+    const seen = new Set();
+    const add = (matchIndex, rawValue) => {
+      const value = Number(String(rawValue).replace(",", "."));
+      if (!Number.isFinite(value) || value < 30 || value > 200) return;
+      const nearby = text.slice(Math.max(0, matchIndex - 18), Math.min(text.length, matchIndex + 28));
+      if (skipWords.test(nearby)) return;
+      const key = String(value);
+      if (seen.has(key)) return;
+      seen.add(key);
+      entries.push({ date: m.date, value, text, index });
+    };
+    let match;
+    unitRe.lastIndex = 0;
+    while ((match = unitRe.exec(text))) add(match.index, match[1]);
+    contextRe.lastIndex = 0;
+    while ((match = contextRe.exec(text))) add(match.index, match[2]);
+  });
+  return entries.sort((a, b) => {
+    const ad = a.date || "9999-99-99", bd = b.date || "9999-99-99";
+    return ad === bd ? a.index - b.index : ad.localeCompare(bd);
+  });
+}
+
+function WeightChart({ weights }) {
+  if (!weights.length) return null;
+  const values = weights.map((w) => w.value);
+  const min = Math.min(...values), max = Math.max(...values);
+  const latest = weights[weights.length - 1];
+  const first = weights[0];
+  const delta = latest.value - first.value;
+  const pad = max === min ? 1 : Math.max(0.5, (max - min) * 0.18);
+  const yMin = min - pad, yMax = max + pad;
+  const width = 520, height = 190, left = 44, right = 18, top = 18, bottom = 34;
+  const plotW = width - left - right, plotH = height - top - bottom;
+  const xFor = (i) => left + (weights.length === 1 ? plotW / 2 : (plotW * i) / (weights.length - 1));
+  const yFor = (v) => top + ((yMax - v) / (yMax - yMin)) * plotH;
+  const points = weights.map((w, i) => ({ ...w, x: xFor(i), y: yFor(w.value) }));
+  const path = points.map((p, i) => `${i ? "L" : "M"} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(" ");
+  const ticks = [yMax, (yMax + yMin) / 2, yMin];
+  const fmt = (n) => `${n.toFixed(1)}kg`;
+  return (
+    <Card>
+      <CardTitle>⚖️ 몸무게 변화</CardTitle>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, marginBottom: 10 }}>
+        <Stat emoji="📍" big={fmt(latest.value)} label="최근 기록" />
+        <Stat emoji="↕️" big={`${fmt(min)}–${fmt(max)}`} label="기록 범위" />
+        <Stat emoji={delta <= 0 ? "🌿" : "📝"} big={`${delta >= 0 ? "+" : ""}${delta.toFixed(1)}kg`} label="첫 기록 대비" />
+      </div>
+      <svg viewBox={`0 0 ${width} ${height}`} style={{ width: "100%", height: "auto", display: "block", overflow: "visible" }}>
+        <rect x={left} y={top} width={plotW} height={plotH} rx="10" fill="#FFFBEF" stroke={C.taupe} />
+        {ticks.map((t, i) => (
+          <g key={i}>
+            <line x1={left} x2={left + plotW} y1={yFor(t)} y2={yFor(t)} stroke={i === 1 ? C.taupe : "#EFE4D6"} strokeDasharray={i === 1 ? "0" : "4 5"} />
+            <text x={left - 8} y={yFor(t) + 4} textAnchor="end" style={{ fontFamily: sans, fontSize: 10, fill: "#9a8478" }}>{fmt(t)}</text>
+          </g>
+        ))}
+        <path d={path} fill="none" stroke={C.burgundy} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        {points.map((p, i) => (
+          <g key={i}>
+            <circle cx={p.x} cy={p.y} r="5" fill={C.cream} stroke={C.burgundy} strokeWidth="3" />
+            <text x={p.x} y={p.y - 10} textAnchor="middle" style={{ fontFamily: sans, fontSize: 10, fontWeight: 700, fill: C.burgundyDeep }}>{p.value.toFixed(1)}</text>
+          </g>
+        ))}
+        {points.map((p, i) => (
+          <text key={i} x={p.x} y={height - 10} textAnchor="middle" style={{ fontFamily: sans, fontSize: 10, fill: "#9a8478" }}>
+            {p.date ? p.date.slice(5).replace("-", "/") : `${i + 1}`}
+          </text>
+        ))}
+      </svg>
+      <div style={{ fontFamily: sans, fontSize: 11, color: "#9a8478", lineHeight: 1.5, marginTop: 8 }}>
+        대화에서 본인이 남긴 체중 표현만 자동 추출했어요. 목표 체중이나 감량량으로 보이는 표현은 제외했습니다.
+      </div>
+    </Card>
+  );
+}
+
+function Report({ name, report, info, photos, messages, programStart, programEnd }) {
+  const dayMap = {};
+  (messages || []).forEach((m) => { if (!m.date) return; const d = (dayMap[m.date] = dayMap[m.date] || { c: 0, p: 0 }); d.c += 1; if (m.isMedia) d.p += 1; });
+  const start = programStart || info.firstDate, end = programEnd || info.lastDate;
+  const days = [];
+  if (start && end) {
+    const toUTC = (s) => { const [y, mo, da] = s.split("-").map(Number); return Date.UTC(y, mo - 1, da); };
+    const fromUTC = (ms) => new Date(ms).toISOString().slice(0, 10);
+    let n = 1;
+    for (let ms = toUTC(start); ms <= toUTC(end) && days.length < 45; ms += 86400000, n++) {
+      const ds = fromUTC(ms); const e = dayMap[ds] || { c: 0, p: 0 };
+      days.push({ ds, n, active: e.c > 0, photo: e.p > 0 });
+    }
+  }
+  const photoDays = days.filter((d) => d.photo);
+  const totalDays = days.length || info.activeDays;
+  const mood = report.mood_arc || [], forward = report.forward || [];
+  const ICONS = ["✔️", "✔️"];
+  const weights = extractWeights(messages);
+  const localTone = generateLocal(name, messages);
+  const note = report.note && !/함께한 시간 동안 정말 고생 많았어요/.test(report.note) ? report.note : localTone.note;
+  const nextActions = mergeForwardActions(forward, buildForwardActions(inferSignals(messages), info));
+  const cheer = report.cheer && !/여기까지 온 것만으로 충분히 멋져요/.test(report.cheer) ? report.cheer : localTone.cheer;
+
+  return (
+    <div className="report" style={{ fontFamily: serif, background: C.cream, color: C.ink }}>
+      <div style={{ background: C.burgundy, color: C.cream, padding: "24px 26px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
+          <div>
+            <div style={{ fontFamily: sans, fontSize: 11, letterSpacing: 3, opacity: 0.7 }}>CHEEU · 10일 디톡스 리포트</div>
+            <h1 style={{ fontSize: 28, lineHeight: 1.2, margin: "6px 0 0", fontWeight: 800 }}>{name}님 리포트</h1>
+          </div>
+          <div style={{ fontFamily: sans, fontSize: 11, opacity: 0.8, textAlign: "right", whiteSpace: "nowrap" }}>{info.firstDate}<br />— {info.lastDate}</div>
+        </div>
+        {note && <p style={{ fontFamily: sans, fontSize: 13.5, lineHeight: 1.6, margin: "14px 0 0", opacity: 0.95 }}>{note}</p>}
+      </div>
+
+      <div style={{ padding: "20px 22px", display: "flex", flexDirection: "column", gap: 16 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
+          <Stat emoji="🗓️" big={`${info.activeDays}일`} label="참여일" />
+          <Stat emoji="📸" big={`${info.media}회`} label="인증 기록" />
+          <Stat emoji="🤍" big={`${totalDays}일`} label="전체 기간" />
+        </div>
+
+        <Card><CardTitle>📈 참여 체크</CardTitle><FootprintStrip days={days} activeCount={info.activeDays} /></Card>
+
+        <WeightChart weights={weights} />
+
+        {mood.length > 0 && (
+          <Card>
+            <CardTitle>💗 진행 흐름</CardTitle>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              {mood.map((m, i) => (
+                <React.Fragment key={i}>
+                  <div style={{ textAlign: "center", flex: 1 }}>
+                    <div style={{ fontSize: 28 }}>{m.emoji}</div>
+                    <div style={{ fontFamily: sans, fontSize: 11, color: C.burgundy, marginTop: 4 }}>{m.stage}</div>
+                    <div style={{ fontSize: 13, marginTop: 1 }}>{m.word}</div>
+                  </div>
+                  {i < mood.length - 1 && <div style={{ color: C.roseTaupe, fontSize: 16 }}>→</div>}
+                </React.Fragment>
+              ))}
+            </div>
+          </Card>
+        )}
+
+        <div style={{ display: "grid", gridTemplateColumns: photos && photos.length ? "1fr 1fr" : "1fr", gap: 12 }}>
+          {photos && photos.length > 0 && (
+            <Card>
+              <CardTitle>🖼️ 인증 사진</CardTitle>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 6 }}>
+                {photos.slice(0, 4).map((src, i) => (
+                  <div key={i}>
+                    <img src={src} alt="" style={{ width: "100%", height: 78, objectFit: "cover", borderRadius: 8, display: "block" }} />
+                    {photoDays[i] && <div style={{ fontFamily: sans, fontSize: 10, color: C.burgundyDeep, marginTop: 2 }}>{photoDays[i].n}일차</div>}
+                  </div>
+                ))}
+              </div>
+            </Card>
+          )}
+          {report.highlight && (
+            <Card>
+              <CardTitle>✨ 개인 포인트</CardTitle>
+              <p style={{ fontSize: 15, lineHeight: 1.6, margin: 0, fontStyle: "italic", color: C.burgundy }}>{report.highlight}</p>
+            </Card>
+          )}
+        </div>
+
+        {nextActions.length > 0 && (
+          <Card accent>
+            <CardTitle>🌿 앞으로 할 일</CardTitle>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {nextActions.map((f, i) => (
+                <div key={i} style={{ display: "flex", gap: 8, fontSize: 14, lineHeight: 1.5, alignItems: "flex-start" }}>
+                  <span>{ICONS[i % ICONS.length]}</span><span>{String(f).replace(/^✔️\s*/, "")}</span>
+                </div>
+              ))}
+            </div>
+          </Card>
+        )}
+
+        {cheer && (
+          <div style={{ textAlign: "center", padding: "6px 0 10px" }}>
+            <p style={{ fontSize: 17, lineHeight: 1.6, margin: 0 }}>{cheer}</p>
+            <div style={{ fontFamily: sans, fontSize: 11, color: C.roseTaupe, letterSpacing: 2, marginTop: 12 }}>CHEEU RUMI 🩷</div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ===== 메인 앱 ===== */
+function App() {
+  const [raw, setRaw] = useState("");
+  const [parsed, setParsed] = useState(null);
+  const [included, setIncluded] = useState({});
+  const [photos, setPhotos] = useState({});
+  const [reports, setReports] = useState({});
+  const [batch, setBatch] = useState(null);
+  const [apiKey, setApiKey] = useState("");
+  const [showKey, setShowKey] = useState(false);
+
+  const ingest = (text) => {
+    const result = analyze(text);
+    setParsed(result);
+    const inc = {};
+    result.participants.forEach((p) => (inc[p.name] = p.count >= 3));
+    setIncluded(inc); setReports({});
+  };
+  const handleFile = (file) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => { setRaw(String(reader.result || "")); ingest(String(reader.result || "")); };
+    reader.readAsText(file, "utf-8");
+  };
+  const handlePhotos = (name, files) => {
+    const urls = Array.from(files).map((f) => URL.createObjectURL(f));
+    setPhotos((p) => ({ ...p, [name]: [...(p[name] || []), ...urls] }));
+  };
+  const generateOne = async (name) => {
+    setBatch({ done: 0, total: 1 });
+    const r = await makeReport(name, parsed.byPerson[name] || [], apiKey);
+    setReports((s) => ({ ...s, [name]: r }));
+    setBatch(null);
+  };
+  const generateAll = async () => {
+    const names = parsed.participants.filter((p) => included[p.name]).map((p) => p.name);
+    if (!names.length) return;
+    setReports({}); setBatch({ done: 0, total: names.length });
+    const out = {};
+    for (let i = 0; i < names.length; i++) {
+      out[names[i]] = await makeReport(names[i], parsed.byPerson[names[i]] || [], apiKey);
+      setReports({ ...out }); setBatch({ done: i + 1, total: names.length });
+    }
+    setBatch(null);
+  };
+
+  const cohort = useMemo(() => {
+    if (!parsed) return { start: null, end: null };
+    const starts = parsed.participants.map((p) => p.firstDate).filter(Boolean).sort();
+    const ends = parsed.participants.map((p) => p.lastDate).filter(Boolean).sort();
+    return { start: starts[0] || null, end: ends[ends.length - 1] || null };
+  }, [parsed]);
+
+  const btn = (bg, color, extra) => ({ background: bg, color, border: "none", borderRadius: 8, padding: "11px 20px", fontSize: 14, ...extra });
+
+  return (
+    <div style={{ minHeight: "100vh" }}>
+      <div className="no-print" style={{ maxWidth: 720, margin: "0 auto", padding: "32px 20px" }}>
+        <div style={{ fontFamily: serif, fontSize: 26, fontWeight: 800, color: C.burgundy }}>CHEEU 보고서 생성기</div>
+        <p style={{ fontSize: 14, color: "#777", marginTop: 6 }}>카카오톡 대화 내보내기 파일(.csv)을 올리거나, 텍스트를 붙여넣어 주세요.</p>
+
+        <div style={{ marginTop: 14, display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+          <label style={btn(C.burgundy, C.cream)}>
+            카톡 파일 올리기 (.csv / .txt)
+            <input type="file" accept=".csv,.txt,text/csv,text/plain" style={{ display: "none" }} onChange={(e) => handleFile(e.target.files[0])} />
+          </label>
+          <span style={{ fontSize: 12, color: "#aaa" }}>또는 아래에 붙여넣기</span>
+        </div>
+
+        <textarea value={raw} onChange={(e) => setRaw(e.target.value)} placeholder="여기에 카톡 대화 내용을 붙여넣으세요"
+          style={{ width: "100%", height: 140, marginTop: 12, padding: 14, borderRadius: 10, border: `1px solid ${C.taupe}`, fontSize: 13, fontFamily: "monospace", resize: "vertical" }} />
+        <button onClick={() => ingest(raw)} disabled={!raw.trim()} style={btn(C.burgundy, C.cream, { marginTop: 10, opacity: raw.trim() ? 1 : 0.4 })}>대화 분석하기</button>
+
+        {/* 고급: 직접 API 키 */}
+        <div style={{ marginTop: 14, fontSize: 12, color: "#999" }}>
+          <button onClick={() => setShowKey(!showKey)} style={{ background: "none", border: "none", color: C.burgundy, fontSize: 12, padding: 0 }}>
+            {showKey ? "▾" : "▸"} 고급: AI 개인화 텍스트 (직접 API 키)
+          </button>
+          {showKey && (
+            <div style={{ marginTop: 8 }}>
+              <input type="password" value={apiKey} onChange={(e) => setApiKey(e.target.value)} placeholder="Anthropic API 키 (선택)"
+                style={{ width: "100%", padding: 10, borderRadius: 8, border: `1px solid ${C.taupe}`, fontSize: 13 }} />
+              <p style={{ marginTop: 6, lineHeight: 1.5 }}>
+                비워두면 대화 내용으로 자동 생성돼요. 키를 넣으면 더 개인화된 문구가 생성되지만,
+                키가 브라우저에 그대로 쓰이니 <b>공개 사이트에 올릴 땐 비워두고</b> 본인 PC에서만 사용하세요.
+              </p>
+            </div>
+          )}
+        </div>
+
+        {parsed && (
+          <div style={{ marginTop: 24 }}>
+            <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>감지된 인원 {parsed.participants.length}명</div>
+            <p style={{ fontSize: 12, color: "#999", marginBottom: 12 }}>운영자·코치는 체크를 해제하세요.</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {parsed.participants.map((p) => (
+                <div key={p.name} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 10, border: "1px solid #eee" }}>
+                  <input type="checkbox" checked={!!included[p.name]} onChange={(e) => setIncluded((s) => ({ ...s, [p.name]: e.target.checked }))} />
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 600, fontSize: 14 }}>{p.name}</div>
+                    <div style={{ fontSize: 11, color: "#999" }}>메시지 {p.count} · 참여 {p.activeDays}일 · 사진 {p.media}</div>
+                  </div>
+                  <label style={{ fontSize: 12, color: C.burgundy, border: `1px solid ${C.taupe}`, borderRadius: 6, padding: "5px 8px" }}>
+                    사진 추가
+                    <input type="file" accept="image/*" multiple style={{ display: "none" }} onChange={(e) => handlePhotos(p.name, e.target.files)} />
+                  </label>
+                  {photos[p.name] && photos[p.name].length > 0 && <span style={{ fontSize: 11, color: "#999" }}>{photos[p.name].length}장</span>}
+                  <button onClick={() => generateOne(p.name)} disabled={!included[p.name] || !!batch} style={btn(included[p.name] ? C.burgundy : "#ddd", "#fff", { padding: "7px 12px", fontSize: 12 })}>보고서</button>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ marginTop: 16, display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+              <button onClick={generateAll} disabled={!!batch} style={btn(C.burgundy, C.cream, { opacity: batch ? 0.5 : 1 })}>체크된 참가자 보고서 한번에 생성</button>
+              {batch && <span style={{ fontSize: 13, color: C.burgundy }}>생성 중… {batch.done}/{batch.total}</span>}
+              {Object.keys(reports).length > 0 && !batch && (
+                <button onClick={() => window.print()} style={btn("#fff", C.burgundy, { border: `1px solid ${C.burgundy}` })}>전체 PDF로 저장 / 인쇄 ({Object.keys(reports).length}명)</button>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {Object.keys(reports).length > 0 && parsed && (
+        <div style={{ maxWidth: 620, margin: "0 auto 60px" }}>
+          {parsed.participants.filter((p) => reports[p.name]).map((p) => (
+            <div key={p.name} className="report-page" style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.12)", borderRadius: 16, overflow: "hidden", marginBottom: 40 }}>
+              <Report name={p.name} report={reports[p.name]} info={p} photos={photos[p.name]} messages={parsed.byPerson[p.name]} programStart={cohort.start} programEnd={cohort.end} />
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
