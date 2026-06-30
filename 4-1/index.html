@@ -29,14 +29,14 @@ section{padding:80px 0}
 .nav-cta:hover{opacity:.85}
 .hero{min-height:100vh;display:flex;align-items:center;padding:176px 0 80px;position:relative;overflow:hidden}
 .hero::before{content:'';position:absolute;top:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(124,58,237,.15) 0%,transparent 70%);pointer-events:none}
-.hero-eyebrow{font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--purple-light);font-weight:500;margin-bottom:28px}
+.hero-eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--purple-light);font-weight:500;margin-bottom:28px}
 .hero-title{font-family:'Noto Serif KR',serif;font-size:clamp(36px,6vw,56px);font-weight:700;line-height:1.2;margin-bottom:28px;letter-spacing:-.02em}
 .hero-title em{font-style:normal;color:var(--purple-light)}
 .hero-sub{font-size:17px;color:var(--text-muted);line-height:1.8;margin-bottom:48px;max-width:520px}
 .hero-cta-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-.btn-primary{display:inline-block;background:var(--purple);color:#fff;font-size:21px;font-weight:600;padding:21px 48px;border-radius:100px;text-decoration:none;letter-spacing:.02em;transition:opacity .2s;cursor:pointer;border:none}
+.btn-primary{display:inline-block;background:var(--purple);color:#fff;font-size:14px;font-weight:600;padding:14px 32px;border-radius:100px;text-decoration:none;letter-spacing:.02em;transition:opacity .2s;cursor:pointer;border:none}
 .btn-primary:hover{opacity:.85}
-.hero-notice{margin-top:48px;font-size:15px;color:var(--text-dim)}
+.hero-notice{margin-top:20px;font-size:12px;color:var(--text-dim)}
 .hero-notice span{color:var(--purple-light)}
 .stat-bar{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:32px 0}
 .stat-row{display:grid;grid-template-columns:repeat(3,1fr)}
@@ -169,20 +169,6 @@ section{padding:80px 0}
   .instructor-photo{width:140px;height:160px}
   .course-top{flex-direction:column}
 }
-
-
-/* ===== Mobile Sales Optimization Patch by ChatGPT ===== */
-.highlight-marker{background:linear-gradient(transparent 58%,rgba(167,139,250,.38) 58%);color:#fff;padding:0 .08em}
-.hook-strip{display:flex;flex-direction:column;gap:10px;margin:28px 0 0;max-width:560px}
-.hook-line{background:var(--purple-pale);border:1px solid rgba(167,139,250,.24);border-radius:14px;padding:14px 16px;font-size:16px;font-weight:700;line-height:1.45;color:var(--text)}
-.hook-line strong{color:var(--purple-light)}
-.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:28px;text-align:left}
-.result-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:22px;display:flex;gap:14px;align-items:flex-start}
-.result-icon{font-size:26px;flex-shrink:0;width:34px;text-align:center}.result-title{font-size:16px;font-weight:700;color:var(--text);margin-bottom:5px;letter-spacing:-.02em}.result-desc{font-size:13px;color:var(--text-muted);line-height:1.65}.black-hook{background:#050506;border-top:1px solid var(--border);border-bottom:1px solid var(--border);text-align:center}.black-hook .big{font-family:'Noto Serif KR',serif;font-size:42px;line-height:1.22;font-weight:700;letter-spacing:-.04em}.black-hook .big em{font-style:normal;color:var(--purple-light)}.black-hook .copy{margin-top:20px;color:var(--text-muted);font-size:16px;line-height:1.8}.scarcity-box{background:var(--surface2);border:1px solid rgba(167,139,250,.28);border-radius:18px;padding:22px;margin:28px auto 0;max-width:560px;text-align:left}.scarcity-box p{font-size:15px;color:var(--text-muted);line-height:1.75}.scarcity-box strong{color:var(--purple-light)}.anti-section{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);text-align:center}.anti-list{display:flex;flex-direction:column;gap:10px;margin-top:28px;text-align:left}.anti-item{background:#09090b;border:1px solid var(--border);border-radius:14px;padding:16px 18px;font-size:15px;color:var(--text-muted);line-height:1.65}.anti-item strong{color:var(--text)}.sticky-mobile-cta{display:none}
-@media(max-width:640px){
-  body{font-size:18px;line-height:1.72;-webkit-text-size-adjust:100%}.container{max-width:100%;padding:0 20px}section{padding:64px 0}.nav{top:34px;padding:12px 18px}.nav img{height:26px!important}.nav-cta{font-size:13px;padding:9px 16px}.hero{min-height:auto;padding:128px 0 64px}.hero-eyebrow{font-size:13px;line-height:1.55;margin-bottom:20px}.hero-title{font-size:clamp(44px,13vw,60px);line-height:1.08;letter-spacing:-.055em;margin-bottom:24px}.hero-sub{font-size:20px;line-height:1.65;margin-bottom:24px;color:#d5d0e8}.btn-primary{width:100%;text-align:center;font-size:24px;padding:22px 24px;border-radius:14px}.hero-notice{font-size:16px;line-height:1.6}.hook-line{font-size:18px;padding:15px 16px}.stat-bar{padding:20px 0}.stat-row{grid-template-columns:1fr;gap:8px}.stat-item{border-right:none;border-bottom:1px solid var(--border);padding:14px 0}.stat-item:last-child{border-bottom:none}.stat-val{font-size:34px}.stat-label{font-size:15px}.badge{font-size:12px;padding:6px 14px;margin-bottom:18px}.section-title{font-size:clamp(34px,9vw,44px);line-height:1.18;letter-spacing:-.045em}.section-sub{font-size:18px;line-height:1.75;margin-bottom:32px}.pain-grid,.result-grid,.solution-inner,.howto-grid,.review-grid,.info-grid{grid-template-columns:1fr!important}.pain-card,.result-card,.solution-point,.wyg-item,.howto-card,.review-card,.info-card{border-radius:16px;padding:20px}.pain-text{font-size:18px;line-height:1.65}.pain-icon{width:40px;height:40px;font-size:20px}.solution-title{font-size:38px;line-height:1.18}.solution-desc{font-size:18px;line-height:1.78}.point-num{width:30px;height:30px;font-size:13px}.point-text strong{font-size:18px}.point-text span{font-size:16px;line-height:1.65}.selection-headline{font-size:34px;line-height:1.2;margin-bottom:24px}.sel-card{padding:22px}.sel-title-yes{font-size:18px}.sel-item{font-size:17px;line-height:1.65}.course-block{padding:22px 20px;border-radius:18px}.course-name{font-size:26px}.course-desc,.course-item{font-size:17px;line-height:1.65}.course-price-val,.package-final{font-size:30px}.package-box{padding:20px}.wyg-title,.howto-title{font-size:19px}.wyg-sub,.howto-desc,.result-desc{font-size:16px;line-height:1.7}.result-title{font-size:19px}.black-hook .big{font-size:40px}.black-hook .copy{font-size:18px}.review-text{font-size:17px;line-height:1.72}.faq-q{font-size:18px;line-height:1.5}.faq-a{font-size:16px;line-height:1.75}.cta-section{padding:76px 0 92px}.cta-title{font-size:42px;line-height:1.15}.cta-sub{font-size:18px}.cta-price-box{width:100%;padding:22px 20px}.sticky-mobile-cta{display:block;position:fixed;left:0;right:0;bottom:0;z-index:220;background:rgba(10,10,13,.92);backdrop-filter:blur(12px);border-top:1px solid var(--border);padding:10px 16px}.sticky-mobile-cta a{display:block;background:var(--purple);color:#fff;text-decoration:none;text-align:center;font-weight:700;border-radius:12px;padding:14px 18px;font-size:16px}
-}
-
 </style>
 </head>
 <body>
@@ -234,26 +220,22 @@ section{padding:80px 0}
 <!-- HERO -->
 <section class="hero">
   <div class="container">
-    <p class="hero-eyebrow">Focus AI Edu · 인스타 성장 시작반</p>
+    <p class="hero-eyebrow">Focus AI Edu · 인스타 성장반 · 클로드코드 × 인스타 성장 특별반</p>
     <h1 class="hero-title serif">
-      매일 콘텐츠 고민,<br>
-      이제 <em>AI가 먼저</em><br>
-      가져오게 하세요
+      클로드코드로<br>
+      <em>내 인스타를</em><br>
+      직접 키워요
     </h1>
     <p class="hero-sub">
-      오늘 올릴 주제, 경쟁 계정 분석, 해외 레퍼런스, 성장 리포트까지.<br>
-      코딩 몰라도 괜찮아요. 내 인스타를 키우는 자동화 시스템을 직접 만듭니다.
+      Claude Code × 인스타 성장 — 특별 기수.<br>
+      코딩 몰라도 OK. 아이디어만 있으면 충분해요.<br>
+      강남 신사동 · 소수 정예 오프라인 클래스
     </p>
-    <div class="hook-strip">
-      <div class="hook-line">📋 <strong>매일 아침 콘텐츠 기획안 3개</strong> 자동 생성</div>
-      <div class="hook-line">🔎 경쟁 계정 분석, 레퍼런스 찾기, 상세페이지 초안까지 한 번에</div>
-      <div class="hook-line">⚡ 강의 듣고 끝이 아니라 <strong>내 결과물 완성</strong>하고 가는 수업</div>
-    </div>
-    <div class="hero-cta-row" style="margin-top:64px">
-      <a href="https://shoocreamvillage.notion.site/23f5e8593cb683ae81a00152412a5cd7?pvs=105" class="btn-primary" target="_blank">선착순 신청하기</a>
+    <div class="hero-cta-row">
+      <a href="https://shoocreamvillage.notion.site/23f5e8593cb683ae81a00152412a5cd7?pvs=105" class="btn-primary" target="_blank">신청하기</a>
     </div>
     <p class="hero-notice">
-      ⚡ <span>8명 소수 정예 · 7월 19일부터 매주 일요일 오후 3시 · 강남 신사동</span>
+      ⚡ <span>8명 소수 정예 · 7월 2일부터 매주 목요일 오후 7시</span>
     </p>
   </div>
 </section>
@@ -264,15 +246,15 @@ section{padding:80px 0}
     <div class="stat-row">
       <div class="stat-item">
         <span class="stat-val">8명</span>
-        <span class="stat-label">질문 가능한 소수 정예</span>
+        <span class="stat-label">소수 정예 오프라인</span>
       </div>
       <div class="stat-item">
-        <span class="stat-val">3주</span>
-        <span class="stat-label">인스타 자동화 시스템 완성</span>
+        <span class="stat-val">3강</span>
+        <span class="stat-label">완성형 커리큘럼</span>
       </div>
       <div class="stat-item">
-        <span class="stat-val">80만원</span>
-        <span class="stat-label">시작반 특별가</span>
+        <span class="stat-val">당일</span>
+        <span class="stat-label">결과물 완성해가기</span>
       </div>
     </div>
   </div>
@@ -281,30 +263,15 @@ section{padding:80px 0}
 <!-- EMPATHY -->
 <section class="empathy">
   <div class="container">
-    <div class="badge">먼저, 이 문제부터 해결합니다</div>
-    <h2 class="section-title serif">인스타가 안 크는 이유,<br><em>열심히 안 해서가</em><br>아닐 수 있어요</h2>
-    <p class="section-sub">대부분은 콘텐츠를 못 만드는 게 아니라, 매번 혼자 찾고 분석하고 기획하느라 지치는 거예요. 이제 반복되는 고민은 AI에게 맡기고, 우리는 실행에 집중합니다.</p>
+    <div class="badge">혹시 이런 생각 해봤나요?</div>
+    <h2 class="section-title serif">매일 아침<br><em>오늘 뭐 찍지?</em><br>고민하다 하루가 가나요</h2>
+    <p class="section-sub">인스타를 키우고 싶은데 뭘 어떻게 해야 할지 모르겠는 거잖아요.<br>사실 방법이 있어요. AI가 다 해줄 수 있거든요.</p>
     <div class="divider"></div>
     <div class="pain-grid">
-      <div class="pain-card"><div class="pain-icon">😵</div><p class="pain-text">매일 아침 <span class="highlight-marker">오늘 뭐 올리지?</span> 고민하다 하루가 간다</p></div>
-      <div class="pain-card"><div class="pain-icon">📉</div><p class="pain-text">조회수와 도달률이 떨어졌는데 이유를 모르겠다</p></div>
-      <div class="pain-card"><div class="pain-icon">🔍</div><p class="pain-text">경쟁 계정은 왜 터졌는지 분석하고 싶은데 시간이 없다</p></div>
-      <div class="pain-card"><div class="pain-icon">⏰</div><p class="pain-text">레퍼런스 찾다가 정작 콘텐츠 만들 시간은 사라진다</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- RESULT PREVIEW -->
-<section class="black-hook">
-  <div class="container">
-    <div class="badge">수업 후 가져가는 결과</div>
-    <h2 class="big">AI가 대신 찾고,<br><em>당신은 실행만</em><br>하게 됩니다</h2>
-    <p class="copy">이 수업의 목표는 AI 지식을 많이 아는 게 아니에요.<br>내 인스타를 매일 굴러가게 만드는 <span class="highlight-marker">실제 시스템</span>을 갖고 나가는 것입니다.</p>
-    <div class="result-grid">
-      <div class="result-card"><div class="result-icon">📋</div><div><div class="result-title">콘텐츠 기획안 자동 생성</div><div class="result-desc">내 계정 톤에 맞는 주제·대본·훅을 매일 받아볼 수 있게 만들어요.</div></div></div>
-      <div class="result-card"><div class="result-icon">🔎</div><div><div class="result-title">경쟁 계정 분석 리포트</div><div class="result-desc">어제 잘 된 콘텐츠를 분석하고 왜 터졌는지 정리합니다.</div></div></div>
-      <div class="result-card"><div class="result-icon">🌍</div><div><div class="result-title">해외 레퍼런스 번역</div><div class="result-desc">외국에서 잘 된 콘텐츠를 한국어 레퍼런스로 바꿔 활용합니다.</div></div></div>
-      <div class="result-card"><div class="result-icon">📊</div><div><div class="result-title">성장 리포트 자동화</div><div class="result-desc">조회수·도달률이 왜 움직였는지 매일 확인하는 구조를 만듭니다.</div></div></div>
+      <div class="pain-card"><div class="pain-icon">😵</div><p class="pain-text">매일 아침 오늘 뭐 찍지? 고민하다 하루가 간다</p></div>
+      <div class="pain-card"><div class="pain-icon">🔍</div><p class="pain-text">경쟁 계정은 왜 저게 터졌는지 도무지 모르겠다</p></div>
+      <div class="pain-card"><div class="pain-icon">📉</div><p class="pain-text">내 계정이 왜 안 크는지 이유를 모르겠다</p></div>
+      <div class="pain-card"><div class="pain-icon">⏰</div><p class="pain-text">레퍼런스 찾다가 시간이 다 가버린다</p></div>
     </div>
   </div>
 </section>
@@ -314,15 +281,15 @@ section{padding:80px 0}
   <div class="container">
     <div class="solution-inner">
       <div>
-        <p class="solution-label">불안 제거</p>
-        <h2 class="solution-title serif">코딩 몰라도<br>AI 처음이어도<br><em>괜찮아요</em></h2>
-        <p class="solution-desc">이 수업은 개발자를 만드는 수업이 아닙니다.<br><br>Claude Code와 터미널을 어렵지 않게 다루면서, 내 콘텐츠와 내 계정에 바로 쓰는 자동화 결과물을 만드는 수업이에요.</p>
+        <p class="solution-label">우리의 접근</p>
+        <h2 class="solution-title serif">AI 전문가가<br>될 필요<br><em>없어요</em></h2>
+        <p class="solution-desc">Claude와 터미널, 두 가지만 알면 뭐든 만들 수 있어요.<br><br>아이디어만 가져오세요. 기획부터 배포까지<br>강의 끝에 실제로 작동하는 내 서비스가 완성됩니다.</p>
       </div>
       <div class="solution-points">
-        <div class="solution-point"><div class="point-num">1</div><div class="point-text"><strong>어려운 용어 최소화</strong><span>프롬프트, LLM 같은 말보다 실제로 어디를 누르고 무엇을 입력하는지부터 알려드려요.</span></div></div>
-        <div class="solution-point"><div class="point-num">2</div><div class="point-text"><strong>결과물 중심 실습</strong><span>강의 듣고 끝이 아니라 내 계정에 쓰는 자동화 툴을 직접 만듭니다.</span></div></div>
-        <div class="solution-point"><div class="point-num">3</div><div class="point-text"><strong>인스타 성장에 바로 적용</strong><span>콘텐츠 기획, 경쟁 계정 분석, 레퍼런스 수집, 상세페이지 초안에 적용해요.</span></div></div>
-        <div class="solution-point"><div class="point-num">4</div><div class="point-text"><strong>8명 소수 정예 피드백</strong><span>막히는 부분을 질문하고 바로 잡을 수 있도록 소수로만 운영합니다.</span></div></div>
+        <div class="solution-point"><div class="point-num">1</div><div class="point-text"><strong>기술 용어 없음</strong><span>프롬프트, LLM 같은 말 안 써요. 쉬운 말로만 합니다.</span></div></div>
+        <div class="solution-point"><div class="point-num">2</div><div class="point-text"><strong>이론 아닌 실습</strong><span>강의 듣고 끝이 아니에요. 직접 만들어가는 수업입니다.</span></div></div>
+        <div class="solution-point"><div class="point-num">3</div><div class="point-text"><strong>내 삶에 바로 적용</strong><span>일상 루틴, 인스타, 내 사업에 바로 적용할 수 있어요.</span></div></div>
+        <div class="solution-point"><div class="point-num">4</div><div class="point-text"><strong>소수 정예 운영</strong><span>최대 8명. 질문하고, 피드백 받고, 제대로 배웁니다.</span></div></div>
       </div>
     </div>
   </div>
@@ -442,24 +409,12 @@ section{padding:80px 0}
 </section>
 
 
-<!-- PRICE HOOK -->
-<section class="black-hook">
-  <div class="container">
-    <div class="badge">이번 기수만</div>
-    <h2 class="big">다음 모집부터는<br><em>150만원 정가</em>로<br>올라갑니다</h2>
-    <div class="scarcity-box">
-      <p>이번 인스타 성장반은 <strong>4기 특별반</strong>으로 운영됩니다. 3강 정가 150만원에서 이번 기수만 <strong>80만원</strong>으로 신청할 수 있어요.</p>
-      <p style="margin-top:10px">자리도 많지 않습니다. <strong>선착순 8명</strong>만 받고, 소수 정예로 질문과 피드백을 충분히 받을 수 있게 운영합니다.</p>
-    </div>
-  </div>
-</section>
-
 <!-- CURRICULUM -->
 <section class="curriculum" id="curriculum">
   <div class="container">
     <div class="badge">커리큘럼</div>
     <h2 class="section-title serif">3주 안에<br><em>내 인스타 성장 시스템</em>을 만들어요</h2>
-    <p class="section-sub">클로드코드 × 인스타 특별반 · 매주 일요일 오후 3시 · 강남 신사동</p>
+    <p class="section-sub">클로드코드 × 인스타 특별반 · 매주 토요일 오후 3시 · 강남 신사동</p>
 
     <div style="margin-top:32px">
 
@@ -467,7 +422,7 @@ section{padding:80px 0}
       <div class="course-block">
         <div class="course-top">
           <div>
-            <p class="course-tag">1강 — 7월 19일 (일)</p>
+            <p class="course-tag">1강 — 7월 19일 (토)</p>
             <h3 class="course-name serif">AI랑 친해지기</h3>
             <p class="course-desc">AI가 뭔지 알고 직접 써보는 첫 번째 시간. 내 계정 분석부터 콘텐츠 배포까지.</p>
           </div>
@@ -489,7 +444,7 @@ section{padding:80px 0}
       <div class="course-block">
         <div class="course-top">
           <div>
-            <p class="course-tag">2강 — 7월 26일 (일)</p>
+            <p class="course-tag">2강 — 7월 26일 (토)</p>
             <h3 class="course-name serif">AI 익숙해지기</h3>
             <p class="course-desc">터미널을 내 손에 익히고, 나만의 서비스를 기획하고 만들기 시작해요.</p>
           </div>
@@ -511,7 +466,7 @@ section{padding:80px 0}
       <div class="course-block">
         <div class="course-top">
           <div>
-            <p class="course-tag">3강 — 8월 2일 (일)</p>
+            <p class="course-tag">3강 — 8월 2일 (토)</p>
             <h3 class="course-name serif">AI 내맘대로 쓰기</h3>
             <p class="course-desc">나만의 서비스를 완성하고, 앞으로 혼자서도 할 수 있는 힘을 가져가요.</p>
           </div>
@@ -725,8 +680,8 @@ section{padding:80px 0}
       </div>
       <div class="howto-card">
         <span class="howto-icon">🌙</span>
-        <div class="howto-title">매주 일요일 오후</div>
-        <div class="howto-desc">7/19 · 7/26 · 8/2 매주 일요일 오후 3시 시작. 주말에 여유롭게 배워요.</div>
+        <div class="howto-title">매주 토요일 오후</div>
+        <div class="howto-desc">7/19 · 7/26 · 8/2 매주 토요일 오후 3시 시작. 주말에 여유롭게 배워요.</div>
       </div>
       <div class="howto-card">
         <span class="howto-icon">♾️</span>
@@ -741,36 +696,30 @@ section{padding:80px 0}
 <section class="reviews">
   <div class="container">
     <div class="badge">이전 기수 수강생 후기</div>
-    <h2 class="section-title serif">혼자 막막했던 분들이<br><em>이렇게 달라졌어요</em></h2>
-    <p class="section-sub">후기는 구매를 망설이는 사람에게 가장 큰 확신이 됩니다. 모바일에서도 한 장씩 또렷하게 읽히도록 카드형으로 정리했습니다.</p>
+    <h2 class="section-title serif">먼저 배운 분들이<br><em>말해주는 것들</em></h2>
     <div class="review-grid">
-      <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">매일 뭘 찍어야 할지 몰라서 릴스를 거의 못 올렸는데, 수업 듣고 AI로 주제를 뽑는 법을 알게 됐어요. 콘텐츠 막막함이 확 줄었어요.</p><div class="reviewer"><div class="reviewer-avatar">김</div><div><div class="reviewer-name">김 ○○ 님</div><div class="reviewer-sub">인스타 크리에이터</div></div></div></div>
-      <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">경쟁 계정 분석을 매번 손으로 했는데, 자동화할 수 있다는 걸 처음 알았어요. 레퍼런스 찾는 시간이 진짜 반 이상 줄었습니다.</p><div class="reviewer"><div class="reviewer-avatar">이</div><div><div class="reviewer-name">이 ○○ 님</div><div class="reviewer-sub">소셜 마케터</div></div></div></div>
-      <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">터미널이 뭔지도 몰랐는데 수업 끝나고 제 손으로 자동화 툴을 만들었어요. 클로드 코드가 이렇게 쓸 수 있는 건지 몰랐네요.</p><div class="reviewer"><div class="reviewer-avatar">박</div><div><div class="reviewer-name">박 ○○ 님</div><div class="reviewer-sub">제품 판매 계정 운영</div></div></div></div>
-      <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">상세페이지를 만들 때마다 외주를 고민했는데, 이제 초안은 제가 AI로 만들 수 있어요. 비용도 줄고 속도도 빨라졌습니다.</p><div class="reviewer"><div class="reviewer-avatar">최</div><div><div class="reviewer-name">최 ○○ 님</div><div class="reviewer-sub">소규모 브랜드 운영</div></div></div></div>
-      <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">AI를 써야 한다는 건 알았는데 어디에 써야 할지 몰랐어요. 수업 후에는 제 계정에 바로 적용할 작업이 명확해졌습니다.</p><div class="reviewer"><div class="reviewer-avatar">정</div><div><div class="reviewer-name">정 ○○ 님</div><div class="reviewer-sub">1인 사업가</div></div></div></div>
-      <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">혼자 하면 설치부터 막혔을 것 같은데 옆에서 바로 잡아주니까 끝까지 갔어요. 소수 정예라 질문하기 편했습니다.</p><div class="reviewer"><div class="reviewer-avatar">윤</div><div><div class="reviewer-name">윤 ○○ 님</div><div class="reviewer-sub">프리랜서 마케터</div></div></div></div>
-      <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">강의보다 실습 시간이 많아서 좋았어요. 듣고 아는 느낌이 아니라 진짜 제 결과물이 생겨서 만족도가 높았습니다.</p><div class="reviewer"><div class="reviewer-avatar">한</div><div><div class="reviewer-name">한 ○○ 님</div><div class="reviewer-sub">콘텐츠 제작자</div></div></div></div>
-      <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">좋은 콘텐츠를 어떻게 찾고 분석해야 하는지 기준이 생겼어요. 그냥 감으로 올리던 방식에서 벗어난 느낌이에요.</p><div class="reviewer"><div class="reviewer-avatar">송</div><div><div class="reviewer-name">송 ○○ 님</div><div class="reviewer-sub">브랜드 계정 담당자</div></div></div></div>
-      <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">클로드 코드가 어렵게 느껴졌는데, 인스타 성장이라는 목적에 맞춰 배우니까 훨씬 이해가 쉬웠어요.</p><div class="reviewer"><div class="reviewer-avatar">오</div><div><div class="reviewer-name">오 ○○ 님</div><div class="reviewer-sub">초보 크리에이터</div></div></div></div>
-      <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">수업 전에는 AI를 검색용으로만 썼는데, 이제는 제 일을 대신 굴리는 시스템으로 써야겠다는 감이 생겼어요.</p><div class="reviewer"><div class="reviewer-avatar">강</div><div><div class="reviewer-name">강 ○○ 님</div><div class="reviewer-sub">강사·콘텐츠 운영</div></div></div></div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">매일 뭘 찍어야 할지 몰라서 릴스를 거의 못 올리고 있었는데, 수업 듣고 나서 AI로 주제를 뽑는 법을 알게 됐어요. 이제 콘텐츠 막막함이 사라졌어요.</p>
+        <div class="reviewer"><div class="reviewer-avatar">김</div><div><div class="reviewer-name">김 ○○ 님</div><div class="reviewer-sub">30대 후반 · 인스타 크리에이터</div></div></div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">경쟁 계정 분석을 매번 손으로 했는데, 이걸 자동화할 수 있다는 걸 처음 알았어요. 레퍼런스 찾는 시간이 진짜 반 이상 줄었어요.</p>
+        <div class="reviewer"><div class="reviewer-avatar">이</div><div><div class="reviewer-name">이 ○○ 님</div><div class="reviewer-sub">30대 중반 · 소셜 마케터</div></div></div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">터미널이 뭔지도 몰랐는데 수업 끝나고 나니까 진짜 제 손으로 자동화 툴을 만들었어요. 클로드 코드가 이렇게 쓸 수 있는 건지 몰랐네요.</p>
+        <div class="reviewer"><div class="reviewer-avatar">박</div><div><div class="reviewer-name">박 ○○ 님</div><div class="reviewer-sub">40대 초반 · 제품 판매 계정 운영</div></div></div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">상세페이지를 만드는 데 매번 외주를 맡겼는데, 이제 제가 직접 AI로 만들 수 있어요. 비용도 줄고 속도도 빨라졌어요.</p>
+        <div class="reviewer"><div class="reviewer-avatar">최</div><div><div class="reviewer-name">최 ○○ 님</div><div class="reviewer-sub">30대 후반 · 소규모 브랜드 운영</div></div></div>
+      </div>
     </div>
-    <p class="review-notice">* 후기는 실제 수강생의 경험을 바탕으로 개인정보를 가려 재구성한 내용입니다.</p>
-  </div>
-</section>
-
-<!-- ANTI SECTION -->
-<section class="anti-section">
-  <div class="container">
-    <div class="badge">이런 분은 맞지 않을 수 있어요</div>
-    <h2 class="section-title serif">듣기만 하고<br><em>실행하지 않을 분</em>은<br>추천하지 않아요</h2>
-    <p class="section-sub">이 수업은 지식 강의가 아니라 결과물을 만드는 실습형 수업입니다. 진짜로 내 계정에 적용해보고 싶은 분에게 가장 잘 맞아요.</p>
-    <div class="anti-list">
-      <div class="anti-item">❌ <strong>AI가 알아서 다 해주겠지</strong> 생각하고 아무것도 입력하지 않을 분</div>
-      <div class="anti-item">❌ 설치나 세팅에서 한 번 막히면 바로 포기할 분</div>
-      <div class="anti-item">❌ 내 계정, 내 콘텐츠, 내 제품에 적용할 의지가 없는 분</div>
-      <div class="anti-item">✅ 반대로, 지금은 몰라도 <strong>직접 만들고 내 것으로 가져가고 싶은 분</strong>께 추천합니다.</div>
-    </div>
+    <p class="review-notice">* 후기는 실제 수강생의 경험을 바탕으로 재구성한 내용입니다.</p>
   </div>
 </section>
 
@@ -782,19 +731,7 @@ section{padding:80px 0}
     <div class="faq-list">
       <div class="faq-item">
         <div class="faq-q" onclick="toggleFaq(this)">저 진짜 아무것도 몰라요. 따라갈 수 있을까요?<span>+</span></div>
-        <div class="faq-a">네, 완전히 처음인 분들을 위한 수업이에요. 실제로 30대·40대에 AI를 처음 만져보는 분들이 대부분이고요. 챗GPT가 뭔지 몰라도 "어렵다"는 느낌 없이 한 단계씩 함께 갑니다.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">매일 뭘 올려야 할지 막막해요. 릴스 주제도 AI가 뽑아주나요?<span>+</span></div>
-        <div class="faq-a">네, 그게 이 수업의 핵심이에요. 매일 아침 내 계정에 맞는 콘텐츠 기획안을 AI가 자동으로 뽑아주는 시스템을 직접 만들어요. "오늘 뭐 올리지" 고민하는 시간이 사라져요.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">잘나가는 계정이나 해외 릴스를 참고하고 싶은데, 그것도 AI가 도와주나요?<span>+</span></div>
-        <div class="faq-a">경쟁 계정 분석과 해외 레퍼런스 찾기까지 AI가 한 번에 해줘요. 잘되는 콘텐츠의 공통점을 뽑아서 내 계정에 맞게 응용하는 법을 배웁니다.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">이거 들으면 팔로워가 늘어나나요?<span>+</span></div>
-        <div class="faq-a">팔로워 수를 보장하진 않아요. 대신 좋은 콘텐츠를 꾸준히, 빠르게 올릴 수 있는 시스템을 만들어드려요. 계정을 키우는 건 결국 꾸준함인데, 그 꾸준함을 AI가 받쳐주는 구조예요.</div>
+        <div class="faq-a">네, 완전히 처음인 분들이 대상이에요. 챗GPT가 뭔지, AI가 뭔지 몰라도 괜찮아요. "어렵다"는 느낌 없이 시작할 수 있도록 설계된 수업이에요.</div>
       </div>
       <div class="faq-item">
         <div class="faq-q" onclick="toggleFaq(this)">수업 들으면 실제로 뭘 할 수 있게 되나요?<span>+</span></div>
@@ -805,8 +742,16 @@ section{padding:80px 0}
         <div class="faq-a">노트북 하나만 가져오시면 돼요. 맥북이든 윈도우든 상관없어요. 나머지 준비는 수업 당일 강사가 함께 도와드려요.</div>
       </div>
       <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">1강만 들을 수도 있나요?<span>+</span></div>
+        <div class="faq-a">3기는 3강 패키지로만 운영해요. 3주 동안 나만의 서비스를 기획하고 완성하는 연속 과정이라, 중간부터 합류하거나 1강만 듣는 건 어려워요. 대신 3강을 마치면 진짜 내 것 하나가 완성돼요.</div>
+      </div>
+      <div class="faq-item">
         <div class="faq-q" onclick="toggleFaq(this)">수업 후에도 질문할 수 있나요?<span>+</span></div>
         <div class="faq-a">네, 3강 수강 후 평생 함께하는 커뮤니티에 입장할 수 있어요. 혼자 막힐 때 질문하고, 같이 배운 분들과 계속 함께할 수 있어요.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">주말 오후 3시 시간대가 맞지 않으면 어떡하나요?<span>+</span></div>
+        <div class="faq-a">매주 토요일 오후 3~6시 진행이에요. 주말 오전은 자유롭게 보내고 오후에 오시면 돼요. 강남 신사동이라 접근도 편해요.</div>
       </div>
     </div>
   </div>
@@ -825,8 +770,8 @@ section{padding:80px 0}
       </div>
       <div class="info-card">
         <div class="info-label">일정</div>
-        <div class="info-val">7/19 · 7/26 · 8/2 (일)</div>
-        <div class="info-sub">매주 일요일 15:00 시작</div>
+        <div class="info-val">7/19 · 7/26 · 8/2 (토)</div>
+        <div class="info-sub">매주 토요일 15:00 시작</div>
       </div>
       <div class="info-card">
         <div class="info-label">정원</div>
@@ -847,12 +792,12 @@ section{padding:80px 0}
   <div class="container">
     <div class="badge">인스타 성장반 모집 중</div>
     <h2 class="cta-title serif">
-      7월, 내 인스타를<br>
-      <em>자동화하세요</em>
+      7월, 나만의<br>
+      <em>서비스를 만들어요</em>
     </h2>
     <p class="cta-sub">
-      선착순 8명 · 빠르게 마감될 수 있습니다.<br>
-      7/19 · 7/26 · 8/2 매주 일요일 오후 3시
+      8명 소수 정예 · 빠르게 마감될 수 있습니다.<br>
+      7/2 · 7/9 · 7/16 매주 목요일 오후 7시
     </p>
     <div class="cta-price-box" style="flex-direction:column;gap:8px;align-items:center">
       <div style="font-size:12px;color:var(--text-dim);letter-spacing:.08em;text-transform:uppercase">3강 패키지 · 인스타 성장반 특별할인 47%</div>
@@ -885,7 +830,5 @@ function toggleFaq(el){
   item.classList.toggle('open');
 }
 </script>
-
-<div class="sticky-mobile-cta"><a href="https://shoocreamvillage.notion.site/23f5e8593cb683ae81a00152412a5cd7?pvs=105" target="_blank">선착순 8명 신청하기 · 80만원</a></div>
 </body>
 </html>
