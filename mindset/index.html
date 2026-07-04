@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>나도 모르는 나 찾기 · 포커스 AI Edu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root{
+  --main:#7C3AED; --main-soft:#A78BFA; --bg:#F0ECFF;
+  --card:#FFFFFF; --ink:#0E0E10; --muted:#8B84A0;
+  --line:#E7E1F5;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:"Noto Sans KR",sans-serif; background:var(--bg); color:var(--ink);
+  line-height:1.7; -webkit-font-smoothing:antialiased;
+}
+.serif{font-family:"Noto Serif KR",serif}
+.wrap{max-width:760px; margin:0 auto; padding:32px 20px 80px}
+.brand{font-size:12px; letter-spacing:3px; color:var(--main); font-weight:700; text-transform:uppercase}
+.btn{
+  font-family:inherit; font-size:16px; font-weight:700; border:none; cursor:pointer;
+  background:var(--main); color:#fff; padding:16px 28px; border-radius:14px;
+  transition:transform .12s, opacity .12s; width:100%;
+}
+.btn:hover:not(:disabled){transform:translateY(-1px)}
+.btn:disabled{background:var(--main-soft); opacity:.55; cursor:not-allowed}
+.btn.ghost{background:transparent; color:var(--main); border:1.5px solid var(--line); font-weight:500}
+.screen{animation:fade .5s ease both}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.screen,.bar-fill{animation:none!important;transition:none!important}}
+
+/* intro */
+.intro-card{background:var(--card); border-radius:22px; padding:40px 32px; box-shadow:0 12px 40px rgba(124,58,237,.08)}
+.intro-title{font-size:34px; font-weight:700; margin:14px 0 8px; line-height:1.3}
+.intro-note{color:var(--muted); white-space:pre-line; font-size:15px; margin:20px 0 28px; border-left:3px solid var(--main-soft); padding-left:16px}
+
+/* question */
+.progress-row{display:flex; align-items:center; gap:12px; margin-bottom:24px}
+.progress-track{flex:1; height:8px; background:#e3dcf3; border-radius:99px; overflow:hidden}
+.progress-fill{height:100%; background:var(--main); border-radius:99px; transition:width .4s ease}
+.progress-label{font-size:13px; color:var(--muted); font-weight:500; white-space:nowrap}
+.q-eyebrow{font-size:13px; color:var(--main); font-weight:700; letter-spacing:1px}
+.q-title{font-size:26px; font-weight:700; margin:8px 0 6px; line-height:1.35}
+.q-sub{color:var(--muted); font-size:15px; margin-bottom:24px}
+.field{margin-bottom:18px}
+.field label{display:block; font-size:14px; font-weight:500; margin-bottom:8px; color:var(--ink)}
+.field textarea{
+  width:100%; font-family:inherit; font-size:15px; line-height:1.6; color:var(--ink);
+  background:var(--card); border:1.5px solid var(--line); border-radius:12px;
+  padding:14px; resize:vertical; min-height:64px; transition:border-color .15s;
+}
+.field textarea:focus{outline:none; border-color:var(--main)}
+.field textarea::placeholder{color:#c4bcd8}
+.nav-row{display:flex; gap:12px; margin-top:8px}
+.nav-row .btn{width:auto; flex:1}
+.hint{font-size:13px; color:var(--muted); text-align:center; margin-top:14px}
+
+/* loading */
+.loading{text-align:center; padding:80px 20px}
+.spinner{width:52px; height:52px; border:4px solid #e3dcf3; border-top-color:var(--main); border-radius:50%; margin:0 auto 24px; animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* result dashboard */
+.report-head{background:var(--main); color:#fff; border-radius:22px; padding:32px; margin-bottom:20px}
+.report-head .brand{color:#e5d9ff}
+.report-head h1{font-size:30px; font-weight:700; margin:10px 0 4px}
+.report-meta{font-size:13px; color:#d9c9ff; display:flex; gap:16px; flex-wrap:wrap; margin-top:14px}
+.card{background:var(--card); border-radius:18px; padding:26px; margin-bottom:16px; box-shadow:0 6px 24px rgba(124,58,237,.06)}
+.card-eyebrow{font-size:12px; font-weight:700; letter-spacing:2px; color:var(--main); text-transform:uppercase; margin-bottom:14px}
+.engine{display:flex; gap:14px; align-items:flex-start; padding:16px 0; border-bottom:1px solid var(--line)}
+.engine:last-child{border-bottom:none}
+.engine-badge{background:var(--bg); color:var(--main); font-weight:700; font-size:14px; padding:8px 14px; border-radius:10px; white-space:nowrap}
+.engine-desc{font-size:15px; color:#333}
+.bar-row{display:grid; grid-template-columns:96px 1fr 42px; align-items:center; gap:12px; margin-bottom:12px}
+.bar-name{font-size:14px; font-weight:500; text-align:right}
+.bar-track{height:22px; background:#f1edf9; border-radius:8px; overflow:hidden}
+.bar-fill{height:100%; background:var(--main); border-radius:8px; width:0; transition:width .9s cubic-bezier(.2,.7,.3,1)}
+.bar-score{font-size:14px; font-weight:700; color:var(--main)}
+.bar-note{grid-column:2/4; font-size:12.5px; color:var(--muted); margin:-6px 0 10px}
+.wound{font-family:"Noto Serif KR",serif; font-size:19px; line-height:1.7; color:var(--main); font-weight:500}
+.diag-text{font-size:15px; color:#333; white-space:pre-line}
+.summary-line{font-size:16px; line-height:2; color:#333}
+.summary-line b{color:var(--main); font-weight:700; background:var(--bg); padding:1px 8px; border-radius:6px}
+.self-q{margin:18px 0}
+.self-q p{font-size:15px; font-weight:500; margin-bottom:8px}
+.self-q textarea{width:100%; font-family:inherit; font-size:15px; border:1.5px solid var(--line); border-radius:12px; padding:12px; min-height:56px; resize:vertical}
+.self-q textarea:focus{outline:none; border-color:var(--main)}
+.closing{background:#0E0E10; color:#fff; border-radius:18px; padding:26px; font-family:"Noto Serif KR",serif; font-size:16px; line-height:1.7; margin-bottom:20px}
+.actions{display:flex; gap:12px; flex-wrap:wrap}
+.actions .btn{flex:1; min-width:180px}
+.err{background:#fff; border:1.5px solid #f0d0d0; color:#a33; border-radius:12px; padding:14px; font-size:14px; margin-bottom:16px}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script>
+/* ============================================================
+   설정 — 배포할 때 여기만 바꾸면 됩니다 (슈니는 지금 손대지 마세요)
+   미리보기: 아래 그대로 두면 실제 AI가 진단합니다.
+   깃허브 배포: API_ENDPOINT 를 슈니의 Cloudflare Worker 주소로 교체.
+   ============================================================ */
+const API_ENDPOINT = "https://api.anthropic.com/v1/messages";
+const MODEL = "claude-sonnet-4-6"; // 배포 땐 Worker에서 슈니가 고른 모델 사용
+
+/* 원본 욕구 프롬프트 (진단 로직 — 한 글자도 바꾸지 않음) */
+const DESIRE_PROMPT = `당신은 "욕구 사전(Desire Journey)" 인터뷰어이자 진단가입니다.
+아래 사용자의 9개 답변을 읽고, 원본 진단 규칙에 따라 분석하세요.
+
+【진단 규칙】
+1. 각 답을 9개 욕구 중 '진짜로 작동한 욕구'로 분류하세요. (입으로는 ②알고 싶다라고 답했어도 속이 ⑥인정이면 ⑥으로 옮기기)
+2. 살아있는 욕구 vs 비어있는/뒤집힌 욕구를 가르세요. 특히 "물었더니 정반대로 답한 욕구"를 찾으세요.
+3. 여러 답에 반복해서 나온 '같은 감정·같은 상처'를 짚으세요. 그게 가장 깊은 상처입니다.
+4. 가장 센 엔진 1~2개에 이름을 붙이세요. (예: 인정 엔진 / 보호자 엔진)
+5. 9개 욕구를 5점 만점으로, '감정이 흔들린 정도'로 점수를 매기세요.
+6. 마지막 자기 바운더리: 가장 센 욕구, 가장 비어있는 구멍, 그 구멍이 생긴 감정을 짚어주세요.
+핵심 원칙: "인정은 일의 연료이지, 안전감의 약이 아닙니다. 일을 더 키워서 빈 구멍을 메우려는 순간, 구멍은 더 깊어집니다."
+
+9개 욕구: ①이기고싶다 ②알고싶다 ③만들고싶다 ④돕고싶다 ⑤모으고싶다 ⑥인정받고싶다 ⑦탐험하고싶다 ⑧자유롭고싶다 ⑨친구를만들고싶다`;
+
+/* JSON 출력 지시 (대시보드 렌더링용 — 진단 내용은 위 규칙 그대로) */
+const JSON_INSTRUCTION = `
+위 진단을 수행하되, 결과를 아래 JSON 형식으로만 출력하세요. 다른 말·마크다운·설명 없이 JSON만.
+{
+ "engines":[{"name":"엔진 이름","desc":"왜 이 엔진이 가장 센지 2~3문장"}],
+ "deepest_wound":"반복해서 나온 가장 깊은 상처 (2~3문장)",
+ "scores":[{"desire":"이기고 싶다","score":4.5,"note":"실제 작동한 욕구/재분류 코멘트 (한 줄)"}],
+ "diagnosis":"살아있는 욕구 vs 비어있는/뒤집힌 욕구 분석 (4~6문장). 정반대로 답한 욕구가 있으면 반드시 언급.",
+ "summary":{"strongest":"가장 센 욕구","emptiest":"가장 비어있는 구멍","wound_reason":"그 구멍이 생긴 감정"}
+}
+scores 배열은 반드시 9개 욕구 전부 포함, score 는 0~5.0.`;
+
+const QUESTIONS = [
+  {n:"①", key:"win",     title:"이기고 싶다", ask:"살면서 꼭 한번 이기고 싶은 사람, 혹은 지금 굉장히 신경 쓰이는 사람이 있나요?"},
+  {n:"②", key:"know",    title:"알고 싶다", ask:"공부가 아니라, 그냥 자꾸 끌렸던 영역이 있나요?"},
+  {n:"③", key:"make",    title:"만들고 싶다", ask:"크기 상관없이, 꼭 한번 세상에 내놓고 싶은 것이 있나요?"},
+  {n:"④", key:"help",    title:"돕고 싶다", ask:"잘 됐으면 하는 사람, 내가 챙기고 싶은 사람이 있나요?"},
+  {n:"⑤", key:"gather",  title:"모으고 싶다", ask:"돈·사람·기록·신뢰 — 자꾸 쌓아두고 싶은 것이 있나요?"},
+  {n:"⑥", key:"approve", title:"인정받고 싶다", ask:"누군가에게 꼭 이런 말을 듣고 싶다는 순간이 있나요?"},
+  {n:"⑦", key:"explore", title:"탐험하고 싶다", ask:"아직 닿아보지 못한, 경험해보지 못한 것이 있나요?"},
+  {n:"⑧", key:"free",    title:"자유롭고 싶다", ask:"지금 나를 묶고 있다고 느껴지는 것이 있나요?"},
+  {n:"⑨", key:"friend",  title:"친구를 만들고 싶다", ask:"곁에 두고 싶은 사람들, 만들고 싶은 관계가 있나요?"},
+];
+
+const SAMPLE = {
+  engines:[
+    {name:"인정 엔진", desc:"거의 모든 답의 밑바닥에서 '나를 알아봐 달라'는 신호가 반복됩니다. 이기고 싶은 마음도, 만들고 싶은 것도 결국 누군가의 인정을 향하고 있습니다."},
+    {name:"보호자 엔진", desc:"돕고 싶은 대상을 말할 때 감정이 가장 크게 흔들렸습니다. 나를 챙기기 전에 남을 먼저 챙기는 패턴이 뚜렷합니다."}
+  ],
+  deepest_wound:"'내가 충분하지 않으면 사라질지 모른다'는 불안이 여러 답에 반복됩니다. 자유를 물었을 때조차 떠나는 대신 붙잡아두고 싶다고 답한 것이 그 증거입니다.",
+  scores:[
+    {desire:"인정받고 싶다", score:5.0, note:"입으로는 성취라 했지만 속은 인정"},
+    {desire:"만들고 싶다", score:4.6, note:"살아있는 욕구 · 감정이 크게 흔들림"},
+    {desire:"돕고 싶다", score:4.3, note:"보호자 엔진의 연료"},
+    {desire:"이기고 싶다", score:3.8, note:"인정 욕구의 다른 얼굴"},
+    {desire:"알고 싶다", score:3.4, note:"살아있으나 도구화되어 있음"},
+    {desire:"친구를 만들고 싶다", score:3.0, note:"원하지만 먼저 다가가지 못함"},
+    {desire:"모으고 싶다", score:2.6, note:"신뢰를 쌓으려는 형태"},
+    {desire:"탐험하고 싶다", score:2.1, note:"동경은 있으나 실행은 미룸"},
+    {desire:"자유롭고 싶다", score:1.4, note:"뒤집힘 · 자유 대신 붙잡음을 택함"}
+  ],
+  diagnosis:"살아있는 욕구는 인정·창조·이타입니다. 이 셋은 감정이 크게 흔들렸고, 지금 삶을 굴리는 진짜 엔진입니다.\n\n반대로 비어있는 욕구는 자유입니다. 특히 주목할 지점 — '벗어나고 싶은 것'을 물었더니, 벗어남이 아니라 '떠나지 않게 붙잡아두고 싶다'로 답했습니다. 이것은 자유 욕구가 비어 있고, 그 자리를 버려짐에 대한 두려움이 채우고 있다는 신호입니다.",
+  summary:{strongest:"인정받고 싶다", emptiest:"자유(로부터의 안전감)", wound_reason:"충분하지 않으면 사라질지 모른다는 불안"}
+};
+
+let state = { step:"intro", idx:0, answers:{} };
+const app = document.getElementById("app");
+const esc = s => (s||"").replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+
+function render(){
+  if(state.step==="intro") return renderIntro();
+  if(state.step==="q") return renderQuestion();
+  if(state.step==="loading") return renderLoading();
+  if(state.step==="result") return renderResult();
+}
+
+function renderIntro(){
+  app.innerHTML = `<div class="screen intro-card">
+    <div class="brand">포커스 AI Edu · 심리 진단 리포트</div>
+    <h1 class="intro-title serif">나도 모르는 나 찾기</h1>
+    <div class="intro-note">본 대화는 당신이 자신에게 가장 진실해지기 위한 과정입니다.
+솔직하게 답해 주세요. 이건 그 누구를 위한 시간도 아닙니다.
+가장 이기적인, 오직 당신의 인생 시나리오를 위한 시간입니다.
+정답은 없습니다. 떠오르지 않으면 '안 떠오른다'고 적어도 됩니다 — 그 침묵도 답입니다.
+점수를 매기는 게 아니라, 실제 장면과 그때 흔들렸던 감정을 떠올려 적어 주세요.</div>
+    <button class="btn" onclick="start()">시작하기 · 9개의 질문</button>
+    <button class="btn ghost" style="margin-top:12px" onclick="showSample()">샘플 리포트 바로 보기</button>
+  </div>`;
+}
+
+function start(){ state.step="q"; state.idx=0; render(); }
+function showSample(){ state.result=SAMPLE; state.step="result"; render(); }
+
+function renderQuestion(){
+  const q = QUESTIONS[state.idx];
+  const a = state.answers[q.key] || {};
+  const pct = Math.round((state.idx)/QUESTIONS.length*100);
+  app.innerHTML = `<div class="screen">
+    <div class="progress-row">
+      <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <div class="progress-label">${state.idx+1} / 9</div>
+    </div>
+    <div class="q-eyebrow">${q.n} ${q.title}</div>
+    <div class="q-title serif">${q.ask}</div>
+    <div class="q-sub">세 가지를 다 적어야 다음으로 넘어갈 수 있어요.</div>
+    <div class="field"><label>무엇이 / 누가 떠올랐나요?</label>
+      <textarea id="f0" placeholder="떠오른 대상을 적어주세요">${esc(a.target)}</textarea></div>
+    <div class="field"><label>왜 그게 떠올랐나요?</label>
+      <textarea id="f1" placeholder="이유를 적어주세요">${esc(a.why)}</textarea></div>
+    <div class="field"><label>그때 드는 감정은 무엇인가요?</label>
+      <textarea id="f2" placeholder="솔직한 감정을 적어주세요">${esc(a.emotion)}</textarea></div>
+    <div class="nav-row">
+      ${state.idx>0?'<button class="btn ghost" onclick="prev()">이전</button>':''}
+      <button class="btn" id="next" disabled onclick="next()">${state.idx<8?'다음':'진단 받기'}</button>
+    </div>
+    <div class="hint">떠오르지 않으면 '안 떠오른다'고 적어도 괜찮아요.</div>
+  </div>`;
+  ["f0","f1","f2"].forEach(id=>document.getElementById(id).addEventListener("input",checkFilled));
+  checkFilled();
+}
+
+function checkFilled(){
+  const v = ["f0","f1","f2"].map(id=>document.getElementById(id).value.trim());
+  document.getElementById("next").disabled = v.some(x=>x==="");
+}
+function saveCurrent(){
+  const q = QUESTIONS[state.idx];
+  state.answers[q.key] = {
+    target:document.getElementById("f0").value.trim(),
+    why:document.getElementById("f1").value.trim(),
+    emotion:document.getElementById("f2").value.trim()
+  };
+}
+function prev(){ saveCurrent(); state.idx--; render(); }
+function next(){ saveCurrent(); if(state.idx<8){state.idx++; render();} else { runDiagnosis(); } }
+
+function renderLoading(){
+  app.innerHTML = `<div class="screen loading">
+    <div class="spinner"></div>
+    <div class="serif" style="font-size:22px;margin-bottom:8px">당신의 답을 읽고 있습니다</div>
+    <div style="color:var(--muted)">9개의 욕구를 하나씩 살펴보는 중이에요…</div>
+  </div>`;
+}
+
+async function runDiagnosis(){
+  state.step="loading"; render();
+  const answerText = QUESTIONS.map(q=>{
+    const a=state.answers[q.key]||{};
+    return `${q.n} ${q.title}\n- 대상: ${a.target}\n- 이유: ${a.why}\n- 감정: ${a.emotion}`;
+  }).join("\n\n");
+
+  try{
+    const res = await fetch(API_ENDPOINT,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:MODEL, max_tokens:1500,
+        messages:[{role:"user", content: DESIRE_PROMPT+"\n\n【사용자 답변】\n"+answerText+"\n"+JSON_INSTRUCTION }]
+      })
+    });
+    const data = await res.json();
+    const txt = (data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("\n");
+    const clean = txt.replace(/```json|```/g,"").trim();
+    state.result = JSON.parse(clean);
+  }catch(e){
+    state.error = "실시간 진단 연결에 실패해 샘플 리포트를 보여드려요. (배포 시 서버 연결로 해결됩니다)";
+    state.result = SAMPLE;
+  }
+  state.step="result"; render();
+}
+
+function renderResult(){
+  const r = state.result;
+  const sorted = [...r.scores].sort((a,b)=>b.score-a.score);
+  const today = new Date().toLocaleDateString("ko-KR");
+  app.innerHTML = `<div class="screen" id="report">
+    ${state.error?`<div class="err">${state.error}</div>`:""}
+    <div class="report-head">
+      <div class="brand">포커스 AI Edu · 심리 진단 리포트</div>
+      <h1 class="serif">나도 모르는 나 찾기</h1>
+      <div class="report-meta"><span>발행일 ${today}</span><span>9가지 욕구 분석</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-eyebrow">당신을 굴리는 엔진</div>
+      ${r.engines.map(e=>`<div class="engine"><div class="engine-badge">${esc(e.name)}</div><div class="engine-desc">${esc(e.desc)}</div></div>`).join("")}
+    </div>
+
+    <div class="card">
+      <div class="card-eyebrow">9가지 욕구 점수표</div>
+      ${sorted.map(s=>`
+        <div class="bar-row">
+          <div class="bar-name">${esc(s.desire)}</div>
+          <div class="bar-track"><div class="bar-fill" data-w="${s.score/5*100}"></div></div>
+          <div class="bar-score">${s.score.toFixed(1)}</div>
+        </div>
+        <div class="bar-note">${esc(s.note)}</div>`).join("")}
+    </div>
+
+    <div class="card">
+      <div class="card-eyebrow">가장 깊은 상처</div>
+      <div class="wound">${esc(r.deepest_wound)}</div>
+    </div>
+
+    <div class="card">
+      <div class="card-eyebrow">살아있는 욕구 · 비어있는 구멍</div>
+      <div class="diag-text">${esc(r.diagnosis)}</div>
+    </div>
+
+    <div class="card">
+      <div class="card-eyebrow">정리하면</div>
+      <div class="summary-line">
+        당신에게 가장 센 욕구는 <b>${esc(r.summary.strongest)}</b>,<br>
+        가장 비어 있는 구멍은 <b>${esc(r.summary.emptiest)}</b> 으로 보입니다.<br>
+        그 구멍이 생긴 건 <b>${esc(r.summary.wound_reason)}</b> 때문인 것 같습니다.
+      </div>
+      <div style="border-top:1px solid var(--line); margin:20px 0"></div>
+      <div class="self-q"><p>① 나의 욕구 바운더리 — '나는 앞으로 ___ 라는 감정이 채워지는 일만 한다.'</p><textarea placeholder="한 문장으로 적어보세요"></textarea></div>
+      <div class="self-q"><p>② 그런데 그 일로도 절대 안 메워지는 빈 구멍이 하나 있습니다. 그 구멍은 ___ 이고, 이건 일이 아니라 ___ 에서 채워야 합니다.</p><textarea placeholder="적어보세요"></textarea></div>
+      <div class="self-q"><p>③ 그래서 지금, 가장 먼저 채워야 할 감정 한 가지는 무엇인가요?</p><textarea placeholder="적어보세요"></textarea></div>
+    </div>
+
+    <div class="closing">인정은 일의 연료이지, 안전감의 약이 아닙니다.<br>일을 더 키워서 빈 구멍을 메우려는 순간, 구멍은 더 깊어집니다.</div>
+
+    <div class="actions">
+      <button class="btn" onclick="saveImage()">리포트 이미지로 저장</button>
+      <button class="btn ghost" onclick="restart()">다시 하기</button>
+    </div>
+  </div>`;
+  requestAnimationFrame(()=>{ setTimeout(()=>{ document.querySelectorAll(".bar-fill").forEach(b=>b.style.width=b.dataset.w+"%"); },80); });
+}
+
+function restart(){ state={step:"intro",idx:0,answers:{}}; render(); }
+
+async function saveImage(){
+  const node = document.getElementById("report");
+  const canvas = await html2canvas(node,{backgroundColor:"#F0ECFF", scale:2});
+  const link = document.createElement("a");
+  link.download = "나도-모르는-나-리포트.png";
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}
+
+render();
+</script>
+</body>
+</html>
