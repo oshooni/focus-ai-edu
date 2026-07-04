@@ -1,0 +1,326 @@
+<!-- Focus AI Edu · 내가 진짜 만들고 싶은 건? -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>내가 진짜 만들고 싶은 건? · Focus AI Edu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+  :root{
+    --bg:#0e0e10; --card:#17171b; --card2:#1e1e24;
+    --purple:#7c3aed; --purple-l:#a78bfa; --cream:#f0ecff;
+    --muted:#a29ec2; --faint:#726e8f;
+    --border:rgba(167,139,250,.16); --border-str:rgba(167,139,250,.42);
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+    --body:"Pretendard","Pretendard Variable",-apple-system,BlinkMacSystemFont,sans-serif;
+    --disp:"Outfit","Pretendard",-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--bg); color:var(--cream); font-family:var(--body);
+    min-height:100vh; display:flex; align-items:center; justify-content:center;
+    padding:24px 16px; line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{width:100%; max-width:540px}
+  .card{background:var(--card); border:1px solid var(--border); border-radius:22px; padding:30px 26px 26px; position:relative; overflow:hidden}
+  .brand{font-family:var(--mono); font-size:12px; color:var(--faint); display:flex; align-items:center; gap:7px; margin-bottom:22px}
+  .dots{display:inline-flex; gap:5px}
+  .dots i{width:9px; height:9px; border-radius:50%; display:block}
+  .dots i:nth-child(1){background:#ff5f57}.dots i:nth-child(2){background:#febc2e}.dots i:nth-child(3){background:#28c840}
+  .brand b{color:var(--purple-l); font-weight:500}
+
+  .progress{height:3px; background:rgba(255,255,255,.06); border-radius:99px; margin-bottom:20px; overflow:hidden}
+  .bar{height:100%; width:0; background:linear-gradient(90deg,var(--purple),var(--purple-l)); border-radius:99px; transition:width .45s cubic-bezier(.4,0,.2,1)}
+
+  .eyebrow{font-family:var(--mono); font-size:12.5px; color:var(--purple-l); margin:0 0 14px}
+  .eyebrow .num{color:var(--faint)}
+  .thread{font-size:12.5px; color:var(--faint); margin:-6px 0 18px; font-family:var(--mono); word-break:keep-all}
+  .thread b{color:var(--purple-l); font-weight:400}
+  h1{font-family:var(--disp); font-weight:600; font-size:29px; line-height:1.25; margin:0 0 14px; letter-spacing:-.01em}
+  .q{font-family:var(--disp); font-weight:600; font-size:22px; line-height:1.35; margin:0 0 22px; letter-spacing:-.005em}
+  .sub{color:var(--muted); font-size:15px; margin:0 0 26px}
+
+  .opts{display:flex; flex-direction:column; gap:10px}
+  .opt{text-align:left; width:100%; background:var(--card2); color:var(--cream); border:1px solid var(--border); border-radius:13px; padding:14px 17px; font-family:var(--body); font-size:15.5px; cursor:pointer; transition:.16s}
+  .opt:hover{border-color:var(--border-str); transform:translateY(-1px)}
+  .opt:focus-visible{outline:2px solid var(--purple-l); outline-offset:2px}
+  .opt.sel{background:rgba(124,58,237,.16); border-color:var(--purple)}
+
+  input.txt{width:100%; background:var(--card2); color:var(--cream); font-family:var(--body); border:1px solid var(--border); border-radius:13px; padding:15px 16px; font-size:16px}
+  input.txt::placeholder{color:var(--faint)}
+  input.txt:focus{outline:none; border-color:var(--purple)}
+
+  .row{display:flex; gap:10px; margin-top:18px; align-items:center}
+  .btn{font-family:var(--body); font-weight:600; font-size:15.5px; border-radius:13px; padding:14px 22px; cursor:pointer; border:1px solid transparent; transition:.16s}
+  .btn.primary{background:var(--purple); color:#fff; border-color:var(--purple)}
+  .btn.primary:hover{background:#6d31d9}
+  .btn.primary:disabled{opacity:.4; cursor:not-allowed}
+  .btn.ghost{background:transparent; color:var(--muted); border-color:var(--border)}
+  .btn.ghost:hover{color:var(--cream); border-color:var(--border-str)}
+  .btn.full{width:100%; justify-content:center; text-align:center}
+  .skip{background:none; border:none; color:var(--faint); font-family:var(--body); font-size:14px; cursor:pointer; padding:6px}
+  .skip:hover{color:var(--muted)}
+
+  .fade{animation:fade .4s ease}
+  @keyframes fade{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
+
+  .load{text-align:center; padding:26px 0 8px}
+  .load p{color:var(--muted); font-size:15px; margin-top:20px; min-height:22px}
+  .spin{width:44px; height:44px; margin:0 auto; border-radius:50%; border:3px solid rgba(167,139,250,.2); border-top-color:var(--purple-l); animation:sp 1s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
+
+  .mirror{font-size:16.5px; line-height:1.75; color:var(--cream); margin:6px 0 24px}
+  .mirror b{color:var(--purple-l); font-weight:600}
+  .idea{background:var(--card2); border:1px solid var(--border-str); border-radius:16px; padding:20px; margin-bottom:16px}
+  .idea .lbl{font-family:var(--mono); font-size:11.5px; color:var(--faint); letter-spacing:.04em; text-transform:uppercase; margin-bottom:9px}
+  .idea .title{font-family:var(--disp); font-weight:700; font-size:21px; margin-bottom:8px; color:#fff}
+  .idea .what{font-size:15px; color:var(--cream); margin-bottom:8px}
+  .idea .why{font-size:14px; color:var(--muted)}
+  .promptbox{background:#0b0b0d; border:1px solid var(--border); border-radius:13px; padding:14px 15px; margin-bottom:16px}
+  .promptbox .head{display:flex; align-items:center; justify-content:space-between; margin-bottom:9px}
+  .promptbox .head .lbl{font-family:var(--mono); font-size:11.5px; color:var(--faint)}
+  .copy{font-family:var(--body); font-size:12.5px; color:var(--purple-l); background:none; border:1px solid var(--border); border-radius:8px; padding:4px 10px; cursor:pointer}
+  .copy:hover{border-color:var(--purple)}
+  .promptbox pre{font-family:var(--mono); font-size:13px; line-height:1.6; color:#d9d4f5; white-space:pre-wrap; word-break:break-word; margin:0}
+  .step{border-left:2px solid var(--purple); padding:2px 0 2px 15px; margin-bottom:24px}
+  .step .lbl{font-family:var(--mono); font-size:12px; color:var(--purple-l); margin-bottom:5px}
+  .step .txt{font-size:15px; color:var(--cream)}
+
+  @media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+  @media (max-width:480px){.card{padding:26px 20px 22px} h1{font-size:25px} .q{font-size:20px}}
+</style>
+
+<div class="wrap"><div class="card">
+  <div class="brand"><span class="dots"><i></i><i></i><i></i></span> <b>Focus&nbsp;AI&nbsp;Edu</b> · idea finder</div>
+  <div class="progress" id="prog" style="display:none"><div class="bar" id="bar"></div></div>
+  <div id="screen"></div>
+</div></div>
+
+<script>
+const SUBS = {
+  "집안일·육아·생활 루틴":["아이 일과·루틴 관리","집안일·살림 정리","식단·장보기","가족 일정·약속","건강·복약 챙기기"],
+  "콘텐츠·SNS 운영":["릴스·숏폼 아이디어","피드·게시물 기획","캡션·글쓰기","댓글·DM 응대","콘텐츠 발행 일정 관리"],
+  "공부·학습·자기계발":["학습 계획·진도 관리","자료 요약·정리","문제·퀴즈 만들기","암기·복습","독서·기록"],
+  "돈·재테크·가계 관리":["가계부·지출 관리","투자·자산 정리","구독·고정비 관리","세금·서류 정리","목표 저축 관리"],
+  "일·업무 (직장)":["반복 문서·보고서","이메일·메시지 처리","회의록·정리","일정·할 일 관리","자료 조사"],
+  "내 사업·가게 운영":["주문·발주 관리","재고·상품 관리","예약·고객 관리","매출·정산 정리","리뷰·문의 응대"],
+  "마케팅·홍보·영업":["제안서·자료 제작","고객·리드 관리","캠페인·게시물 기획","성과 분석·리포트","메일·메시지 발송"],
+  "정보 수집·리서치":["뉴스·트렌드 모니터링","경쟁사·시장 조사","자료·논문 정리","가격·상품 비교","데이터 수집"],
+  "취미·창작 활동":["작업 아이디어·기획","창작물 관리·정리","레퍼런스 수집","진행 기록","커뮤니티·공유"],
+  "건강·운동·식단 관리":["운동 계획·기록","식단·영양 관리","습관·루틴 추적","몸 상태 기록","목표 관리"],
+  "여행·일정·계획":["여행 코스·일정 짜기","예약·체크리스트","예산·경비 관리","맛집·장소 추천","짐·준비물 관리"],
+  "인간관계·소통":["연락·기념일 챙기기","메시지 작성 도움","모임·약속 관리","대화·감정 정리","선물·이벤트 아이디어"]
+};
+
+const QUESTIONS = [
+  {key:"area", type:"choice", step:"어디서",
+   q:"당장 도움을 받고 싶은 영역은?",
+   options:[...Object.keys(SUBS),"기타 (직접 입력)"]},
+  {key:"subarea", type:"dynamic", step:"좁히기",
+   q:"그중에서도, 구체적으로 어떤 거예요?"},
+  {key:"detail", type:"text", optional:true, step:"상황",
+   q:"그 일에서 지금 제일 번거롭거나 아쉬운 순간을 적어주세요.",
+   placeholder:"예: 밤중 수유·목욕 시간을 매번 까먹어서 기록해두고 싶어요 (선택, 넘어가도 돼요)"},
+  {key:"func", type:"choice", step:"어떻게",
+   q:"Claude Code가 어떻게 도와주면 좋겠어요?",
+   options:["기록·정리·체크해주기","글·문서·아이디어를 자동으로 만들어주기","골라서 추천해주기","때 되면 알림·리마인드","모아서 분석·리포트","자료를 찾아서 수집·정리","메시지·메일 자동 응대·발송"]},
+  {key:"forwhom", type:"choice", step:"누구에게",
+   q:"이건 누구를 위한 거예요?",
+   options:["나 자신","지인·친구·가족","회사·팀 동료","고객·예비 고객","특정 인물 한 명","불특정 다수"]},
+  {key:"purpose", type:"choice", step:"목적",
+   q:"이걸 만들어서 궁극적으로 하고 싶은 건?",
+   options:["내 시간·수고 줄이기","지금보다 더 잘 해내기","사람들에게 알려지기","돈 벌기","누군가에게 도움 주기"]},
+];
+
+const answers = {};
+let idx = -1;
+const screen = document.getElementById('screen');
+const prog = document.getElementById('prog');
+const bar = document.getElementById('bar');
+function esc(s){const d=document.createElement('div');d.textContent=s==null?'':s;return d.innerHTML;}
+
+function intro(){
+  prog.style.display='none';
+  screen.className='fade';
+  screen.innerHTML = `
+    <h1>내가 진짜<br>만들고 싶은 건?</h1>
+    <p class="sub">아직 뭘 만들지 몰라도 괜찮아요. 도움받고 싶은 것부터 하나씩 좁혀가다 보면, Claude Code로 만들 당신만의 첫 프로젝트가 정해져요. 1분이면 충분해요.</p>
+    <button class="btn primary full" onclick="next()">시작하기</button>`;
+}
+
+function threadLine(){
+  const parts=[];
+  if(answers.area && answers.area!=="기타 (직접 입력)") parts.push(answers.area);
+  else if(answers.area) parts.push(answers.subarea||"");
+  if(answers.subarea && answers.area!=="기타 (직접 입력)") parts.push(answers.subarea);
+  if(answers.func) parts.push(answers.func);
+  const clean=parts.filter(Boolean);
+  if(!clean.length) return '';
+  return `<div class="thread">지금까지: <b>${clean.map(esc).join(' › ')}</b></div>`;
+}
+
+function render(){
+  const total = QUESTIONS.length;
+  prog.style.display='block';
+  bar.style.width = (idx/total*100)+'%';
+  let item = QUESTIONS[idx];
+
+  let isText = item.type==='text';
+  let opts = item.options;
+  let placeholder = item.placeholder;
+  if(item.type==='dynamic'){
+    const subs = SUBS[answers.area];
+    if(subs && subs.length){ opts = subs; isText=false; }
+    else { isText=true; placeholder="구체적으로 어떤 영역이에요?"; }
+  }
+
+  let body='';
+  if(!isText){
+    body = `<div class="opts">` + opts.map(o =>
+      `<button class="opt${answers[item.key]===o?' sel':''}" onclick="pick('${item.key}',this)">${esc(o)}</button>`
+    ).join('') + `</div>`;
+  } else {
+    body = `<input class="txt" id="inp" type="text" placeholder="${esc(placeholder||'')}" value="${esc(answers[item.key]||'')}" autocomplete="off">
+      <div class="row">
+        ${item.optional?`<button class="skip" onclick="setText('');next()">넘어가기</button>`:''}
+        <span style="flex:1"></span>
+        <button class="btn primary" id="nx" onclick="setText(document.getElementById('inp').value);next()">다음</button>
+      </div>`;
+  }
+
+  screen.className='fade';
+  screen.innerHTML = `
+    <p class="eyebrow"><span class="num">${String(idx+1).padStart(2,'0')} / ${String(total).padStart(2,'0')}</span> · ${esc(item.step)}</p>
+    ${threadLine()}
+    <p class="q">${item.q}</p>
+    ${body}`;
+
+  if(isText){
+    const inp=document.getElementById('inp'); inp.focus();
+    const nx=document.getElementById('nx');
+    const check=()=>{ if(nx && !item.optional) nx.disabled = inp.value.trim()===''; };
+    check(); inp.addEventListener('input',check);
+    inp.addEventListener('keydown',e=>{ if(e.key==='Enter' && (item.optional||inp.value.trim()!=='')){ setText(inp.value); next(); }});
+  }
+}
+
+function pick(key, el){
+  answers[key]=el.textContent;
+  [...el.parentNode.children].forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  setTimeout(next,200);
+}
+function setText(v){ answers[QUESTIONS[idx].key]=(v||'').trim(); }
+
+function next(){
+  idx++;
+  if(idx>=QUESTIONS.length){ finish(); return; }
+  render();
+}
+
+const LOADING=["당신이 좁혀온 걸 읽는 중…","Claude Code로 만들 수 있게 다듬는 중…","당신을 위한 하나를 고르는 중…"];
+function finish(){
+  bar.style.width='100%'; screen.className='';
+  screen.innerHTML=`<div class="load"><div class="spin"></div><p id="lmsg">${LOADING[0]}</p></div>`;
+  let i=0; const lm=document.getElementById('lmsg');
+  const tick=setInterval(()=>{ i=(i+1)%LOADING.length; lm.textContent=LOADING[i]; },1300);
+  generate().then(r=>{ clearInterval(tick); result(r); });
+}
+
+async function generate(){
+  const sys = `당신은 Focus AI Edu의 아이디어 큐레이터입니다. "무엇을 만들지" 찾도록 돕는 자기발견 테스트의 답변을 받아, Claude Code로 실제로 만들 수 있는 '단 하나의' 구체적인 프로젝트를 제안합니다.
+
+가장 중요한 규칙:
+- Claude Code는 소프트웨어(웹앱·봇·자동화 스크립트·문서 생성기 등)를 만드는 도구입니다. 물리적인 행동(요리·청소·아기 씻기기 등)은 직접 하지 못합니다.
+- 그러니 주제가 물리적인 일이어도, 그것을 기록·관리·자동화·생성·알림·추천해주는 소프트웨어를 제안하세요. 예: '아기 씻기기'가 아니라 '아기 목욕·수유 시간을 기록하고 알림 주는 루틴 앱'.
+- 사용자가 고른 영역 → 세부 → 원하는 기능의 흐름을 그대로 이어서, 처음 답변과 자연스럽게 연결되는 결과를 내세요. 생뚱맞게 다른 주제로 튀지 마세요.
+
+출력 규칙:
+- 반드시 아래 JSON만 출력. 그 외 텍스트·마크다운·백틱 금지.
+- 모두 한국어, 따뜻하고 담백한 존댓말.
+- mirror: 사용자의 답을 이어붙여 "당신은 ~를 ~하고 싶은 사람이에요" 식 2~3문장. 사용자가 적은 구체적 표현을 그대로 녹여서. 강조할 핵심 단어는 <b>로 감싸도 됩니다.
+- ideaTitle: 만들 소프트웨어의 짧고 구체적인 이름.
+- ideaWhat: 그게 무엇을 해주는지 한 문장.
+- ideaWhy: 왜 이 사람에게 맞는지 한 문장.
+- starterPrompt: Claude Code에 바로 붙여넣을 실전 프롬프트. 만들 것을 구체적으로 설명하고, 마지막을 "만드는 데 필요한 정보가 있으면 먼저 나에게 하나씩 질문해줘"처럼 대화를 이어갈 수 있게 끝맺으세요.
+- firstStep: 이번 주 시작할 딱 한 걸음, 부담 없게.
+형식: {"mirror":"","ideaTitle":"","ideaWhat":"","ideaWhy":"","starterPrompt":"","firstStep":""}`;
+  const usr = `테스트 답변:
+- 도움받고 싶은 영역: ${answers.area||'-'}
+- 구체적으로: ${answers.subarea||'-'}
+- 지금 번거로운 상황: ${answers.detail||'(안 적음)'}
+- 원하는 도움 방식: ${answers.func||'-'}
+- 누구를 위한 것: ${answers.forwhom||'-'}
+- 궁극적 목적: ${answers.purpose||'-'}`;
+  try{
+    const ctrl=new AbortController(); const to=setTimeout(()=>ctrl.abort(),22000);
+    const res=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST", headers:{"Content-Type":"application/json"}, signal:ctrl.signal,
+      body:JSON.stringify({model:"claude-sonnet-4-6", max_tokens:1000, system:sys, messages:[{role:"user",content:usr}]})
+    });
+    clearTimeout(to);
+    const data=await res.json();
+    const text=(data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join("\n");
+    const p=JSON.parse(text.replace(/```json|```/g,'').trim());
+    if(p && p.mirror && p.ideaTitle && p.starterPrompt) return p;
+    throw new Error('shape');
+  }catch(e){ return fallback(); }
+}
+
+function fallback(){
+  const topic = answers.subarea || answers.area || "그 일";
+  const funcTitle = {
+    "기록·정리·체크해주기":"기록·체크 앱",
+    "글·문서·아이디어를 자동으로 만들어주기":"자동 생성 도구",
+    "골라서 추천해주기":"맞춤 추천 도구",
+    "때 되면 알림·리마인드":"알림 봇",
+    "모아서 분석·리포트":"분석 리포트 도구",
+    "자료를 찾아서 수집·정리":"자료 수집 도구",
+    "메시지·메일 자동 응대·발송":"자동 응대 봇"
+  }[answers.func] || "도구";
+  const title = `${topic} ${funcTitle}`;
+  const detail = answers.detail;
+  const prompt = `${title}을(를) 웹앱으로 만들어줘.` +
+    (detail ? ` 특히 "${detail}" 이 부분을 편하게 해결하고 싶어.` : ``) +
+    ` 만드는 데 필요한 정보가 있으면 먼저 나에게 하나씩 질문해줘 — 어떤 항목이 필요한지, 화면은 어떻게 구성할지 같은 걸 물어보면서 함께 만들어가자.`;
+  return {
+    mirror:`당신은 <b>${esc(topic)}</b>을(를) 더 편하게 만들고 싶은 분이에요.` +
+      (detail?` “${esc(detail)}” 이 순간을 해결해주는 도구라면 딱 맞겠네요.`:` 이건 Claude Code로 충분히 만들 수 있어요.`),
+    ideaTitle:title,
+    ideaWhat:`${esc(topic)}을(를) ${esc((answers.func||'').replace('해주기',''))}해주는 소프트웨어예요.`,
+    ideaWhy:`${esc(answers.forwhom||'당신')}에게 도움이 되고, ${esc(answers.purpose||'하고 싶던 일')}로 이어져요.`,
+    starterPrompt:prompt,
+    firstStep:`종이에 “무엇을 입력하면 무엇이 나와야 하는지”를 한 줄로 적어본 다음, 위 프롬프트를 Claude Code에 그대로 붙여넣어 보세요.`
+  };
+}
+
+let CURPROMPT="";
+function copyPrompt(btn){
+  navigator.clipboard.writeText(CURPROMPT).then(()=>{ btn.textContent="복사됨"; setTimeout(()=>btn.textContent="복사",1500); });
+}
+
+function result(r){
+  CURPROMPT=r.starterPrompt||"";
+  prog.style.display='none'; screen.className='fade';
+  screen.innerHTML=`
+    <p class="eyebrow">✦ 당신을 위한 발견</p>
+    <p class="mirror">${r.mirror}</p>
+    <div class="idea">
+      <div class="lbl">만들면 좋을 프로젝트</div>
+      <div class="title">${esc(r.ideaTitle)}</div>
+      <div class="what">${esc(r.ideaWhat)}</div>
+      <div class="why">${esc(r.ideaWhy)}</div>
+    </div>
+    <div class="promptbox">
+      <div class="head"><span class="lbl">Claude Code에 이렇게 말 걸어보세요</span><button class="copy" onclick="copyPrompt(this)">복사</button></div>
+      <pre>${esc(r.starterPrompt)}</pre>
+    </div>
+    <div class="step"><div class="lbl">이번 주, 여기까지만</div><div class="txt">${esc(r.firstStep)}</div></div>
+    <div class="row"><span style="flex:1"></span><button class="btn ghost" onclick="restart()">다시 하기</button></div>`;
+}
+
+function restart(){ for(const k in answers) delete answers[k]; idx=-1; intro(); }
+intro();
+</script>
