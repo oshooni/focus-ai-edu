@@ -86,10 +86,10 @@ body{
 .diag-text{font-size:15px; color:#333; white-space:pre-line}
 .summary-line{font-size:16px; line-height:2; color:#333}
 .summary-line b{color:var(--main); font-weight:700; background:var(--bg); padding:1px 8px; border-radius:6px}
-.self-q{margin:18px 0}
-.self-q p{font-size:15px; font-weight:500; margin-bottom:8px}
-.self-q textarea{width:100%; font-family:inherit; font-size:15px; border:1.5px solid var(--line); border-radius:12px; padding:12px; min-height:56px; resize:vertical}
-.self-q textarea:focus{outline:none; border-color:var(--main)}
+.rx{display:flex; gap:14px; align-items:flex-start; margin:18px 0}
+.rx-num{font-family:"Noto Serif KR",serif; font-size:22px; color:var(--main-soft); font-weight:700; line-height:1.3}
+.rx-label{font-size:12px; font-weight:700; letter-spacing:1px; color:var(--muted); margin-bottom:5px}
+.rx-text{font-family:"Noto Serif KR",serif; font-size:17px; line-height:1.65; color:var(--main); font-weight:500}
 .closing{background:#0E0E10; color:#fff; border-radius:18px; padding:26px; font-family:"Noto Serif KR",serif; font-size:16px; line-height:1.7; margin-bottom:20px}
 .actions{display:flex; gap:12px; flex-wrap:wrap}
 .actions .btn{flex:1; min-width:180px}
@@ -131,7 +131,8 @@ const JSON_INSTRUCTION = `
  "deepest_wound":"반복해서 나온 가장 깊은 상처 (2~3문장)",
  "scores":[{"desire":"이기고 싶다","score":4.5,"note":"실제 작동한 욕구/재분류 코멘트 (한 줄)"}],
  "diagnosis":"살아있는 욕구 vs 비어있는/뒤집힌 욕구 분석 (4~6문장). 정반대로 답한 욕구가 있으면 반드시 언급.",
- "summary":{"strongest":"가장 센 욕구","emptiest":"가장 비어있는 구멍","wound_reason":"그 구멍이 생긴 감정"}
+ "summary":{"strongest":"가장 센 욕구","emptiest":"가장 비어있는 구멍","wound_reason":"그 구멍이 생긴 감정"},
+ "prescription":{"boundary":"'나는 앞으로 ___ 라는 감정이 채워지는 일만 한다' 형태로 완성된 한 문장 (사용자를 대신해 당신이 채워줌)","empty_hole":"일로도 안 메워지는 빈 구멍이 무엇인지","fill_where":"그 구멍을 일이 아니라 어디서 채워야 하는지","first_emotion":"지금 가장 먼저 채워야 할 감정 한 가지"}
 }
 scores 배열은 반드시 9개 욕구 전부 포함, score 는 0~5.0.`;
 
@@ -165,7 +166,13 @@ const SAMPLE = {
     {desire:"자유롭고 싶다", score:1.4, note:"뒤집힘 · 자유 대신 붙잡음을 택함"}
   ],
   diagnosis:"살아있는 욕구는 인정·창조·이타입니다. 이 셋은 감정이 크게 흔들렸고, 지금 삶을 굴리는 진짜 엔진입니다.\n\n반대로 비어있는 욕구는 자유입니다. 특히 주목할 지점 — '벗어나고 싶은 것'을 물었더니, 벗어남이 아니라 '떠나지 않게 붙잡아두고 싶다'로 답했습니다. 이것은 자유 욕구가 비어 있고, 그 자리를 버려짐에 대한 두려움이 채우고 있다는 신호입니다.",
-  summary:{strongest:"인정받고 싶다", emptiest:"자유(로부터의 안전감)", wound_reason:"충분하지 않으면 사라질지 모른다는 불안"}
+  summary:{strongest:"인정받고 싶다", emptiest:"자유(로부터의 안전감)", wound_reason:"충분하지 않으면 사라질지 모른다는 불안"},
+  prescription:{
+    boundary:"나는 앞으로 '내가 스스로 충분하다'는 감정이 채워지는 일만 한다.",
+    empty_hole:"아무 성과가 없어도 곁에 남아주는 사람이 있다는 안전감",
+    fill_where:"성과가 아니라, 조건 없이 이어지는 가까운 관계",
+    first_emotion:"'지금 이대로도 괜찮다'는 안심"
+  }
 };
 
 let state = { step:"intro", idx:0, answers:{} };
@@ -319,10 +326,10 @@ function renderResult(){
         가장 비어 있는 구멍은 <b>${esc(r.summary.emptiest)}</b> 으로 보입니다.<br>
         그 구멍이 생긴 건 <b>${esc(r.summary.wound_reason)}</b> 때문인 것 같습니다.
       </div>
-      <div style="border-top:1px solid var(--line); margin:20px 0"></div>
-      <div class="self-q"><p>① 나의 욕구 바운더리 — '나는 앞으로 ___ 라는 감정이 채워지는 일만 한다.'</p><textarea placeholder="한 문장으로 적어보세요"></textarea></div>
-      <div class="self-q"><p>② 그런데 그 일로도 절대 안 메워지는 빈 구멍이 하나 있습니다. 그 구멍은 ___ 이고, 이건 일이 아니라 ___ 에서 채워야 합니다.</p><textarea placeholder="적어보세요"></textarea></div>
-      <div class="self-q"><p>③ 그래서 지금, 가장 먼저 채워야 할 감정 한 가지는 무엇인가요?</p><textarea placeholder="적어보세요"></textarea></div>
+      <div style="border-top:1px solid var(--line); margin:22px 0"></div>
+      <div class="rx"><span class="rx-num">①</span><div><div class="rx-label">당신의 욕구 바운더리</div><div class="rx-text">${esc(r.prescription.boundary)}</div></div></div>
+      <div class="rx"><span class="rx-num">②</span><div><div class="rx-label">일로도 메워지지 않는 빈 구멍</div><div class="rx-text">${esc(r.prescription.empty_hole)} — 이건 일이 아니라 ${esc(r.prescription.fill_where)}에서 채워야 합니다.</div></div></div>
+      <div class="rx"><span class="rx-num">③</span><div><div class="rx-label">지금 가장 먼저 채워야 할 감정</div><div class="rx-text">${esc(r.prescription.first_emotion)}</div></div></div>
     </div>
 
     <div class="closing">인정은 일의 연료이지, 안전감의 약이 아닙니다.<br>일을 더 키워서 빈 구멍을 메우려는 순간, 구멍은 더 깊어집니다.</div>
