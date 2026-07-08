@@ -105,8 +105,8 @@ body{
    미리보기: 아래 그대로 두면 실제 AI가 진단합니다.
    깃허브 배포: API_ENDPOINT 를 슈니의 Cloudflare Worker 주소로 교체.
    ============================================================ */
-const API_ENDPOINT = "https://api.anthropic.com/v1/messages";
-const MODEL = "claude-sonnet-4-6"; // 배포 땐 Worker에서 슈니가 고른 모델 사용
+const API_ENDPOINT = "https://desire.tbsl0624.workers.dev";
+const MODEL = "claude-sonnet-5"; // 모델은 Worker에서 최종 결정됨
 
 /* 원본 욕구 프롬프트 (진단 로직 — 한 글자도 바꾸지 않음) */
 const DESIRE_PROMPT = `당신은 "욕구 사전(Desire Journey)" 인터뷰어이자 진단가입니다.
