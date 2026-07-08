@@ -33,13 +33,27 @@ section{padding:80px 0}
 .hero-title{font-family:'Noto Serif KR',serif;font-size:clamp(36px,6vw,56px);font-weight:700;line-height:1.2;margin-bottom:28px;letter-spacing:-.02em}
 .hero-title em{font-style:normal;color:var(--purple-light)}
 .hero-sub{font-size:17px;color:var(--text-muted);line-height:1.8;margin-bottom:48px;max-width:520px}
-.hero-cta-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.hero-cta-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:30px 0 34px}
 .btn-primary{display:inline-block;background:var(--purple);color:#fff;font-size:14px;font-weight:600;padding:14px 32px;border-radius:100px;text-decoration:none;letter-spacing:.02em;transition:opacity .2s;cursor:pointer;border:none}
 .btn-primary:hover{opacity:.85}
 .btn-secondary{display:inline-block;background:transparent;color:var(--purple-light);font-size:14px;font-weight:600;padding:13px 30px;border-radius:100px;text-decoration:none;letter-spacing:.02em;transition:background .2s,border-color .2s;cursor:pointer;border:1.5px solid rgba(167,139,250,.5)}
 .btn-secondary:hover{background:rgba(124,58,237,.12);border-color:var(--purple-light)}
-.hero-notice{margin-top:20px;font-size:12px;color:var(--text-dim)}
-.hero-notice span{color:var(--purple-light)}
+.schedule-label{margin:30px 0 12px;font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--purple-light);text-transform:uppercase}
+.schedule-picker{display:flex;flex-direction:column;border:1px solid rgba(167,139,250,.4);border-radius:20px;overflow:hidden;background:linear-gradient(180deg,rgba(124,58,237,.12),rgba(124,58,237,.02))}
+.sched-banner{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;padding:14px 18px;background:linear-gradient(90deg,rgba(124,58,237,.4),rgba(167,139,250,.24));border-bottom:1px solid rgba(167,139,250,.4)}
+.sched-badge{background:#fff;color:var(--purple);font-size:14px;font-weight:800;padding:6px 15px;border-radius:100px;letter-spacing:.02em}
+.sched-price{font-size:16px;font-weight:700;color:#fff}
+.sched-price s{color:rgba(255,255,255,.55);font-weight:500;margin-right:3px}
+.sched-cards{position:relative;display:flex}
+.sched-card{flex:1;padding:28px 20px;text-align:center}
+.sched-card+.sched-card{border-left:1px dashed rgba(167,139,250,.35)}
+.sched-tag{display:inline-block;background:var(--purple);color:#fff;font-size:14px;font-weight:800;padding:6px 20px;border-radius:100px;letter-spacing:.03em;margin-bottom:14px}
+.sched-tag-alt{background:var(--purple-light);color:#0a0a0d}
+.sched-date{font-size:32px;font-weight:700;color:var(--text);line-height:1.2;margin-bottom:8px;font-family:'Noto Serif KR',serif}
+.sched-date span{font-size:21px;color:var(--purple-light)}
+.sched-time{font-size:14px;color:var(--text-muted)}
+.sched-or{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#120f1a;border:1px solid rgba(167,139,250,.45);color:var(--purple-light);font-size:12px;font-weight:800;padding:5px 13px;border-radius:100px;z-index:2}
+.schedule-note{margin-top:14px;font-size:13px;color:var(--text-muted);text-align:center}
 .stat-bar{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:32px 0}
 .stat-row{display:grid;grid-template-columns:repeat(3,1fr)}
 .stat-item{text-align:center;padding:0 16px;border-right:1px solid var(--border)}
@@ -164,6 +178,9 @@ section{padding:80px 0}
 .footer-sub{font-size:12px;color:var(--text-dim)}
 @media(max-width:640px){
   .pain-grid,.solution-inner,.instructor-inner,.howto-grid,.review-grid,.info-grid{grid-template-columns:1fr}
+  .schedule-picker .sched-cards{flex-direction:column}
+  .sched-card+.sched-card{border-left:none;border-top:1px dashed rgba(167,139,250,.35)}
+  .sched-date{font-size:27px}
   .stat-row{grid-template-columns:repeat(3,1fr)}
   .cta-price-box{flex-direction:column;gap:12px}
   .cta-price-divider{width:40px;height:1px}
@@ -234,13 +251,31 @@ section{padding:80px 0}
       내 웹사이트까지 만들어 배포하고 갑니다.<br>
       잠실 · 원데이 오프라인 클래스
     </p>
+    <p class="schedule-label">평일반 · 주말반 중 선택</p>
+    <div class="schedule-picker">
+      <div class="sched-banner">
+        <span class="sched-badge">41% 특별 할인</span>
+        <span class="sched-price"><s>60만원</s> → 35만원</span>
+      </div>
+      <div class="sched-cards">
+        <div class="sched-card">
+          <div class="sched-tag">평일반</div>
+          <div class="sched-date">7월 14일 <span>(화)</span></div>
+          <div class="sched-time">저녁 6시 ~ 10시 · 잠실</div>
+        </div>
+        <div class="sched-card">
+          <div class="sched-tag sched-tag-alt">주말반</div>
+          <div class="sched-date">7월 18일 <span>(토)</span></div>
+          <div class="sched-time">저녁 6시 ~ 10시 · 잠실</div>
+        </div>
+        <div class="sched-or">OR</div>
+      </div>
+    </div>
+    <p class="schedule-note">두 일정 중 편한 날 하나를 선택하세요 · 신청은 아래 버튼 하나로</p>
     <div class="hero-cta-row">
       <a href="https://shoocreamvillage.notion.site/b525e8593cb68258ad1d01ad5640265a?pvs=105" class="btn-primary" target="_blank">신청하기</a>
       <a href="https://shoocreamvillage.notion.site/focusaiedu" class="btn-secondary" target="_blank">강사 프로필</a>
     </div>
-    <p class="hero-notice">
-      ⚡ <span>최대 20명 · 7/14(화)·7/18(토) 중 택1 · 저녁 6시~10시 · 41% 특별 할인</span>
-    </p>
     <div style="margin-top:16px;background:rgba(255,80,80,.1);border:1px solid rgba(255,122,122,.4);border-radius:14px;padding:16px 20px;">
       <div style="font-size:14px;font-weight:700;color:#ff7a7a;line-height:1.6;margin-bottom:4px;">⏰ 18:00 정각에 시작합니다. 절대 늦지 마세요.</div>
       <div style="font-size:13px;color:var(--text-muted);line-height:1.6;">장소 특성상 <span style="color:#ff7a7a;font-weight:600;">단 1분이라도 늦으면 입장이 불가합니다.</span> 시작 전 여유 있게 도착해 주세요.</div>
