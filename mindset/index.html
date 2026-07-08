@@ -197,11 +197,26 @@ function renderIntro(){
 점수를 매기는 게 아니라, 실제 장면과 그때 흔들렸던 감정을 떠올려 적어 주세요.</div>
     <button class="btn" onclick="start()">시작하기 · 9개의 질문</button>
     <button class="btn ghost" style="margin-top:12px" onclick="showSample()">샘플 리포트 바로 보기</button>
+    <button class="btn ghost" style="margin-top:12px;font-size:13px;opacity:.7" onclick="qaRun()">🧪 QA · 예시 답변으로 바로 진단</button>
   </div>`;
 }
 
 function start(){ state.step="q"; state.idx=0; render(); }
 function showSample(){ state.result=SAMPLE; state.step="result"; render(); }
+
+// QA용: 답변을 미리 채우고 진짜 진단까지 한 번에 실행
+const QA_ANSWERS = {
+  win:    {target:"대학 동기 A", why:"늘 나보다 한발 앞서가는 것 같아서", emotion:"조급하고 지기 싫은 마음"},
+  know:   {target:"사람의 심리", why:"왜 그렇게 행동하는지 계속 궁금해서", emotion:"빠져드는 호기심"},
+  make:   {target:"나만의 교육 브랜드", why:"내가 겪은 걸 다른 사람에게 전하고 싶어서", emotion:"설레고 뿌듯함"},
+  help:   {target:"이제 막 시작하는 후배들", why:"예전의 나 같아서 그냥 못 지나쳐서", emotion:"짠하고 챙겨주고 싶은 마음"},
+  gather: {target:"나를 믿어주는 사람들", why:"혼자라는 느낌이 싫어서", emotion:"쌓일수록 안심되는 기분"},
+  approve:{target:"부모님", why:"잘하고 있다는 말을 꼭 듣고 싶어서", emotion:"인정받으면 벅찰 것 같음"},
+  explore:{target:"혼자 떠나는 긴 여행", why:"익숙한 자리에서 벗어나 보고 싶어서", emotion:"두근거림과 약간의 두려움"},
+  free:   {target:"남들의 기대", why:"늘 눈치를 보며 살아서", emotion:"벗어나면 후련할 것 같음"},
+  friend: {target:"같이 성장하는 동료들", why:"혼자 크는 게 외로워서", emotion:"함께라면 든든한 마음"}
+};
+function qaRun(){ state.answers = {...QA_ANSWERS}; runDiagnosis(); }
 
 function renderQuestion(){
   const q = QUESTIONS[state.idx];
