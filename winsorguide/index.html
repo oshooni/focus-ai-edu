@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claude × Windsor 릴스 기획 가이드 — Focus AI Edu</title>
+<meta name="description" content="감이 아니라 내 인스타 데이터로 다음 릴스를 기획하는 법. Windsor.ai로 데이터를 꺼내 Claude로 분석하는 전략편 + 방법 편. 노슈니가 챙겨드려요.">
+<meta property="og:title" content="Claude × Windsor 릴스 기획 가이드 — Focus AI Edu">
+<meta property="og:description" content="조회수 말고 저장·공유로 내 릴스를 읽고, 다음 5개를 기획하는 법.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+  :root{
+    --bg:#0e0e10; --bg-soft:#17171c; --bg-soft2:#1d1d24; --code-bg:#0a0a0c;
+    --line:rgba(255,255,255,.08); --line-strong:rgba(255,255,255,.14);
+    --purple:#7c3aed; --purple-light:#a78bfa; --cream:#f0ecff;
+    --ink:#e9e7f0; --muted:#9c98ab; --muted-2:#6f6b7d;
+    --green:#4ade80; --red:#fb7185; --amber:#fbbf24;
+    --display:'Outfit',sans-serif; --body:'Pretendard Variable',Pretendard,sans-serif;
+    --mono:'JetBrains Mono',monospace; --hand:'Gaegu',cursive;
+    --wrap:1200px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} *{animation:none!important;transition:none!important}}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:var(--body);font-size:16px;line-height:1.75;
+    -webkit-font-smoothing:antialiased;letter-spacing:-.01em;
+  }
+  a{color:var(--purple-light);text-decoration:none}
+  a:hover{text-decoration:underline}
+  :focus-visible{outline:2px solid var(--purple-light);outline-offset:3px;border-radius:4px}
+
+  /* ===== ambient ===== */
+  .glow{position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(600px 400px at 78% -6%, rgba(124,58,237,.20), transparent 60%),
+      radial-gradient(560px 420px at 6% 8%, rgba(124,58,237,.10), transparent 60%);}
+
+  /* ===== hero ===== */
+  header.hero{position:relative;z-index:1;max-width:var(--wrap);margin:0 auto;
+    padding:70px 28px 40px;}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.28em;
+    color:var(--purple-light);text-transform:uppercase;margin:0 0 20px;
+    display:flex;align-items:center;gap:12px;}
+  .kicker::before{content:"";width:34px;height:1px;background:var(--purple-light);opacity:.6}
+  h1.hero-title{font-family:var(--display);font-weight:800;
+    font-size:clamp(34px,6vw,66px);line-height:1.04;letter-spacing:-.03em;
+    margin:0 0 22px;}
+  h1.hero-title .lp{color:var(--purple-light)}
+  .hero-sub{font-size:clamp(16px,2vw,19px);color:var(--muted);max-width:640px;margin:0 0 34px;line-height:1.7}
+  .hero-sub b{color:var(--cream);font-weight:600}
+  /* signature weighting chips */
+  .weigh{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:6px}
+  .weigh .wl{font-family:var(--hand);font-size:18px;color:var(--muted-2);margin-right:2px}
+  .chip{font-family:var(--mono);font-size:13px;padding:9px 14px;border-radius:999px;
+    border:1px solid var(--line-strong);background:var(--bg-soft);display:inline-flex;gap:8px;align-items:center}
+  .chip .k{color:var(--muted)}
+  .chip .v{color:var(--ink);font-weight:600}
+  .chip.dim{opacity:.5}
+  .chip.hot{border-color:rgba(124,58,237,.55);background:linear-gradient(180deg,rgba(124,58,237,.16),rgba(124,58,237,.06))}
+  .chip.hot .v{color:var(--purple-light)}
+
+  /* ===== layout ===== */
+  .shell{position:relative;z-index:1;max-width:var(--wrap);margin:0 auto;
+    padding:24px 28px 100px;display:grid;grid-template-columns:236px 1fr;gap:52px;align-items:start}
+
+  /* ===== sidebar ===== */
+  nav.side{position:sticky;top:24px;align-self:start;font-size:13.5px}
+  .side .grp{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--muted-2);margin:22px 0 10px;padding-left:2px}
+  .side .grp:first-child{margin-top:0}
+  .side a{display:block;color:var(--muted);padding:6px 0 6px 14px;
+    border-left:2px solid var(--line);line-height:1.35;transition:color .15s,border-color .15s}
+  .side a:hover{color:var(--ink);text-decoration:none}
+  .side a.on{color:var(--cream);border-left-color:var(--purple);font-weight:600}
+  .side a .n{font-family:var(--mono);font-size:11px;color:var(--purple-light);margin-right:7px}
+
+  /* ===== content ===== */
+  main{min-width:0}
+  section{scroll-margin-top:20px;padding:14px 0 40px;border-top:1px solid var(--line)}
+  section:first-child{border-top:none;padding-top:0}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--purple-light);margin:26px 0 12px}
+  h2{font-family:var(--display);font-weight:700;font-size:clamp(24px,3.4vw,34px);
+    line-height:1.18;letter-spacing:-.02em;margin:8px 0 18px}
+  h2 .num{font-family:var(--mono);font-size:.62em;color:var(--purple-light);font-weight:500;margin-right:12px;vertical-align:2px}
+  h3{font-family:var(--display);font-weight:600;font-size:20px;letter-spacing:-.01em;margin:34px 0 12px;color:var(--cream)}
+  h4{font-size:15px;font-weight:700;color:var(--ink);margin:22px 0 8px}
+  p{margin:0 0 16px;color:#cfccdb}
+  strong{color:var(--cream);font-weight:600}
+  .lead{font-size:18px;color:var(--ink);line-height:1.7}
+
+  /* chapter divider banner */
+  .chapter{position:relative;padding:40px 30px;border-radius:20px;margin:8px 0 6px;
+    background:linear-gradient(160deg,rgba(124,58,237,.20),rgba(124,58,237,.04));
+    border:1px solid var(--line-strong);overflow:hidden}
+  .chapter::after{content:"";position:absolute;right:-40px;top:-60px;width:220px;height:220px;
+    border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,.35),transparent 70%);pointer-events:none}
+  .chapter .ct{font-family:var(--hand);font-size:19px;color:var(--purple-light);margin:0 0 6px}
+  .chapter h2{margin:0 0 12px}
+  .chapter p{margin:0;color:#d7d4e2;max-width:620px;position:relative}
+
+  /* lists */
+  ul.clean{list-style:none;padding:0;margin:0 0 18px}
+  ul.clean>li{position:relative;padding:9px 0 9px 26px;color:#cfccdb;border-bottom:1px solid var(--line)}
+  ul.clean>li:last-child{border-bottom:none}
+  ul.clean>li::before{content:"";position:absolute;left:4px;top:18px;width:6px;height:6px;border-radius:50%;background:var(--purple)}
+  ul.clean>li b{color:var(--cream)}
+
+  /* metric cards */
+  .mgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin:18px 0 8px}
+  .mcard{background:var(--bg-soft);border:1px solid var(--line);border-radius:16px;padding:18px 18px 16px}
+  .mcard .mh{display:flex;align-items:baseline;gap:8px;margin-bottom:8px}
+  .mcard .mh .en{font-family:var(--mono);font-size:11px;color:var(--muted-2)}
+  .mcard .mt{font-family:var(--display);font-weight:700;font-size:17px;color:var(--cream)}
+  .mcard p{font-size:14px;margin:0;color:var(--muted);line-height:1.6}
+
+  /* callouts */
+  .note{border-radius:14px;padding:16px 18px;margin:20px 0;border:1px solid var(--line-strong);
+    background:var(--bg-soft);font-size:15px;line-height:1.7}
+  .note .nt{font-family:var(--display);font-weight:700;font-size:14px;display:block;margin-bottom:5px}
+  .note.principle{background:linear-gradient(180deg,rgba(124,58,237,.14),rgba(124,58,237,.04));border-color:rgba(124,58,237,.4)}
+  .note.principle .nt{color:var(--purple-light)}
+  .note.warn{border-color:rgba(251,191,36,.35)}
+  .note.warn .nt{color:var(--amber)}
+  .note p{margin:0;color:#d7d4e2}
+  .note p+p{margin-top:10px}
+
+  /* real-data read example */
+  .read{border:1px solid var(--line-strong);border-radius:18px;overflow:hidden;margin:24px 0}
+  .read .rhead{background:var(--bg-soft2);padding:13px 18px;font-family:var(--mono);font-size:12px;
+    letter-spacing:.06em;color:var(--purple-light);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
+  .read .rhead .src{color:var(--muted-2);font-size:11px}
+  .read .rbody{padding:6px 18px 14px}
+  .rrow{display:grid;grid-template-columns:auto 1fr;gap:16px;padding:14px 0;border-bottom:1px solid var(--line);align-items:start}
+  .rrow:last-child{border-bottom:none}
+  .rrow .stat{min-width:112px}
+  .rrow .stat .big{font-family:var(--display);font-weight:800;font-size:22px;color:var(--cream);line-height:1}
+  .rrow .stat .lbl{font-family:var(--mono);font-size:10.5px;color:var(--muted-2);letter-spacing:.05em;margin-top:5px}
+  .rrow .stat .sub{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.4}
+  .rrow .verdict{font-size:14.5px;line-height:1.65;color:#d7d4e2}
+  .tag{display:inline-block;font-family:var(--mono);font-size:10.5px;font-weight:600;padding:3px 8px;border-radius:6px;margin-right:6px;vertical-align:1px}
+  .tag.g{color:var(--green);background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.3)}
+  .tag.r{color:var(--red);background:rgba(251,113,133,.12);border:1px solid rgba(251,113,133,.3)}
+
+  /* code / prompt blocks */
+  .cbox{border:1px solid var(--line-strong);border-radius:14px;overflow:hidden;margin:16px 0 22px;background:var(--code-bg)}
+  .cbar{display:flex;align-items:center;justify-content:space-between;
+    padding:10px 14px;background:#141419;border-bottom:1px solid var(--line)}
+  .cbar .ctag{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--muted);display:flex;gap:9px;align-items:center}
+  .cbar .ctag .dot{width:8px;height:8px;border-radius:50%;background:var(--purple)}
+  .cbar .ctag.en{color:var(--purple-light)}
+  .cpy{font-family:var(--body);font-size:12.5px;font-weight:600;color:var(--muted);
+    background:transparent;border:1px solid var(--line-strong);border-radius:8px;padding:5px 12px;cursor:pointer;transition:.15s;white-space:nowrap}
+  .cpy:hover{color:var(--cream);border-color:var(--purple)}
+  .cpy.done{color:var(--green);border-color:rgba(74,222,128,.4)}
+  pre.code{margin:0;padding:16px 16px;overflow-x:auto;
+    font-family:var(--mono);font-size:13px;line-height:1.7;color:#d5d2e2;white-space:pre;tab-size:2}
+  pre.code.sm{font-size:12.5px}
+  pre.code .cm{color:var(--muted-2)}   /* dimmed prompt symbol / comment */
+  .promptbox pre.code{color:#e2dff0}
+
+  /* tables */
+  .tbl{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin:18px 0}
+  table{width:100%;border-collapse:collapse;font-size:14.5px}
+  th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:var(--bg-soft2);font-family:var(--display);font-weight:600;font-size:13px;color:var(--cream);letter-spacing:.01em}
+  tr:last-child td{border-bottom:none}
+  td b{color:var(--cream)}
+
+  /* checklist */
+  .check li{list-style:none}
+  ul.check{list-style:none;padding:0;margin:0}
+  ul.check li{position:relative;padding:9px 0 9px 30px;border-bottom:1px solid var(--line);color:#cfccdb;font-size:14.5px}
+  ul.check li:last-child{border-bottom:none}
+  ul.check li::before{content:"";position:absolute;left:2px;top:13px;width:15px;height:15px;border-radius:4px;border:1.5px solid var(--purple);background:transparent}
+
+  /* flow steps */
+  .flow{border:1px solid var(--line-strong);border-radius:16px;overflow:hidden;margin:20px 0}
+  .flow .fr{display:grid;grid-template-columns:64px 1fr;gap:0;border-bottom:1px solid var(--line)}
+  .flow .fr:last-child{border-bottom:none}
+  .flow .fr.split{background:linear-gradient(90deg,rgba(124,58,237,.14),transparent)}
+  .flow .fn{font-family:var(--mono);font-weight:600;font-size:13px;color:var(--purple-light);
+    display:flex;align-items:center;justify-content:center;background:var(--bg-soft);border-right:1px solid var(--line)}
+  .flow .fc{padding:13px 16px}
+  .flow .fc .ft{font-weight:600;color:var(--cream);font-size:15px}
+  .flow .fc .fd{font-size:13.5px;color:var(--muted);margin-top:2px}
+  .flow .divrow{padding:9px 16px;font-family:var(--hand);font-size:16px;color:var(--muted-2);text-align:center;background:var(--code-bg)}
+
+  .handnote{font-family:var(--hand);font-size:18px;color:var(--purple-light);margin:2px 0 14px}
+
+  /* footer */
+  footer{position:relative;z-index:1;background:var(--cream);color:#171525;margin-top:20px}
+  .fwrap{max-width:var(--wrap);margin:0 auto;padding:56px 28px 60px}
+  footer .fk{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#6d4bd0;margin:0 0 14px}
+  footer h3{font-family:var(--display);font-weight:800;font-size:clamp(24px,4vw,38px);color:#171525;margin:0 0 14px;letter-spacing:-.02em}
+  footer p{color:#4a4657;margin:0 0 24px;max-width:560px}
+  .fcta{display:inline-flex;align-items:center;gap:10px;background:#171525;color:#fff;
+    font-family:var(--display);font-weight:600;font-size:15px;padding:14px 24px;border-radius:999px;transition:.18s}
+  .fcta:hover{background:var(--purple);text-decoration:none;transform:translateY(-1px)}
+  .fmeta{margin-top:34px;padding-top:22px;border-top:1px solid rgba(23,21,37,.14);font-size:13px;color:#6a6577;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+  /* responsive */
+  @media(max-width:900px){
+    .shell{grid-template-columns:1fr;gap:0}
+    nav.side{display:none}
+    header.hero{padding-top:48px}
+  }
+  @media(max-width:560px){
+    .rrow{grid-template-columns:1fr;gap:6px}
+    .rrow .stat{display:flex;align-items:baseline;gap:10px}
+    .rrow .stat .lbl{margin-top:0}
+    .rrow .stat .sub{width:100%;margin-top:2px}
+  }
+</style>
+</head>
+<body>
+<div class="glow" aria-hidden="true"></div>
+
+<header class="hero">
+  <p class="kicker">Claude × Windsor.ai × Instagram</p>
+  <h1 class="hero-title">내 릴스가 왜 터졌는지,<br><span class="lp">데이터가 이미 알고 있다.</span></h1>
+  <p class="hero-sub">감으로 올리지 마세요. <b>내 계정의 상위 릴스는 이미 검증된 성공 공식</b>이에요. 그걸 찾아서 반복하면 됩니다. 이 가이드는 Windsor.ai로 내 인스타 데이터를 꺼내 Claude로 분석하고, <b>다음 5개 릴스를 기획</b>하는 법이에요.</p>
+  <div class="weigh">
+    <span class="wl">우리가 진짜로 세는 것 →</span>
+    <span class="chip dim"><span class="k">조회</span><span class="v">×1</span></span>
+    <span class="chip hot"><span class="k">저장</span><span class="v">×100</span></span>
+    <span class="chip hot"><span class="k">공유</span><span class="v">×150</span></span>
+  </div>
+</header>
+
+<div class="shell">
+  <!-- SIDEBAR -->
+  <nav class="side" aria-label="목차">
+    <div class="grp">방법 편 · 어떻게</div>
+    <a href="#m1"><span class="n">1</span>준비물</a>
+    <a href="#m2"><span class="n">2</span>Windsor 연결</a>
+    <a href="#m3"><span class="n">3</span>커넥터 활성화</a>
+    <a href="#m4"><span class="n">4</span>실행 순서</a>
+    <a href="#m5"><span class="n">5</span>Prompt 1 · 감사</a>
+    <a href="#m6"><span class="n">6</span>Prompt 2 · 스크립트</a>
+    <a href="#m7"><span class="n">7</span>Bonus · 캘린더</a>
+    <a href="#m8"><span class="n">8</span>Bonus · 훅 리라이팅</a>
+    <a href="#m9"><span class="n">9</span>Bonus · 캡션</a>
+    <a href="#m10"><span class="n">10</span>체크리스트</a>
+    <a href="#m11"><span class="n">11</span>실패했을 때</a>
+    <a href="#m12"><span class="n">12</span>추천 흐름</a>
+    <a href="#m13"><span class="n">13</span>운영 팁</a>
+    <div class="grp">전략편 · 왜 / 무엇</div>
+    <a href="#s-intro"><span class="n">–</span>전략편 시작</a>
+    <a href="#s1"><span class="n">S1</span>왜 데이터인가</a>
+    <a href="#s2"><span class="n">S2</span>조회수는 함정</a>
+    <a href="#s3"><span class="n">S3</span>바이럴 릴스 뼈대</a>
+    <a href="#s4"><span class="n">S4</span>방향성으로 바꾸기</a>
+    <a href="#s5"><span class="n">S5</span>주기적으로</a>
+    <a href="#s-flow"><span class="n">→</span>전략 실행 순서</a>
+  </nav>
+
+  <!-- CONTENT -->
+  <main>
+
+  <!-- =========================================================
+       방법 편
+  ========================================================== -->
+
+  <section id="m1">
+    <div class="chapter">
+      <p class="ct">노슈니가 챙겨드리는 방법 편</p>
+      <h2>Windsor 연결부터 프롬프트 실행까지</h2>
+      <p>먼저 실제로 데이터를 꺼내고 프롬프트를 돌리는 법부터 익혀요. Claude가 Instagram을 직접 읽는 게 아니라, <strong>Windsor.ai가 Insights 데이터를 가져오고 Claude가 커넥터로 그 데이터를 분석</strong>하는 구조입니다. 실행이 익숙해지면 아래 <strong>전략편</strong>에서 "결과를 어떻게 읽고 다음 릴스로 잇는지"를 깊게 다뤄요.</p>
+    </div>
+
+    <p class="eyebrow">방법 · 1</p>
+    <h2><span class="num">01</span>준비물</h2>
+    <div class="tbl">
+      <table>
+        <tr><th style="width:34%">항목</th><th>설명</th></tr>
+        <tr><td><b>Instagram Business / Creator 계정</b></td><td>일반 개인 계정보다는 비즈니스/크리에이터 계정이 필요합니다.</td></tr>
+        <tr><td><b>Facebook Page</b></td><td>Instagram 계정과 연결되어 있어야 합니다.</td></tr>
+        <tr><td><b>Windsor.ai 계정</b></td><td>Instagram 데이터를 Claude에 연결하는 브릿지 역할을 합니다.</td></tr>
+        <tr><td><b>Claude 계정</b></td><td>커넥터 기능을 사용할 수 있어야 합니다.</td></tr>
+        <tr><td><b>Instagram 핸들</b></td><td><code style="font-family:var(--mono);font-size:12.5px;color:var(--purple-light)">[YOUR_INSTAGRAM_HANDLE]</code> 형식으로 본인 계정을 입력합니다.</td></tr>
+      </table>
+    </div>
+    <div class="note principle">
+      <span class="nt">핵심 구조</span>
+      <p>Instagram Business/Creator → Facebook Page 연결 → Windsor.ai에서 Insights 연결 → Claude에서 Windsor 커넥터 활성화 → Prompt 1 → Prompt 2 → Bonus 필요 시.</p>
+    </div>
+    <p><a href="https://windsor.ai" target="_blank" rel="noopener">Windsor.ai 접속 링크 →</a></p>
+  </section>
+
+  <section id="m2">
+    <p class="eyebrow">방법 · 2</p>
+    <h2><span class="num">02</span>Windsor.ai에서 Instagram 연결하기</h2>
+
+    <h4>2-1. Windsor.ai 접속</h4>
+    <p>Windsor.ai에 로그인한 뒤 Instagram Insights 연결 화면으로 이동합니다.</p>
+
+    <h4>2-2. Instagram Access 권한 부여</h4>
+    <p>화면 중앙의 버튼을 클릭합니다.</p>
+    <div class="cbox"><div class="cbar"><span class="ctag"><span class="dot"></span>버튼</span></div><pre class="code">Grant Instagram Access</pre></div>
+
+    <h4>2-3. Facebook / Meta 인증 진행</h4>
+    <p>버튼을 누르면 Facebook 또는 Meta 로그인 창이 열립니다.</p>
+    <div class="cbox"><div class="cbar"><span class="ctag"><span class="dot"></span>순서</span></div><pre class="code">Facebook 로그인
+→ 연결할 Facebook Page 선택
+→ 연결할 Instagram Business / Creator 계정 선택
+→ 권한 허용</pre></div>
+
+    <h4>2-4. 권한 설정</h4>
+    <p>권한 요청 화면이 나오면 가능한 항목을 모두 허용합니다.</p>
+    <div class="cbox"><div class="cbar"><span class="ctag"><span class="dot"></span>허용할 권한</span></div><pre class="code">Instagram 계정 정보 접근
+Instagram 인사이트 접근
+페이지 정보 접근
+비즈니스 관리 권한
+콘텐츠 / 게시물 데이터 접근</pre></div>
+    <div class="note warn">
+      <span class="nt">⚠ 권한 설정 주의</span>
+      <p>권한을 일부 끄면 조회수·저장·공유·릴스 성과 데이터를 Claude가 제대로 읽지 못할 수 있어요. Instagram Insights 관련 권한은 <strong>가능하면 모두 켜두는 것</strong>이 좋습니다.</p>
+    </div>
+
+    <h4>2-5. 연결 완료 확인</h4>
+    <p>Windsor.ai 화면에서 연결된 데이터 소스 또는 선택된 계정 수가 표시되면 정상입니다.</p>
+    <div class="cbox"><div class="cbar"><span class="ctag"><span class="dot"></span>예시 표시</span></div><pre class="code">Data sources in use: 1/10
+Selected accounts: 1/15</pre></div>
+    <p style="color:var(--muted);font-size:14px">정확한 문구는 화면에 따라 다를 수 있습니다.</p>
+  </section>
+
+  <section id="m3">
+    <p class="eyebrow">방법 · 3</p>
+    <h2><span class="num">03</span>Claude에서 Windsor 커넥터 활성화하기</h2>
+    <p>Windsor.ai에서 Instagram 연결만 끝났다고 바로 Claude가 데이터를 읽을 수 있는 건 아니에요. <strong>Claude 안에서도 Windsor 커넥터를 켜야 합니다.</strong></p>
+
+    <h4>3-1. Claude 접속</h4>
+    <p>Claude에서 새 채팅을 엽니다.</p>
+
+    <h4>3-2. Connectors 메뉴 열기</h4>
+    <div class="cbox"><div class="cbar"><span class="ctag"><span class="dot"></span>찾을 메뉴</span></div><pre class="code">Connectors
+또는  Tools / Integrations / 플러그 아이콘</pre></div>
+
+    <h4>3-3. Windsor 검색 후 추가</h4>
+    <p>커넥터 목록에서 Windsor를 검색한 뒤 연결합니다.</p>
+    <div class="cbox"><div class="cbar"><span class="ctag"><span class="dot"></span>Windsor</span></div><pre class="code">Windsor
+→ Add / Connect / Enable</pre></div>
+
+    <h4>3-4. Always allow 설정</h4>
+    <p>가능하다면 권한을 <code style="font-family:var(--mono);font-size:12.5px;color:var(--purple-light)">Always allow</code>로 설정합니다.</p>
+    <div class="note">
+      <span class="nt" style="color:var(--green)">✓ 설정 팁</span>
+      <p>Always allow로 설정해두면 매번 채팅마다 다시 인증할 필요가 줄어듭니다.</p>
+    </div>
+  </section>
+
+  <section id="m4">
+    <p class="eyebrow">방법 · 4</p>
+    <h2><span class="num">04</span>실행 순서</h2>
+    <p>반드시 아래 순서로 실행합니다.</p>
+    <div class="flow">
+      <div class="fr"><div class="fn">1</div><div class="fc"><div class="ft">Prompt 1 · Instagram 계정 감사 / 로스팅</div></div></div>
+      <div class="fr"><div class="fn">2</div><div class="fc"><div class="ft">Prompt 2 · 릴스 스크립트 생성</div></div></div>
+      <div class="fr"><div class="fn">3-1</div><div class="fc"><div class="ft">Bonus · 7일 콘텐츠 캘린더</div></div></div>
+      <div class="fr"><div class="fn">3-2</div><div class="fc"><div class="ft">Bonus · 훅 리라이팅</div></div></div>
+      <div class="fr"><div class="fn">3-3</div><div class="fc"><div class="ft">Bonus · 캡션 생성</div></div></div>
+    </div>
+    <div class="note">
+      <span class="nt" style="color:var(--green)">✓ 실행 순서 팁</span>
+      <p>Prompt 1의 감사 결과가 나온 뒤 Prompt 2를 실행해야 합니다. Bonus 프롬프트는 필요한 것만 개별로 실행하면 돼요.</p>
+    </div>
+  </section>
+
+  <section id="m5">
+    <p class="eyebrow">방법 · 5</p>
+    <h2><span class="num">05</span>Prompt 1 · Instagram 계정 감사 / 로스팅</h2>
+    <p><strong>목적:</strong> 최근 30~50개 릴스를 불러와 성과가 좋은 상위 10개를 뽑고, 각 릴스의 훅·주제·포맷·잘된 점·부족한 점을 분석하는 프롬프트.</p>
+    <div class="note warn">
+      <span class="nt">⚠ 사용 전 바꿀 부분</span>
+      <p>프롬프트 안의 <code style="font-family:var(--mono);font-size:12.5px">[YOUR_INSTAGRAM_HANDLE]</code>을 본인 Instagram 핸들(예: <code style="font-family:var(--mono);font-size:12.5px">@yourname</code>)로 바꿔주세요.</p>
+    </div>
+    <div class="cbox promptbox">
+      <div class="cbar"><span class="ctag en"><span class="dot"></span>PROMPT 1 · Account Audit</span><button class="cpy">복사</button></div>
+<pre class="code sm">You have full access to my Instagram account ([YOUR_INSTAGRAM_HANDLE]).
+I want you to roast me, honestly, no sugar-coating. Instagram only, no other
+platforms.
+
+Step 1: Pull my last 30 to 50 reels. Identify my TOP 10 performing reels
+(by views, saves, shares; weight saves and shares heavily, not just likes).
+
+Step 2: For each of those 10 reels, analyze:
+- Hook type
+- Topic / content pillar
+- Format (talking head, b-roll, text-on-screen, etc.)
+- What's WORKING (be specific: the hook? the pacing? the topic?)
+- What's NOT working / what's holding it back from going bigger
+
+Step 3: Output the analysis as a clean, visually striking PDF I can save and
+screen-record.
+Requirements for the visual:
+- A big bold table or card layout, one row/card per reel
+- Columns: Reel #, Views, Hook, What's Working (green), What's Not (red)
+- Use color (green = working, red = not), large readable type, generous
+  spacing; it needs to look GOOD on a phone screen when I film it
+- Header at the top: "Claude's Instagram Audit, [YOUR_INSTAGRAM_HANDLE]"
+- At the bottom: a 3-line "biggest blind spot" verdict</pre>
+    </div>
+  </section>
+
+  <section id="m6">
+    <p class="eyebrow">방법 · 6</p>
+    <h2><span class="num">06</span>Prompt 2 · 릴스 스크립트 생성</h2>
+    <p><strong>목적:</strong> Prompt 1 감사 결과를 바탕으로, 계정의 톤과 성과 패턴에 맞는 30~55초 릴스 스크립트 3개를 만드는 프롬프트.</p>
+    <p class="handnote">사용 시점 → Prompt 1 결과가 나온 뒤, 같은 Claude 채팅에서 이어서 실행</p>
+    <div class="cbox promptbox">
+      <div class="cbar"><span class="ctag en"><span class="dot"></span>PROMPT 2 · Reel Scripts</span><button class="cpy">복사</button></div>
+<pre class="code sm">Based on the Instagram audit you just created, write me 3 Instagram Reel scripts
+(30 to 55 seconds each) in MY authentic voice, based on the strategy you just
+built.
+
+CRITICAL: match the structure of this reel I just shot:
+
+[HOOK: 1 punchy sentence that creates intrigue or stakes]
+[CONTEXT: 1 to 2 sentences that raise the stakes or set up credibility,
+  e.g. "I have 455K followers and..."]
+[PROMISE: "Here are the 3 things..." or equivalent]
+[SERIES TEASE: "This is part X of [series name]"]
+
+#1) [Point one: include a personal/vulnerable beat, not just info]
+#2) [Point two: include a tangible outcome or artifact]
+#3) [Point three: include a meta moment that ties back to THIS reel,
+     e.g. "the reel you're watching right now is the result"]
+
+[CTA: comment-bait with a specific keyword, e.g. "Comment X and I'll send you..."]
+[FOLLOW CTA: "Follow for more..."]
+
+For each script, also give me:
+- 3 hook variants so I can pick the strongest
+- On-screen text cues
+- Caption (in my voice, with the same comment-bait CTA)
+
+Pull tone, phrasing, and rhythm from my last 20 captions and reels.
+My audience: creators, AI-curious professionals, and beginners.
+I'm known for making AI feel approachable.
+At least one of the three scripts should be PERSONAL, something I've been
+avoiding posting.</pre>
+    </div>
+  </section>
+
+  <section id="m7">
+    <p class="eyebrow">방법 · 7 · Bonus</p>
+    <h2><span class="num">07</span>Bonus · 7일 콘텐츠 캘린더</h2>
+    <p><strong>목적:</strong> Prompt 1 감사 결과를 기반으로 7일 동안 어떤 콘텐츠를 올릴지 일정표를 만드는 프롬프트.</p>
+    <div class="cbox promptbox">
+      <div class="cbar"><span class="ctag en"><span class="dot"></span>BONUS · 7-Day Calendar</span><button class="cpy">복사</button></div>
+<pre class="code sm">Based on the audit you just did, build me a 7-day Instagram content calendar.
+For each day give me: the format (reel/carousel/story), the content pillar,
+a one-line hook, and why it fits my strategy. Lead with my strengths, fix my
+blind spot. Keep it realistic for someone posting once a day, not five times
+a day.</pre>
+    </div>
+  </section>
+
+  <section id="m8">
+    <p class="eyebrow">방법 · 8 · Bonus</p>
+    <h2><span class="num">08</span>Bonus · 훅 리라이팅 (Hook Doctor)</h2>
+    <p><strong>목적:</strong> 약한 훅을 바이럴 가능성이 높은 훅 5개로 다시 쓰게 하는 프롬프트.</p>
+    <div class="note warn">
+      <span class="nt">⚠ 사용 전 바꿀 부분</span>
+      <p><code style="font-family:var(--mono);font-size:12.5px">[PASTE YOUR FLAT HOOK]</code> → 내가 쓴 기존 훅</p>
+    </div>
+    <div class="cbox promptbox">
+      <div class="cbar"><span class="ctag en"><span class="dot"></span>BONUS · Hook Doctor</span><button class="cpy">복사</button></div>
+<pre class="code sm">Here is a hook I wrote: [PASTE YOUR FLAT HOOK].
+Rewrite it 5 ways using proven viral hook formulas (curiosity gap, bold claim,
+direct question, number + confession, "nobody is talking about this").
+Keep each under 12 words. Tell me which one you'd bet on and why.</pre>
+    </div>
+  </section>
+
+  <section id="m9">
+    <p class="eyebrow">방법 · 9 · Bonus</p>
+    <h2><span class="num">09</span>Bonus · 내 말투 캡션 생성</h2>
+    <p><strong>목적:</strong> 릴스 설명을 넣으면 기존 캡션 톤과 리듬을 참고해 짧은 캡션 3개를 생성하는 프롬프트.</p>
+    <div class="note warn">
+      <span class="nt">⚠ 사용 전 바꿀 부분</span>
+      <p><code style="font-family:var(--mono);font-size:12.5px">[DESCRIBE THE REEL]</code> → 릴스 내용 설명 &nbsp;·&nbsp; <code style="font-family:var(--mono);font-size:12.5px">[KEYWORD]</code> → 댓글 유도 키워드</p>
+      <p style="color:var(--muted-2);font-size:13.5px">예시 → [DESCRIBE THE REEL] = "AI로 15초 영화 예고편을 만드는 과정을 보여주는 릴스" · [KEYWORD] = PROMPT</p>
+    </div>
+    <div class="cbox promptbox">
+      <div class="cbar"><span class="ctag en"><span class="dot"></span>BONUS · Caption Writer</span><button class="cpy">복사</button></div>
+<pre class="code sm">Write 3 caption options for this reel: [DESCRIBE THE REEL].
+Match the tone, rhythm, and phrasing of my last 20 captions. Keep it short.
+Start with a comment-bait CTA using the keyword [KEYWORD].</pre>
+    </div>
+  </section>
+
+  <section id="m10">
+    <p class="eyebrow">방법 · 10</p>
+    <h2><span class="num">10</span>실행 체크리스트</h2>
+    <ul class="check">
+      <li>Instagram 계정이 Business 또는 Creator 계정인가?</li>
+      <li>Instagram이 Facebook Page와 연결되어 있는가?</li>
+      <li>Windsor.ai에서 Instagram Access를 허용했는가?</li>
+      <li>Windsor.ai에서 연결된 Instagram 계정이 보이는가?</li>
+      <li>Claude에서 Windsor 커넥터를 추가했는가?</li>
+      <li>Claude 채팅에서 Windsor 커넥터가 활성화되어 있는가?</li>
+      <li>가능하면 Always allow로 설정했는가?</li>
+      <li>Prompt 1을 먼저 실행했는가?</li>
+      <li>Prompt 1 결과가 나온 뒤 Prompt 2를 실행했는가?</li>
+      <li>Bonus 프롬프트는 필요한 것만 개별 실행했는가?</li>
+    </ul>
+  </section>
+
+  <section id="m11">
+    <p class="eyebrow">방법 · 11</p>
+    <h2><span class="num">11</span>실패했을 때 체크할 것</h2>
+
+    <h3>Claude가 "Instagram에 접근할 수 없다"고 할 때</h3>
+    <p>가능한 원인입니다.</p>
+    <ul class="clean">
+      <li>Claude에서 Windsor 커넥터가 꺼져 있음</li>
+      <li>Windsor.ai에서 Instagram 연결이 완료되지 않음</li>
+      <li>Instagram 계정이 Business / Creator 계정이 아님</li>
+      <li>Instagram과 Facebook Page가 연결되어 있지 않음</li>
+      <li>Facebook 계정에 Page 관리자 권한이 없음</li>
+      <li>권한 허용 단계에서 일부 권한을 꺼둠</li>
+    </ul>
+
+    <h3>Claude가 일반적인 조언만 할 때</h3>
+    <p>이 경우는 실제 데이터를 읽은 것이 아닐 가능성이 높아요.</p>
+    <div class="note principle">
+      <span class="nt">🔎 정상 분석 기준</span>
+      <p>정상적인 분석이라면 Claude는 최근 릴스 데이터, 조회수·저장·공유 등 <strong>구체적인 성과 데이터를 기반으로</strong> 답변해야 합니다. 숫자 없이 두루뭉술하면 데이터를 안 읽은 거예요.</p>
+    </div>
+
+    <h3>PDF 출력이 잘 안 될 때</h3>
+    <p>Claude가 실제 PDF 파일을 바로 만들지 못하면 아래처럼 추가 요청합니다.</p>
+    <div class="cbox promptbox">
+      <div class="cbar"><span class="ctag en"><span class="dot"></span>FIX · PDF layout</span><button class="cpy">복사</button></div>
+<pre class="code sm">Turn this audit into a clean PDF-ready report layout.
+Use clear sections, large tables, green/red labels, and phone-screen readable
+spacing. Format it so I can copy it into a PDF or screen-record it.</pre>
+    </div>
+  </section>
+
+  <section id="m12">
+    <p class="eyebrow">방법 · 12</p>
+    <h2><span class="num">12</span>추천 사용 흐름</h2>
+    <div class="flow">
+      <div class="fr"><div class="fn">1</div><div class="fc"><div class="ft">Windsor.ai에서 Instagram 연결</div></div></div>
+      <div class="fr"><div class="fn">2</div><div class="fc"><div class="ft">Claude에서 Windsor 커넥터 활성화</div></div></div>
+      <div class="fr"><div class="fn">3</div><div class="fc"><div class="ft">Prompt 1 실행</div></div></div>
+      <div class="fr"><div class="fn">4</div><div class="fc"><div class="ft">Claude가 실제 릴스 데이터를 읽었는지 확인</div></div></div>
+      <div class="fr"><div class="fn">5</div><div class="fc"><div class="ft">Audit 결과 저장</div></div></div>
+      <div class="fr"><div class="fn">6</div><div class="fc"><div class="ft">Prompt 2 실행 → 릴스 스크립트 3개 확보</div></div></div>
+      <div class="fr"><div class="fn">7</div><div class="fc"><div class="ft">필요 시 7일 콘텐츠 캘린더 실행</div></div></div>
+      <div class="fr"><div class="fn">8</div><div class="fc"><div class="ft">개별 릴스 제작 전 훅 리라이팅 실행</div></div></div>
+      <div class="fr"><div class="fn">9</div><div class="fc"><div class="ft">업로드 직전 캡션 생성 실행</div></div></div>
+    </div>
+    <p class="handnote">→ 전략편 S-2·S-3은 3번(Prompt 1)과 6번(Prompt 2) 사이에 끼워 돌리면 딱이에요.</p>
+  </section>
+
+  <section id="m13">
+    <p class="eyebrow">방법 · 13</p>
+    <h2><span class="num">13</span>운영 팁</h2>
+    <p>이 워크플로우는 한 번만 쓰는 것보다 <strong>주기적으로 돌리는 것</strong>이 좋아요.</p>
+    <div class="cbox"><div class="cbar"><span class="ctag"><span class="dot"></span>재실행 주기</span></div><pre class="code">릴스 30개 이상 쌓였을 때
+또는  2~4주에 한 번</pre></div>
+    <p>성과 판단 기준은 단순 조회수보다 아래 지표를 더 중요하게 봅니다.</p>
+    <div class="cbox"><div class="cbar"><span class="ctag"><span class="dot"></span>진짜 봐야 할 지표</span></div><pre class="code">저장 · 공유 · 댓글 · 완주율 · 반복 시청 · 프로필 방문 · 팔로우 전환</pre></div>
+    <div class="note principle">
+      <span class="nt">📌 운영 기준</span>
+      <p>조회수만 높은 릴스보다 <strong>저장과 공유가 높은 릴스</strong>가 콘텐츠 전략에 더 중요할 수 있어요. (전략편 S2에서 본 그대로예요.)</p>
+    </div>
+  </section>
+
+  <!-- ===== 전략편 표지 ===== -->
+  <section id="s-intro">
+    <div class="chapter">
+      <p class="ct">노슈니가 챙겨드리는 전략편</p>
+      <h2>데이터로 릴스를 기획하는 법</h2>
+      <p>위 방법 편으로 프롬프트를 돌려봤다면, 이제 진짜예요. <strong>"어떻게 돌리는가"보다 "왜 돌리고, 결과를 어떻게 읽어 다음 릴스로 잇는가"</strong> — 여기서부터가 감으로 올리는 사람과 데이터로 기획하는 사람이 갈리는 지점입니다.</p>
+    </div>
+    <div class="note principle">
+      <span class="nt">이 워크플로우의 목적 한 줄</span>
+      <p>터진 걸 <strong>우연이 아니라 시스템</strong>으로 바꾸기.</p>
+    </div>
+  </section>
+
+  <!-- ===== S1 ===== -->
+  <section id="s1">
+    <p class="eyebrow">S1 · 전제</p>
+    <h2><span class="num">S1</span>왜 감이 아니라 데이터인가</h2>
+    <p class="lead">대부분은 "이번엔 이게 먹힐 것 같아서" 감으로 올려요. 문제는 그 감이 <strong>내 계정이 아니라 남의 성공 사례에서 온 감</strong>이라는 거예요. 안 터지면 "알고리즘이 죽었나" 하고 넘어가죠.</p>
+    <p>데이터는 이걸 뒤집어요. 내 상위 릴스는 의도했든 아니든 이미 검증된 성공 공식이에요. 그걸 찾아서 반복하는 게 핵심이지, 매번 새로운 걸 시도하는 게 아니에요.</p>
+    <p>그래서 방법 편의 Prompt 1이 칭찬이 아니라 <strong>"로스팅(정직한 감사)"</strong>인 이유도 여기 있어요. 잘한 것만 보면 자기 위안으로 끝나요. 안 되는 이유를 정면으로 봐야 다음 릴스가 달라집니다. 그리고 상위 10개를 뜯는 이유는, 그 안에 <strong>내 계정의 진짜 콘텐츠 필러(주제 기둥)</strong>가 숨어 있기 때문이에요.</p>
+  </section>
+
+  <!-- ===== S2 ===== -->
+  <section id="s2">
+    <p class="eyebrow">S2 · 지표</p>
+    <h2><span class="num">S2</span>조회수는 함정이다 — 진짜 봐야 할 지표</h2>
+    <p class="lead">조회수는 결과지 원인이 아니에요. 아래 4개가 원인이고, 조회수는 이게 잘 됐을 때 <strong>따라옵니다.</strong></p>
+
+    <div class="mgrid">
+      <div class="mcard">
+        <div class="mh"><span class="mt">저장</span><span class="en">Saves</span></div>
+        <p>"나중에 또 볼게" 신호. 알고리즘한테 "정보 밀도가 높다"고 말하는 것. 저장이 높으면 더 많은 사람한테 밀어줘요.</p>
+      </div>
+      <div class="mcard">
+        <div class="mh"><span class="mt">공유</span><span class="en">Shares</span></div>
+        <p>가장 강력한 지표. 공유 한 번이 내 릴스를 완전히 새로운 네트워크에 꽂아줘요. 조회수를 밖으로 확장시키는 유일한 행동.</p>
+      </div>
+      <div class="mcard">
+        <div class="mh"><span class="mt">완주율·반복시청</span><span class="en">Watch</span></div>
+        <p>릴스 알고리즘 1순위 신호. 끝까지, 그리고 다시 보면 "좋은 콘텐츠"로 판단해요. 그래서 첫 3초(훅)가 전부.</p>
+      </div>
+      <div class="mcard">
+        <div class="mh"><span class="mt">팔로우 전환</span><span class="en">Follows</span></div>
+        <p>기존 팬을 즐겁게만 했는지, 새 팬을 데려왔는지. 조회수 높고 전환 0이면 성장은 안 해요.</p>
+      </div>
+    </div>
+
+    <div class="note principle">
+      <span class="nt">한 줄 원칙</span>
+      <p>조회수는 결과지 원인이 아니다. <strong>저장·공유·완주율이 원인이고, 조회수는 그게 잘 됐을 때 따라온다.</strong></p>
+    </div>
+
+    <h3>실제로 이렇게 읽습니다</h3>
+    <p>추상적으로 들리죠? 노슈니 본인 계정을 이 기준으로 깐 실제 로스트에서 세 장면만 가져왔어요. <strong>같은 조회수라도 저장·공유가 다르면 완전히 다른 릴스</strong>라는 걸 보여줘요.</p>
+
+    <div class="read">
+      <div class="rhead">
+        <span>노슈니 계정 실제 로스트 · 저장/공유 가중 랭킹</span>
+        <span class="src">source · Instagram Insights (Windsor.ai)</span>
+      </div>
+      <div class="rbody">
+        <div class="rrow">
+          <div class="stat">
+            <div class="big">131,068</div>
+            <div class="lbl">VIEWS · 저장/1k 14.9</div>
+            <div class="sub">꿀팁=블록 사용법</div>
+          </div>
+          <div class="verdict"><span class="tag r">함정</span>조회는 계정 압도적 1위지만, 이건 실력이 아니라 <strong>스파이크</strong>예요. 영상 안에 다시 볼 '내용'이 없어서 131k가 들어왔는데 담을 그릇이 비었어요. 2·3편 후속으로 이어받았어야 할 <strong>이긴 공식을 흘려보낸 게 최대 손실.</strong></div>
+        </div>
+        <div class="rrow">
+          <div class="stat">
+            <div class="big">16,037</div>
+            <div class="lbl">VIEWS · 저장 21 · 공유 2</div>
+            <div class="sub">0원 100명 노션 행사</div>
+          </div>
+          <div class="verdict"><span class="tag r">구경거리</span>조회 16k인데 저장 21·공유 2. 저장률이 딱 중앙값(1.3)이라 <strong>'구경거리'지 '내 것'이 아니에요.</strong> 시청자가 가져갈 액션·템플릿이 없어서 뷰만 나오고 복리가 안 붙어요. <strong>조회수만 보면 성공 같지만 성장 기여는 0.</strong></div>
+        </div>
+        <div class="rrow">
+          <div class="stat">
+            <div class="big">15,407</div>
+            <div class="lbl">VIEWS · 저장/1k 22.6</div>
+            <div class="sub">클로드 코드 × 피그마</div>
+          </div>
+          <div class="verdict"><span class="tag g">진짜 성과</span>조회는 위 두 개보다 낮지만 <strong>저장률 22.6·공유 157로 계정 최고.</strong> 구체 결과 + 실전 데모가 저장·공유·신청을 동시에 당겼어요. <strong>조회수는 4위여도, 성장 기여는 1위인 릴스.</strong></div>
+        </div>
+      </div>
+    </div>
+    <p class="handnote">→ 조회수 순서로 줄 세웠으면 정반대로 읽었을 거예요.</p>
+  </section>
+
+  <!-- ===== S3 ===== -->
+  <section id="s3">
+    <p class="eyebrow">S3 · 구조</p>
+    <h2><span class="num">S3</span>바이럴 릴스의 뼈대 — 왜 그 스크립트 구조인가</h2>
+    <p class="lead">방법 편 Prompt 2의 구조(HOOK → CONTEXT → PROMISE → 포인트 → CTA)는 그냥 틀이 아니라 <strong>시청 유지 설계도</strong>예요.</p>
+    <ul class="clean">
+      <li><b>HOOK</b> = 스크롤 정지. 첫 문장에 긴장·궁금증이 없으면 그냥 넘어가요.</li>
+      <li><b>CONTEXT</b> = 신뢰 + 몰입. "나 이런 사람인데…"로 판돈을 걸어야 계속 봐요.</li>
+      <li><b>PROMISE</b> ("3가지 알려줄게") = 끝까지 볼 이유 → 완주율을 끌어올리는 장치.</li>
+      <li><b>META 모먼트</b> ("지금 보는 이 릴스가 바로 그 결과") = 콘텐츠가 스스로를 증명 → 저장·공유 유발.</li>
+      <li><b>댓글 유도 CTA</b> = 댓글은 가장 강한 참여 신호. 그래서 "좋아요 눌러"가 아니라 "OO 댓글 달아"예요.</li>
+    </ul>
+    <div class="note">
+      <span class="nt" style="color:var(--purple-light)">훅 공식이 통하는 심리</span>
+      <p>Hook Doctor가 쓰는 5개 공식(궁금증 갭·과감한 주장·직접 질문·숫자+고백·아무도 안 하는 얘기)은 전부 <strong>"열린 고리(open loop)"</strong> 원리예요. 뇌는 완결 안 된 정보를 못 견디고 답을 찾으려 계속 봐요. 12자 이내로 자르는 이유도 여기 있어요 — <strong>첫 3초에 못 읽히는 훅은 훅이 아닙니다.</strong></p>
+    </div>
+  </section>
+
+  <!-- ===== S4 ===== -->
+  <section id="s4">
+    <p class="eyebrow">S4 · 방향성 · 핵심</p>
+    <h2><span class="num">S4</span>감사 결과를 "방향성"으로 바꾸기</h2>
+    <p class="lead">여기가 원래 가이드에서 완전히 비어 있던 부분이에요. 로스트는 "네 문제는 이거다"까지만 하고 멈춰요. <strong>"그래서 다음 5개는 이걸 만들어라"</strong>가 없었죠. 이 다리를 놓는 게 전략편의 핵심입니다.</p>
+    <ul class="clean">
+      <li><b>① 패턴 뽑기</b> — 상위 10개에서 공통점 3개를 찾는다 (같은 주제? 같은 훅 유형? 같은 길이?).</li>
+      <li><b>② 강점은 더 자주, 사각지대는 하나씩</b> — 전부 뜯어고치면 계정 색이 무너져요. 블라인드 스팟은 한 번에 하나만.</li>
+      <li><b>③ 필러 고정</b> — 매번 새 주제 말고 검증된 2~3개 기둥을 정해 반복한다. 일관성이 복리로 쌓여요.</li>
+      <li><b>④ 트랙 분리</b> — 성장 콘텐츠(저장·공유·신규 팔로우)와 커뮤니티 콘텐츠(따뜻하지만 저장 낮음)를 섞지 않는다.</li>
+    </ul>
+
+    <h3>프롬프트 S-2 · 패턴·필러 추출</h3>
+    <p>로스트가 릴스별로 흩어놓은 걸 모아서, <strong>반복할 기둥</strong>과 <strong>버릴 주제</strong>를 딱 잘라 확정합니다. 로스트 결과가 같은 채팅에 떠 있는 상태에서 이어서 실행하세요.</p>
+    <div class="cbox promptbox">
+      <div class="cbar"><span class="ctag en"><span class="dot"></span>PROMPT S-2 · Pattern &amp; Pillar Finder</span><button class="cpy">복사</button></div>
+<pre class="code sm">Based on the audit you just produced (ranked by Views + Saves×100 + Shares×150),
+find my patterns. Do not re-analyze individual reels — work from the audit you
+already made. Answer in 3 tight blocks:
+
+1. COMMON THREADS — the 3 things my top reels actually share
+   (topic, hook type, length, or format). Only call it a pattern if it shows up
+   in 4+ of the top 10. Cite the reel numbers as evidence.
+
+2. CONTENT PILLARS — name my 2–3 REAL pillars, the ones the SAVE/SHARE data
+   proves I'm good at — not the ones I wish I had. One line each on why the
+   data backs it.
+
+3. NOT A PILLAR — the topics or formats I keep making that pull views but
+   near-zero saves/shares. Tell me plainly which ones to stop treating as
+   growth content.
+
+Be blunt. Use my actual reels as evidence, no generic advice.</pre>
+    </div>
+
+    <h3>프롬프트 S-3 · 방향성 브리핑 <span style="font-family:var(--hand);color:var(--purple-light);font-size:17px">★ 핵심</span></h3>
+    <p>로스트의 진단을 <strong>"다음 5개는 이걸 만들어라"</strong>는 실행으로 바꾸는 한 장. 전략편에서 제일 값어치 있는 프롬프트예요.</p>
+    <div class="cbox promptbox">
+      <div class="cbar"><span class="ctag en"><span class="dot"></span>PROMPT S-3 · Direction Brief</span><button class="cpy">복사</button></div>
+<pre class="code sm">Now turn the audit + patterns into a one-page action brief. The audit already
+told me what's wrong — I want what to DO next. Structure it exactly like this:
+
+- WINNING FORMULA: name my single most-proven, repeatable format in one sentence
+  (the audit likely points to one). Then tell me how to turn it into a
+  2–3 part SERIES instead of a one-off, since my biggest loss was not
+  repeating a win.
+
+- DO MORE OF: the 2–3 proven moves to repeat every week (pillar + hook style +
+  format), each tied to a reel that proves it.
+
+- FIX ONE THING: my single biggest blind spot from the audit, and the SMALLEST
+  change that fixes it. One thing only — no to-do list.
+
+- SPLIT THE TRACKS: separate my GROWTH content (drives saves/shares/new
+  followers) from my COMMUNITY content (warm but low-save). Tell me the rule
+  for each so I stop mixing them.
+
+- NEXT 5 REELS: 5 specific reel ideas that lean on my proven formula and quietly
+  patch the blind spot. For each give: topic + one-line hook (under 12 words) +
+  which pillar it serves + why the data predicts it'll save/share well.
+
+Keep it blunt and realistic for someone posting once a day.</pre>
+    </div>
+  </section>
+
+  <!-- ===== S5 ===== -->
+  <section id="s5">
+    <p class="eyebrow">S5 · 반복</p>
+    <h2><span class="num">S5</span>왜 한 번이 아니라 주기적으로 돌리는가</h2>
+    <p class="lead">오디언스도 알고리즘도 계속 변해요. 3개월 전 터진 공식이 지금도 통한다는 보장은 없어요. <strong>릴스 30개 쌓일 때마다, 또는 2~4주에 한 번</strong> 다시 돌려서 "지금의 나"에 맞추는 거예요. 일회성 진단이 아니라 <strong>정기 건강검진</strong>입니다.</p>
+
+    <h3>프롬프트 S-4 · 추세 추적 (재실행용)</h3>
+    <p>두 번째 실행부터 쓰세요. 이전 구간과 비교해 뭐가 오르고 뭐가 죽는지 추적합니다.</p>
+    <div class="cbox promptbox">
+      <div class="cbar"><span class="ctag en"><span class="dot"></span>PROMPT S-4 · Trend Tracker</span><button class="cpy">복사</button></div>
+<pre class="code sm">Use the Windsor connector to compare my most recent ~30 reels against the ~30
+before them for [YOUR_INSTAGRAM_HANDLE]. Rank both sets by
+Views + Saves×100 + Shares×150.
+
+Tell me what's DRIFTING:
+- Which metric is trending up, which is trending down
+  (shares, saves, watch time, follows).
+- Is my winning pillar still winning, or is the audience moving?
+- Any hook style that used to work and is now fading?
+
+End with: one thing to double down on this month, and one habit to retire.
+If nothing meaningful changed, say so plainly — don't invent a trend.</pre>
+    </div>
+  </section>
+
+  <!-- ===== 전략 실행 순서 ===== -->
+  <section id="s-flow">
+    <p class="eyebrow">전략편 요약</p>
+    <h2>전략편 실행 순서</h2>
+    <p>방법 편 Prompt 1(로스팅)이 진단을 다 해주니까, 전략 프롬프트는 <strong>진단 다음부터</strong> 이어서 실행해요.</p>
+    <div class="flow">
+      <div class="fr"><div class="fn">Prompt 1</div><div class="fc"><div class="ft">계정 감사 / 로스팅 <span style="font-family:var(--mono);font-size:12px;color:var(--muted-2)">· 방법 편 5번</span></div><div class="fd">진단. 상위 릴스와 블라인드 스팟이 나온다.</div></div></div>
+      <div class="fr"><div class="fn">S-2</div><div class="fc"><div class="ft">패턴·필러 추출</div><div class="fd">로스트에서 "내 진짜 기둥"과 "버릴 주제"를 확정.</div></div></div>
+      <div class="fr split"><div class="fn">S-3</div><div class="fc"><div class="ft">방향성 브리핑 · 핵심</div><div class="fd">진단을 "다음 5개 릴스"로 변환.</div></div></div>
+      <div class="divrow">↓ 방법 편(Prompt 2)으로 내려가 실제 스크립트 제작 ↓</div>
+      <div class="fr"><div class="fn">S-4</div><div class="fc"><div class="ft">추세 추적 <span style="font-family:var(--mono);font-size:12px;color:var(--muted-2)">· 반복</span></div><div class="fd">2~4주 뒤 재점검. 뭐가 뜨고 뭐가 죽는지.</div></div></div>
+    </div>
+    <div class="note">
+      <p style="color:var(--muted)">가중치는 전략·방법 편 전체가 <span style="font-family:var(--mono);color:var(--purple-light)">Views + Saves×100 + Shares×150</span> 하나로 통일돼 있어요. S-2·S-3은 로스트를 <strong>다시 분석하지 말고 이어받으라</strong>고 못 박아서 중복 연산·토큰 낭비를 막습니다.</p>
+    </div>
+  </section>
+
+  </main>
+</div>
+
+<footer>
+  <div class="fwrap">
+    <p class="fk">Focus AI Edu</p>
+    <h3>이런 AI 제작 워크플로우,<br>더 궁금하다면?</h3>
+    <p>비전공자도 상상만 하던 서비스와 콘텐츠를 직접 완성해가는 온·오프라인 AI 교육. Claude, Claude Code, 인스타그램 콘텐츠 자동화를 소수정예 집중 과정으로 배웁니다.</p>
+    <a class="fcta" href="https://instagram.com/focusai_edu" target="_blank" rel="noopener">@focusai_edu 팔로우하기 →</a>
+    <div class="fmeta">
+      <span>Claude × Windsor 릴스 기획 가이드</span>
+      <span>노슈니가 챙겨드려요 · Focus AI Edu</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ---- copy buttons ----
+  document.querySelectorAll('.cpy').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var box = btn.closest('.cbox');
+      var code = box.querySelector('pre.code');
+      var text = code.innerText;
+      navigator.clipboard.writeText(text).then(function(){
+        var old = btn.textContent;
+        btn.textContent = '복사됨 ✓';
+        btn.classList.add('done');
+        setTimeout(function(){ btn.textContent = old; btn.classList.remove('done'); }, 1600);
+      }).catch(function(){
+        // fallback
+        var r = document.createRange(); r.selectNode(code);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        try{ document.execCommand('copy'); btn.textContent='복사됨 ✓'; btn.classList.add('done');
+          setTimeout(function(){ btn.textContent='복사'; btn.classList.remove('done'); },1600);}catch(e){}
+        s.removeAllRanges();
+      });
+    });
+  });
+
+  // ---- scroll-spy ----
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav.side a'));
+  var map = {};
+  links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+  var sections = Array.prototype.slice.call(document.querySelectorAll('main section[id]'));
+  var current = null;
+  function setActive(id){
+    if(current === id) return;
+    current = id;
+    links.forEach(function(a){ a.classList.remove('on'); });
+    if(map[id]){ map[id].classList.add('on');
+      // keep active link in view within sidebar
+      var nav = document.querySelector('nav.side');
+    }
+  }
+  var obs = new IntersectionObserver(function(entries){
+    // pick the entry nearest top that is intersecting
+    var visible = entries.filter(function(e){return e.isIntersecting;});
+    if(visible.length){
+      visible.sort(function(a,b){return a.boundingClientRect.top - b.boundingClientRect.top;});
+      setActive(visible[0].target.id);
+    }
+  }, {rootMargin:'-15% 0px -70% 0px', threshold:0});
+  sections.forEach(function(s){ obs.observe(s); });
+</script>
+</body>
+</html>
