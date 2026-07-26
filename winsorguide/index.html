@@ -333,26 +333,56 @@ Selected accounts: 1/15</pre></div>
   <section id="m3">
     <p class="eyebrow">방법 · 3</p>
     <h2><span class="num">03</span>Claude에서 Windsor 커넥터 활성화하기</h2>
-    <p>Windsor.ai에서 Instagram 연결만 끝났다고 바로 Claude가 데이터를 읽을 수 있는 건 아니에요. <strong>Claude 안에서도 Windsor 커넥터를 켜야 합니다.</strong></p>
+    <p>Windsor.ai에서 Instagram 연결만 끝났다고 바로 Claude가 데이터를 읽을 수 있는 건 아니에요. <strong>Claude 안에서도 Windsor 커넥터를 켜야 합니다.</strong> 방법이 두 가지 있어요 — 둘 중 <strong>하나만</strong> 하면 돼요.</p>
 
-    <h4>3-1. Claude 접속</h4>
-    <p>Claude에서 새 채팅을 엽니다.</p>
+    <div class="note principle">
+      <span class="nt">둘 중 뭘 고를까?</span>
+      <p><strong>방법 A(웹)</strong> — 제일 쉬워요. 명령어 없이 클릭만. 웹에서 한 번 붙이면 같은 계정으로 로그인한 <strong>터미널(Claude Code)도 자동으로 물려받아요.</strong> 왕초보에게 추천.</p>
+      <p><strong>방법 B(터미널)</strong> — "터미널에서 다 엮는" 실습이라면 이쪽. 명령어 한 줄이 필요해요.</p>
+    </div>
 
-    <h4>3-2. Connectors 메뉴 열기</h4>
+    <h3>방법 A · 웹에서 붙이기 <span style="font-family:var(--hand);color:var(--purple-light);font-size:17px">가장 쉬움</span></h3>
+    <h4>A-1. Connectors 메뉴 열기</h4>
     <div class="cbox"><div class="cbar"><span class="ctag"><span class="dot"></span>찾을 메뉴</span></div><pre class="code">Connectors
 또는  Tools / Integrations / 플러그 아이콘</pre></div>
 
-    <h4>3-3. Windsor 검색 후 추가</h4>
+    <h4>A-2. Windsor 검색 후 추가</h4>
     <p>커넥터 목록에서 Windsor를 검색한 뒤 연결합니다.</p>
     <div class="cbox"><div class="cbar"><span class="ctag"><span class="dot"></span>Windsor</span></div><pre class="code">Windsor
 → Add / Connect / Enable</pre></div>
 
-    <h4>3-4. Always allow 설정</h4>
+    <h4>A-3. Always allow 설정</h4>
     <p>가능하다면 권한을 <code style="font-family:var(--mono);font-size:12.5px;color:var(--purple-light)">Always allow</code>로 설정합니다.</p>
     <div class="note">
       <span class="nt" style="color:var(--green)">✓ 설정 팁</span>
-      <p>Always allow로 설정해두면 매번 채팅마다 다시 인증할 필요가 줄어듭니다.</p>
+      <p>Always allow로 설정해두면 매번 채팅마다 다시 인증할 필요가 줄어들어요. 그리고 이렇게 붙여두면 <strong>같은 계정으로 로그인한 Claude Code(터미널)에서도 그대로 나타나요.</strong> 따로 명령어를 칠 필요가 없어요.</p>
     </div>
+
+    <h3>방법 B · 터미널(Claude Code)에서 붙이기</h3>
+    <h4>B-1. 커넥터 등록</h4>
+    <p>Claude Code를 <strong>끄고</strong>(<code style="font-family:var(--mono);font-size:12.5px">/exit</code>), 일반 터미널에서 이 한 줄을 붙여넣으세요.</p>
+    <div class="cbox promptbox">
+      <div class="cbar"><span class="ctag en"><span class="dot"></span>터미널</span><button class="cpy">복사</button></div>
+<pre class="code">claude mcp add windsor-ai --transport http https://mcp.windsor.ai</pre>
+    </div>
+    <p style="color:var(--muted);font-size:14px"><code style="font-family:var(--mono);font-size:12px">Added HTTP MCP server windsor-ai...</code> 가 뜨면 등록 성공. 단, 아직 <strong>인증 전</strong>이에요.</p>
+
+    <h4>B-2. 인증 (OAuth)</h4>
+    <p>다시 <code style="font-family:var(--mono);font-size:12.5px">claude</code>로 들어가서 <code style="font-family:var(--mono);font-size:12.5px">/mcp</code>를 실행(엔터까지)하세요. 목록에서 <code style="font-family:var(--mono);font-size:12.5px">windsor-ai</code>를 고르고 엔터하면 브라우저가 열려요. Windsor 계정으로 로그인·승인하면 <code style="font-family:var(--mono);font-size:12.5px;color:var(--purple-light)">⚠ needs authentication</code>이 <code style="font-family:var(--mono);font-size:12.5px;color:var(--green)">✓ connected</code>로 바뀝니다.</p>
+
+    <div class="note warn">
+      <span class="nt">⚠ 흔한 함정 · 중복 등록</span>
+      <p>웹(방법 A)에서 이미 붙였는데 터미널(방법 B)로 또 붙이면, 같은 주소라서 <code style="font-family:var(--mono);font-size:12px">hidden — same URL</code> 이라며 하나가 숨어요. 당황하지 마세요 — <strong>둘 중 하나만 남기면 됩니다.</strong> 터미널 등록을 지우려면 <code style="font-family:var(--mono);font-size:12px">claude mcp remove windsor-ai</code>, 그러면 웹 커넥터가 다시 활성화돼요. <strong>웹에서 이미 붙인 분은 방법 B를 건너뛰세요.</strong></p>
+    </div>
+
+    <h3>연결 확인 (공통)</h3>
+    <p>어느 방법이든, 연결됐다고 인스타 데이터가 바로 읽히는 건 아니에요. 이 프롬프트로 실제로 계정이 물렸는지 확인하세요.</p>
+    <div class="cbox promptbox">
+      <div class="cbar"><span class="ctag en"><span class="dot"></span>CHECK · 연결 테스트</span><button class="cpy">복사</button></div>
+<pre class="code sm">Use the Windsor connector to list my connected data sources
+and show me which Instagram account is linked.</pre>
+    </div>
+    <p style="color:var(--muted);font-size:14px">내 Instagram 계정 이름이 나오면 완벽하게 연결된 거예요. 두루뭉술하게 답하면 아직 연결이 안 된 거고요.</p>
   </section>
 
   <section id="m4">
