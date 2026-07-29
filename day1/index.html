@@ -29,7 +29,9 @@ section{padding:80px 0}
 .nav-cta:hover{opacity:.85}
 .hero{min-height:100vh;display:flex;align-items:center;padding:176px 0 80px;position:relative;overflow:hidden}
 .hero::before{content:'';position:absolute;top:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(124,58,237,.15) 0%,transparent 70%);pointer-events:none}
-.hero-eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--purple-light);font-weight:500;margin-bottom:28px}
+.hero-eyebrow{font-size:16px;letter-spacing:0;color:var(--purple-light);font-weight:600;margin-bottom:18px}
+.hero-tags{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 22px}
+.hero-tag{font-size:17px;font-weight:700;letter-spacing:.02em;color:var(--purple-light);background:rgba(124,58,237,.16);border:1px solid rgba(167,139,250,.4);padding:10px 22px;border-radius:100px}
 .hero-title{font-family:'Noto Serif KR',serif;font-size:clamp(36px,6vw,56px);font-weight:700;line-height:1.2;margin-bottom:28px;letter-spacing:-.02em}
 .hero-title em{font-style:normal;color:var(--purple-light)}
 .hero-sub{font-size:17px;color:var(--text-muted);line-height:1.8;margin-bottom:48px;max-width:520px}
@@ -202,25 +204,25 @@ section{padding:80px 0}
     <span style="display:inline-flex;align-items:center;gap:32px;padding-right:80px;font-size:13px;font-weight:600;color:#fff;letter-spacing:.02em;">
       <span>🔥 인기 강의 원데이 특별판 · 41% 할인 진행 중</span>
       <span style="color:#c4b5fd">·</span>
-      <span>7월 31일 (금) 하루 · 최대 20명 선착순 · 41% 특별 할인</span>
+      <span>8월 1일 (토) 하루 · 최대 20명 선착순 · 41% 특별 할인</span>
       <span style="color:#c4b5fd">·</span>
       <span>🔥 인기 강의 원데이 특별판 · 41% 할인 진행 중</span>
       <span style="color:#c4b5fd">·</span>
-      <span>7월 31일 (금) 하루 · 최대 20명 선착순 · 41% 특별 할인</span>
+      <span>8월 1일 (토) 하루 · 최대 20명 선착순 · 41% 특별 할인</span>
       <span style="color:#c4b5fd">·</span>
       <span>🔥 인기 강의 원데이 특별판 · 41% 할인 진행 중</span>
       <span style="color:#c4b5fd">·</span>
-      <span>7월 31일 (금) 하루 · 최대 20명 선착순 · 41% 특별 할인</span>
+      <span>8월 1일 (토) 하루 · 최대 20명 선착순 · 41% 특별 할인</span>
       <span style="color:#c4b5fd">·</span>
     </span>
     <span style="display:inline-flex;align-items:center;gap:32px;padding-right:80px;font-size:13px;font-weight:600;color:#fff;letter-spacing:.02em;">
       <span>🔥 인기 강의 원데이 특별판 · 41% 할인 진행 중</span>
       <span style="color:#c4b5fd">·</span>
-      <span>7월 31일 (금) 하루 · 최대 20명 선착순 · 41% 특별 할인</span>
+      <span>8월 1일 (토) 하루 · 최대 20명 선착순 · 41% 특별 할인</span>
       <span style="color:#c4b5fd">·</span>
       <span>🔥 인기 강의 원데이 특별판 · 41% 할인 진행 중</span>
       <span style="color:#c4b5fd">·</span>
-      <span>7월 31일 (금) 하루 · 최대 20명 선착순 · 41% 특별 할인</span>
+      <span>8월 1일 (토) 하루 · 최대 20명 선착순 · 41% 특별 할인</span>
       <span style="color:#c4b5fd">·</span>
     </span>
   </div>
@@ -243,17 +245,16 @@ section{padding:80px 0}
 <!-- HERO -->
 <section class="hero">
   <div class="container">
-    <p class="hero-eyebrow">Focus AI Edu · 원데이 클래스</p>
+    <p class="hero-eyebrow">코딩 몰라도 하루 만에 AI랑 친해져요</p>
     <h1 class="hero-title serif">
-      코딩 몰라도<br>
-      <em>하루 만에</em><br>
-      AI랑 친해져요
+      인스타그램<br>
+      <em>인플루언서</em><br>
+      AI 원데이
     </h1>
     <p class="hero-sub">
-      딱 하루, 네 시간이면 충분해요.<br>
+      딱 하루, 4시간이면 충분해요.<br>
       AI가 뭔지 이해하고, Claude로 직접 써보고,<br>
-      내 웹사이트까지 만들어 배포하고 갑니다.<br>
-      신사·잠실 · 원데이 오프라인 클래스
+      내 웹사이트까지 만들어 배포하고 갑니다.
     </p>
     <p class="schedule-label">원데이 클래스 일정</p>
     <div class="schedule-picker">
@@ -264,8 +265,8 @@ section{padding:80px 0}
       <div class="sched-cards">
         <div class="sched-card sched-card-single">
           <div class="sched-tag">원데이</div>
-          <div class="sched-date">7월 31일 <span>(금)</span></div>
-          <div class="sched-time">저녁 6시 ~ 10시 · 장소 신사 or 잠실 (확정 시 안내)</div>
+          <div class="sched-date">8월 1일 <span>(토)</span></div>
+          <div class="sched-time">오후 3시 ~ 7시 · 장소 신사 or 잠실 (자세한 주소는 추후 공지)</div>
         </div>
       </div>
     </div>
@@ -275,7 +276,7 @@ section{padding:80px 0}
       <a href="https://shoocreamvillage.notion.site/focusaiedu" class="btn-secondary" target="_blank">강사 프로필</a>
     </div>
     <div style="margin-top:16px;background:rgba(255,80,80,.1);border:1px solid rgba(255,122,122,.4);border-radius:14px;padding:16px 20px;">
-      <div style="font-size:14px;font-weight:700;color:#ff7a7a;line-height:1.6;margin-bottom:4px;">⏰ 18:00 정각에 시작합니다. 절대 늦지 마세요.</div>
+      <div style="font-size:14px;font-weight:700;color:#ff7a7a;line-height:1.6;margin-bottom:4px;">⏰ 15:00 정각에 시작합니다. 절대 늦지 마세요.</div>
       <div style="font-size:13px;color:var(--text-muted);line-height:1.6;">장소 특성상 <span style="color:#ff7a7a;font-weight:600;">단 1분이라도 늦으면 입장이 불가합니다.</span> 시작 전 여유 있게 도착해 주세요.</div>
     </div>
   </div>
@@ -309,10 +310,10 @@ section{padding:80px 0}
     <p class="section-sub">어렵고 복잡할 것 같아서 시작을 못 했을 뿐이에요.<br>사실 알고 보면 정말 별거 없거든요.</p>
     <div class="divider"></div>
     <div class="pain-grid">
-      <div class="pain-card"><div class="pain-icon">🤔</div><p class="pain-text">챗GPT 써봤는데 뭘 물어봐야 할지 모르겠어요</p></div>
-      <div class="pain-card"><div class="pain-icon">😰</div><p class="pain-text">어렵고 복잡할 것 같아서 시작을 못 했어요</p></div>
-      <div class="pain-card"><div class="pain-icon">🤷</div><p class="pain-text">개발자도 아닌데 나한테 필요한 건지 모르겠어요</p></div>
-      <div class="pain-card"><div class="pain-icon">😅</div><p class="pain-text">주변에서 AI 쓴다고 하는데 나만 뒤처지는 것 같아요</p></div>
+      <div class="pain-card"><div class="pain-icon">😵</div><p class="pain-text">매일 아침 오늘 뭐 찍지? 고민하다 하루가 간다</p></div>
+      <div class="pain-card"><div class="pain-icon">🔍</div><p class="pain-text">경쟁 계정은 왜 저게 터졌는지 도무지 모르겠다</p></div>
+      <div class="pain-card"><div class="pain-icon">📉</div><p class="pain-text">내 계정이 왜 안 크는지 이유를 모르겠다</p></div>
+      <div class="pain-card"><div class="pain-icon">⏰</div><p class="pain-text">레퍼런스 찾다가 시간이 다 가버린다</p></div>
     </div>
   </div>
 </section>
@@ -360,7 +361,7 @@ section{padding:80px 0}
   <div class="container">
     <div class="badge">원데이 커리큘럼</div>
     <h2 class="section-title serif">하루 네 시간 안에<br><em>내 웹사이트를 직접 완성해요</em></h2>
-    <p class="section-sub">코딩 몰라도 OK · 아이디어만 있으면 충분해요 · 7월 31일 (금) 저녁 6시~10시</p>
+    <p class="section-sub">코딩 몰라도 OK · 아이디어만 있으면 충분해요 · 8월 1일 (토) 오후 3시~7시</p>
 
     <div style="margin-top:32px">
 
@@ -368,7 +369,7 @@ section{padding:80px 0}
       <div class="course-block">
         <div class="course-top">
           <div>
-            <p class="course-tag">STEP 01 — 18:00 ~ 18:40</p>
+            <p class="course-tag">STEP 01 — 15:00 ~ 15:40</p>
             <h3 class="course-name serif">AI 개념 이해</h3>
             <p class="course-desc">AI가 대체 뭔지, 어떻게 움직이는지 가장 쉬운 말로 이해하는 시간이에요.</p>
           </div>
@@ -387,7 +388,7 @@ section{padding:80px 0}
       <div class="course-block">
         <div class="course-top">
           <div>
-            <p class="course-tag">STEP 02 — 18:40 ~ 19:20</p>
+            <p class="course-tag">STEP 02 — 15:40 ~ 16:20</p>
             <h3 class="course-name serif">AI 제대로 쓰기</h3>
             <p class="course-desc">뭘 물어봐야 할지 모르겠던 분도, 원하는 답을 끌어내는 감각을 잡아가요.</p>
           </div>
@@ -406,7 +407,7 @@ section{padding:80px 0}
       <div class="course-block">
         <div class="course-top">
           <div>
-            <p class="course-tag">STEP 03 — 19:20 ~ 20:00</p>
+            <p class="course-tag">STEP 03 — 16:20 ~ 17:00</p>
             <h3 class="course-name serif">Claude 활용 사례</h3>
             <p class="course-desc">실제로 AI로 뭘 할 수 있는지, 내 일상과 일에 바로 연결되는 사례를 봐요.</p>
           </div>
@@ -425,7 +426,7 @@ section{padding:80px 0}
       <div class="course-block">
         <div class="course-top">
           <div>
-            <p class="course-tag">STEP 04 — 20:00 ~ 21:00</p>
+            <p class="course-tag">STEP 04 — 17:00 ~ 18:00</p>
             <h3 class="course-name serif">Claude &amp; Claude Code 써보기</h3>
             <p class="course-desc">말로만 듣던 Claude Code, 오늘 처음 직접 써봐요. 생각보다 별거 없어요.</p>
           </div>
@@ -444,7 +445,7 @@ section{padding:80px 0}
       <div class="course-block">
         <div class="course-top">
           <div>
-            <p class="course-tag">STEP 05 — 21:00 ~ 22:00</p>
+            <p class="course-tag">STEP 05 — 18:00 ~ 19:00</p>
             <h3 class="course-name serif">웹사이트 제작 후 배포하기</h3>
             <p class="course-desc">오늘의 하이라이트. 내 웹사이트를 직접 만들고, 세상에 공개하고 갑니다.</p>
           </div>
@@ -463,8 +464,8 @@ section{padding:80px 0}
       <div class="package-box" style="flex-direction:column;gap:16px;align-items:stretch">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px">
           <div>
-            <div class="package-label">원데이 클래스 — 7월 31일 (금)</div>
-            <div class="package-sub">저녁 6시~10시 · 신사 or 잠실 (확정 시 안내) · 최대 20명</div>
+            <div class="package-label">원데이 클래스 — 8월 1일 (토)</div>
+            <div class="package-sub">오후 3시~7시 · 신사 or 잠실 (추후 공지) · 최대 20명</div>
           </div>
           <div style="text-align:right">
             <div class="package-original">60만원</div>
@@ -595,8 +596,8 @@ section{padding:80px 0}
       </div>
       <div class="howto-card">
         <span class="howto-icon">🌙</span>
-        <div class="howto-title">금요일 저녁 하루</div>
-        <div class="howto-desc">7월 31일 (금) 저녁 6시~10시. 퇴근 후 바로 참여하기 좋아요.</div>
+        <div class="howto-title">토요일 오후 하루</div>
+        <div class="howto-desc">8월 1일 (토) 오후 3시~7시. 주말 하루 집중해서 끝내고 가요.</div>
       </div>
       <div class="howto-card">
         <span class="howto-icon">♾️</span>
@@ -666,15 +667,15 @@ section{padding:80px 0}
       </div>
       <div class="faq-item">
         <div class="faq-q" onclick="toggleFaq(this)">수업 날짜와 장소가 어떻게 되나요?<span>+</span></div>
-        <div class="faq-a">7월 31일 (금) 저녁 6시 ~ 10시 하루 진행됩니다. 장소는 신사 또는 잠실 전용 공간 중 한 곳으로, 확정되는 대로 신청하신 분들께 개별 안내드려요. 두 곳 모두 접근성이 좋은 위치입니다.</div>
+        <div class="faq-a">8월 1일 (토) 오후 3시 ~ 7시 하루 진행됩니다. 장소는 신사 또는 잠실 전용 공간 중 한 곳으로, 자세한 주소는 확정되는 대로 신청하신 분들께 개별 안내드려요. 두 곳 모두 접근성이 좋은 위치입니다.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">직장인인데 금요일 저녁 6시가 가능할까요?<span>+</span></div>
-        <div class="faq-a">접근성 좋은 위치라 퇴근 후 바로 오시기 좋아요. 저녁 6시 시작, 10시 종료라 금요일 저녁에도 부담 없이 참여하실 수 있어요. 다만 18:00 정각에 시작하니 절대 늦으면 안 됩니다. 장소 특성상 단 1분이라도 늦으면 입장이 불가하니, 반드시 시작 전에 여유 있게 도착해 주세요.</div>
+        <div class="faq-q" onclick="toggleFaq(this)">직장인도 참여할 수 있나요?<span>+</span></div>
+        <div class="faq-a">네, 토요일 오후 시간대라 평일에 시간 내기 어려운 직장인분들도 부담 없이 오실 수 있어요. 오후 3시 시작, 7시 종료입니다. 다만 15:00 정각에 시작하니 절대 늦으면 안 됩니다. 장소 특성상 단 1분이라도 늦으면 입장이 불가하니, 반드시 시작 전에 여유 있게 도착해 주세요.</div>
       </div>
       <div class="faq-item">
         <div class="faq-q" onclick="toggleFaq(this)">환불 규정이 어떻게 되나요?<span>+</span></div>
-        <div class="faq-a">수업일 기준 10일 전부터는 환불이 불가합니다. 즉 수업 10일 전까지 취소하신 경우에만 환불이 가능하며, 그 이후 취소나 당일 지각·불참의 경우에는 환불이 어렵습니다. 18:00 정각에 시작하며 단 1분이라도 늦으면 입장이 불가한데 이 경우에도 환불은 되지 않으니, 정원이 제한된 오프라인 원데이 수업인 만큼 신중하게 신청하시고 반드시 시간을 지켜 주세요.</div>
+        <div class="faq-a">수업일 기준 10일 전부터는 환불이 불가합니다. 즉 수업 10일 전까지 취소하신 경우에만 환불이 가능하며, 그 이후 취소나 당일 지각·불참의 경우에는 환불이 어렵습니다. 15:00 정각에 시작하며 단 1분이라도 늦으면 입장이 불가한데 이 경우에도 환불은 되지 않으니, 정원이 제한된 오프라인 원데이 수업인 만큼 신중하게 신청하시고 반드시 시간을 지켜 주세요.</div>
       </div>
     </div>
   </div>
@@ -693,8 +694,8 @@ section{padding:80px 0}
       </div>
       <div class="info-card">
         <div class="info-label">일정</div>
-        <div class="info-val">7월 31일 (금)</div>
-        <div class="info-sub">저녁 6시 ~ 10시</div>
+        <div class="info-val">8월 1일 (토)</div>
+        <div class="info-sub">오후 3시 ~ 7시</div>
       </div>
       <div class="info-card">
         <div class="info-label">정원</div>
@@ -715,12 +716,12 @@ section{padding:80px 0}
   <div class="container">
     <div class="badge">원데이 모집 중</div>
     <h2 class="cta-title serif">
-      7월 31일 하루,<br>
+      8월 1일 하루,<br>
       <em>내 웹사이트를 만들어요</em>
     </h2>
     <p class="cta-sub">
       최대 20명 · 빠르게 마감될 수 있습니다.<br>
-      7월 31일 (금) 저녁 6시~10시 · 신사 or 잠실 (확정 시 안내)
+      8월 1일 (토) 오후 3시~7시 · 신사 or 잠실 (추후 공지)
     </p>
     <div class="cta-price-box" style="flex-direction:column;gap:8px;align-items:center">
       <div style="font-size:12px;color:var(--text-dim);letter-spacing:.08em;text-transform:uppercase">원데이 클래스 · 41% 특별 할인</div>
